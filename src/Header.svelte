@@ -1,0 +1,34 @@
+<script>
+import { Link } from 'svelte-routing'
+import Login from './login/Login.svelte';
+import Logout from './logout/Logout.svelte';
+</script>
+
+<header>
+    <nav class="navbar" aria-label="main navigation">
+        <div class="navbar-brand">
+            <Link class="navbar-item" to="/">Exorcist</Link>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="exorcistNavbar">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="exorcistNavbar" class="navbar-menu">
+            <Link class="navbar-item" to="/people">People</Link>
+        </div>
+
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <Login />
+            </div>
+            <div class="navbar-item">
+                <Logout />
+            </div>
+        </div>
+    </nav>
+</header>
+
+
