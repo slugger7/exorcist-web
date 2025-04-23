@@ -1,7 +1,7 @@
 <script>
 import { Link } from 'svelte-routing'
-import Login from './login/Login.svelte';
-import Logout from './logout/Logout.svelte';
+import LoginButton from './lib/LoginButton.svelte';
+import LogoutButton from './lib/LogoutButton.svelte';
 </script>
 
 <header>
@@ -22,10 +22,10 @@ import Logout from './logout/Logout.svelte';
 
         <div class="navbar-end">
             <div class="navbar-item">
-                <Login />
+                <LoginButton />
             </div>
             <div class="navbar-item">
-                <Logout />
+                <LogoutButton />
             </div>
         </div>
     </nav>
