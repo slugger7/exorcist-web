@@ -1,7 +1,10 @@
 <script>
-import { Link } from 'svelte-routing'
+import { Link } from 'svelte-routing';
+import { userState } from './shared/state/userState.svelte.js';
 import LoginButton from './lib/LoginButton.svelte';
 import LogoutButton from './lib/LogoutButton.svelte';
+
+
 </script>
 
 <header>
@@ -21,12 +24,15 @@ import LogoutButton from './lib/LogoutButton.svelte';
         </div>
 
         <div class="navbar-end">
-            <div class="navbar-item">
-                <LoginButton />
-            </div>
+            {#if !userState.id}
+                <div class="navbar-item">
+                    <LoginButton />
+                </div>
+            {:else}
             <div class="navbar-item">
                 <LogoutButton />
             </div>
+            {/if}
         </div>
     </nav>
 </header>
