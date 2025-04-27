@@ -5,8 +5,7 @@ import { server } from "../env.js";
  * @param {string} password
  */
 export const login = async (username, password) => {
-  const res = await fetch(`${server()}/api/login`, {
-    credentials: "include",
+  const res = await fetch(`${server()}/login`, {
     method: "POST",
     body: JSON.stringify({ username, password }),
   });
@@ -24,7 +23,7 @@ export const login = async (username, password) => {
 };
 
 export const logout = async () => {
-  const res = await fetch(`${server()}/api/logout`, { credentials: "include" });
+  const res = await fetch(`${server()}/logout`);
 
   if (res.status != 200) {
     throw new Error("could not log out");
