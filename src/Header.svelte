@@ -1,17 +1,21 @@
 <script>
-import { Link } from 'svelte-routing';
-import { userState } from './shared/state/userState.svelte.js';
-import LoginButton from './lib/LoginButton.svelte';
-import LogoutButton from './lib/LogoutButton.svelte';
-
-
+    import { Link } from "svelte-routing";
+    import { userState } from "./shared/state/userState.svelte.js";
+    import LoginButton from "./lib/components/LoginButton.svelte";
+    import LogoutButton from "./lib/components/LogoutButton.svelte";
 </script>
 
 <header>
     <nav class="navbar" aria-label="main navigation">
         <div class="navbar-brand">
             <Link class="navbar-item" to="/">Exorcist</Link>
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="exorcistNavbar">
+            <a
+                role="button"
+                class="navbar-burger"
+                aria-label="menu"
+                aria-expanded="false"
+                data-target="exorcistNavbar"
+            >
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
@@ -29,12 +33,10 @@ import LogoutButton from './lib/LogoutButton.svelte';
                     <LoginButton />
                 </div>
             {:else}
-            <div class="navbar-item">
-                <LogoutButton />
-            </div>
+                <div class="navbar-item">
+                    <LogoutButton />
+                </div>
             {/if}
         </div>
     </nav>
 </header>
-
-
