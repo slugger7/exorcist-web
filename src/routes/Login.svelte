@@ -9,12 +9,12 @@ async function handleSubmit(e) {
     e.preventDefault();
 
     try {
-        const userId = await login(username, password)
-        userState.id = userId
+            const userId = await login(username, password);
+            userState.id = userId;
 
-        navigate("/")
+            navigate("/");
     } catch (e) {
-        console.error(e)
+            console.error(e);
     }
 }
 </script>
@@ -23,16 +23,28 @@ async function handleSubmit(e) {
     <h1 class="title is-1">Login</h1>
     <form onsubmit={handleSubmit}>
         <div class="field">
-            <label class="label">Username</label>
+            <label class="label" for="username">Username</label>
             <div class="control">
-                <input class="input" bind:value={username} type="text" placeholder="Username">
+                <input
+                    class="input"
+                    bind:value={username}
+                    name="username"
+                    type="text"
+                    placeholder="Username"
+                />
             </div>
         </div>
 
         <div class="field">
-            <label class="label">Password</label>
+            <label class="label" for="password">Password</label>
             <div class="control">
-                <input class="input" bind:value={password} type="password" placeholder="Password">
+                <input
+                    class="input"
+                    bind:value={password}
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                />
             </div>
         </div>
 
