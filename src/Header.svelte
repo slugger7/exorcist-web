@@ -1,9 +1,10 @@
 <script>
     import { Link } from "svelte-routing";
-    import routes from './routes/routes.js'
+    import routes from "./routes/routes.js";
     import { userState } from "./shared/state/userState.svelte.js";
-    import LoginButton from "./lib/components/LoginButton.svelte";
-    import LogoutButton from "./lib/components/LogoutButton.svelte";
+
+    let isMenuActive = $state(false);
+    let userDropdownActive = $state(false);
 </script>
 
 <header>
@@ -11,37 +12,47 @@
         {#if userState.id}
             <div class="navbar-brand">
                 <Link class="navbar-item" to="/">Exorcist</Link>
-                <a
-                    role="button"
-                    class="navbar-burger"
+                <button
+                    class="navbar-burger {isMenuActive ? 'is-active' : ''}"
                     aria-label="menu"
-                    aria-expanded="false"
+                    aria-expanded={isMenuActive}
                     data-target="exorcistNavbar"
+                    onclick={() => (isMenuActive = !isMenuActive)}
                 >
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
-                </a>
+                </button>
             </div>
 
-            <div id="exorcistNavbar" class="navbar-menu">
+            <div
+                id="exorcistNavbar"
+                class="navbar-menu {isMenuActive ? 'is-active' : ''}"
+            >
                 <Link class="navbar-item" to={routes.libraries}>Libraries</Link>
                 <Link class="navbar-item" to={routes.people}>People</Link>
+                <div class="navbar-end">
+                    <div
+                        class="navbar-item has-dropdown {userDropdownActive
+                            ? 'is-active'
+                            : ''}"
+                    >
+                        <button
+                            class="navbar-link"
+                            onclick={() =>
+                                (userDropdownActive = !userDropdownActive)}
+                            >{userState.username}</button
+                        >
+                        <div class="navbar-dropdown">
+                            <hr class="navbar-divider" />
+                            <Link class="navbar-item" to={routes.logout}
+                                >Logout</Link
+                            >
+                        </div>
+                    </div>
+                </div>
             </div>
         {/if}
-
-        <div class="navbar-end">
-            {#if !userState.id && !window.location.pathname === routes.login}
-                <div class="navbar-item">
-                    <LoginButton />
-                </div>
-            {/if}
-            {#if userState.id}
-                <div class="navbar-item">
-                    <LogoutButton />
-                </div>
-            {/if}
-        </div>
     </nav>
 </header>

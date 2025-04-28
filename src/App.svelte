@@ -11,7 +11,9 @@
             navigate(`${window.location.pathname}${window.location.search}`);
         }
         const userId = localStorage.getItem("userId");
+        const username = localStorage.getItem("username");
         userState.id = userId;
+        userState.username = username;
     });
 </script>
 

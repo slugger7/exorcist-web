@@ -2,6 +2,8 @@
     import { navigate } from "svelte-routing";
     import { userState } from "../shared/state/userState.svelte.js";
     import { login } from "../lib/controllers/authentication.js";
+    import routes from "./routes.js";
+
     let username = $state(import.meta.env.DEV ? "admin" : "");
     let password = $state(import.meta.env.DEV ? "admin" : "");
     const returnUrl = new URLSearchParams(window.location.search).get(
@@ -12,11 +14,12 @@
         e.preventDefault();
 
         try {
-            const userId = await login(username, password);
-            userState.id = userId;
+            const user = await login(username, password);
+            userState.id = user.userId;
+            userState.username = user.username;
 
             if (returnUrl === null) {
-                navigate("/");
+                navigate(routes.home);
             } else {
                 navigate(returnUrl);
             }

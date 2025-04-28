@@ -19,7 +19,8 @@ export const login = async (username, password) => {
     const data = await res.json();
 
     localStorage.setItem("userId", data.userId);
-    return data.userId;
+    localStorage.setItem("username", data.username)
+    return data;
   }
 };
 
