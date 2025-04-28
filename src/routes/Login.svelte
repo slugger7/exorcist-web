@@ -6,12 +6,14 @@
 
     let username = $state(import.meta.env.DEV ? "admin" : "");
     let password = $state(import.meta.env.DEV ? "admin" : "");
+    let loading = $state(false);
     const returnUrl = new URLSearchParams(window.location.search).get(
         "returnUrl",
     );
 
     async function handleSubmit(e) {
         e.preventDefault();
+        loading = true;
 
         try {
             const user = await login(username, password);
@@ -25,6 +27,8 @@
             }
         } catch (e) {
             console.error(e);
+        } finally {
+            loading = false;
         }
     }
 </script>
@@ -60,7 +64,9 @@
 
         <div class="field">
             <div class="control">
-                <button class="button is-primary">Login</button>
+                <button class="button is-primary {loading ? 'is-loading' : ''}"
+                    >Login</button
+                >
             </div>
         </div>
     </form>

@@ -1,9 +1,11 @@
+/** @import { LoginResult } from "../types/models.js" */
 import { server } from "../env.js";
 import { fetch } from "./fetch.js";
 
 /**
  * @param {string} username
  * @param {string} password
+ * @returns {Promise<LoginResult>}
  */
 export const login = async (username, password) => {
   const res = await fetch(`${server()}/login`, {
