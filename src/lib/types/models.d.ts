@@ -11,3 +11,8 @@ export type Video = {
   path: String;
   thumbnailPath: String
 }
+
+export type LoginResult = {
+  userId: String;
+  username: String;
+}
