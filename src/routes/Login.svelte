@@ -2,8 +2,8 @@
     import { navigate } from "svelte-routing";
     import { userState } from "../shared/state/userState.svelte.js";
     import { login } from "../lib/controllers/authentication.js";
-    let username = $state("admin");
-    let password = $state("admin");
+    let username = $state(import.meta.env.DEV ? "admin" : "");
+    let password = $state(import.meta.env.DEV ? "admin" : "");
     const returnUrl = new URLSearchParams(window.location.search).get(
         "returnUrl",
     );
