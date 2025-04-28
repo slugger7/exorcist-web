@@ -1,4 +1,5 @@
 import { server } from "../env.js";
+import { fetch } from "./fetch.js";
 
 /**
  * @param {string} username
