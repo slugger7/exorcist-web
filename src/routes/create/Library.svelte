@@ -36,10 +36,16 @@
         />
       </div>
     </div>
-    <div class="field">
+    <div class="field is-grouped">
       <div class="control">
         <button class="button is-primary {loading ? 'is-loading' : ''}"
           >Create</button
+        >
+      </div>
+      <div class="control">
+        <button
+          class="button {loading ? 'is-loading' : ''}"
+          onclick={() => navigate(routes.libraries)}>Cancel</button
         >
       </div>
     </div>
