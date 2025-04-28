@@ -1,11 +1,16 @@
 <script>
   import { getLibraries } from "../lib/controllers/libraries";
-  import HeaderIconButton from "../lib/components/HeaderIconButton.svelte";
+  import HeaderIconLink from "../lib/components/HeaderIconLink.svelte";
+  import routes from "./routes.js";
 </script>
 
 <div class="container">
   <h1 class="title is-1 inline">Libraries</h1>
-  <HeaderIconButton />
+  <HeaderIconLink
+    icon="fa-solid fa-plus"
+    ariaLabel="create library"
+    to={routes.create.library}
+  />
 
   {#await getLibraries()}
     <span>loading</span>

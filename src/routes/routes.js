@@ -3,6 +3,9 @@ const routes = {
     libraries: "/libraries",
     home: "/",
     login: "/login",
-    logout: "/logout"
+    logout: "/logout",
+    create: {
+        library: "/create/library"
+    }
 }
 export default routes;
