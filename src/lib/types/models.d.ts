@@ -1,3 +1,4 @@
+// https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
 export type Library = {
   id: String;
   name: String;
