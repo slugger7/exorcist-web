@@ -4,20 +4,20 @@
   import routes from "../routes";
 
   let libraryName = $state("");
-  let loading = $state(false);
+  let submitting = $state(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    loading = true;
+    submitting = true;
 
     try {
-      const library = await create(libraryName);
+      await create(libraryName);
 
       navigate(routes.libraries);
     } catch (e) {
       console.error(e);
     } finally {
-      loading = false;
+      submitting = false;
     }
   }
 </script>
@@ -33,18 +33,21 @@
           name="library-name"
           bind:value={libraryName}
           placeholder="Library name"
+          disabled={submitting}
         />
       </div>
     </div>
     <div class="field is-grouped">
       <div class="control">
-        <button class="button is-primary {loading ? 'is-loading' : ''}"
-          >Create</button
+        <button
+          class="button is-primary {submitting ? 'is-loading' : ''}"
+          disabled={submitting}>Create</button
         >
       </div>
       <div class="control">
         <button
-          class="button {loading ? 'is-loading' : ''}"
+          class="button {submitting ? 'is-loading' : ''}"
+          disabled={submitting}
           onclick={() => navigate(routes.libraries)}>Cancel</button
         >
       </div>
