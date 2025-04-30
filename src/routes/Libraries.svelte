@@ -2,6 +2,7 @@
   import { getLibraries } from "../lib/controllers/libraries";
   import HeaderIconLink from "../lib/components/HeaderIconLink.svelte";
   import routes from "./routes.js";
+  import LibraryCard from "../lib/components/LibraryCard.svelte";
 </script>
 
 <div class="container">
@@ -12,13 +13,19 @@
     to={routes.create.library}
   />
 
-  {#await getLibraries()}
-    <span>loading</span>
-  {:then libraries}
-    <pre>{JSON.stringify(libraries, null, 2)}</pre>
-  {:catch}
-    <span>something went wrong</span>
-  {/await}
+  <div class="section">
+    {#await getLibraries()}
+      <span>loading</span>
+    {:then libraries}
+      {#each libraries as { id, name } (id)}
+        <LibraryCard {name} {id} />
+      {:else}
+        <p>No libraries. Create one</p>
+      {/each}
+    {:catch}
+      <p>Oops! Could not get libraries</p>
+    {/await}
+  </div>
 </div>
 
 <style>
