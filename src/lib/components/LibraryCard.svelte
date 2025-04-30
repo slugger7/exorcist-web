@@ -2,13 +2,13 @@
   import { Link } from "svelte-routing";
   import routes from "../../routes/routes";
 
-  /** @type {{ name: String, id: string }}*/
+  /** @type {{ name: string, id: string}}*/
   let { name, id } = $props();
 </script>
 
 <div class="card">
   <header class="card-header">
-    <p class="card-header-title">{name}</p>
+    <Link class="card-header-title" to={routes.libraryFunc(id)}>{name}</Link>
     <Link
       class="card-header-icon"
       aria-label="more-options"
