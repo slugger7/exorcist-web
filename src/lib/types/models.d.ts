@@ -17,3 +17,10 @@ export type LoginResult = {
   userId: String;
   username: String;
 }
+
+export type Page<T> = {
+  data: [T],
+  limit: number,
+  skip: number,
+  total: number
+}
