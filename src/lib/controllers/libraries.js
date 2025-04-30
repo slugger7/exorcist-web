@@ -1,4 +1,4 @@
-/** @import { Library } from "../types/models.js" */
+/** @import { Library, LibraryPath } from "../types/models.js" */
 import { server } from "../env.js";
 import { fetch } from "./fetch.js";
 
@@ -24,6 +24,18 @@ export const create = async (name) => {
     `${server()}/libraries`,
     { method: "POST", body: JSON.stringify({ name }) }
   );
+
+  return await res.json()
+}
+
+/**
+ * @param {string} id
+ * @returns {Promise<[LibraryPath]>}
+ */
+export const getPaths = async (id) => {
+  const res = await fetch(
+    `${server()}/libraries/${id}/libraryPaths`
+  )
 
   return await res.json()
 }
