@@ -1,3 +1,4 @@
+// https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
 export type Library = {
   id: String;
   name: String;
@@ -15,4 +16,11 @@ export type Video = {
 export type LoginResult = {
   userId: String;
   username: String;
+}
+
+export type Page<T> = {
+  data: [T],
+  limit: number,
+  skip: number,
+  total: number
 }
