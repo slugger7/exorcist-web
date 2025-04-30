@@ -17,11 +17,15 @@
     {#await getLibraries()}
       <span>loading</span>
     {:then libraries}
-      {#each libraries as { id, name } (id)}
-        <LibraryCard {name} {id} />
-      {:else}
-        <p>No libraries. Create one</p>
-      {/each}
+      <div class="grid">
+        {#each libraries as { id, name } (id)}
+          <div class="cell">
+            <LibraryCard {name} {id} />
+          </div>
+        {:else}
+          <p>No libraries. Create one</p>
+        {/each}
+      </div>
     {:catch}
       <p>Oops! Could not get libraries</p>
     {/await}
