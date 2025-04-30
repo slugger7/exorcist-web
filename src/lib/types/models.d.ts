@@ -1,21 +1,29 @@
 // https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
 export type Library = {
-  id: String;
-  name: String;
+  id: string;
+  name: string;
+  created: Date;
+  modified: Date;
+}
+
+export type LibraryPath = {
+  id: string;
+  libraryId: string;
+  path: string;
   created: Date;
   modified: Date;
 }
 
 export type Video = {
-  id: String;
-  title: String;
-  path: String;
-  thumbnailPath: String
+  id: string;
+  title: string;
+  path: string;
+  thumbnailPath: string
 }
 
 export type LoginResult = {
-  userId: String;
-  username: String;
+  userId: string;
+  username: string;
 }
 
 export type Page<T> = {

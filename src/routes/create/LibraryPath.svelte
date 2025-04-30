@@ -1,17 +1,22 @@
 <script>
   import { navigate } from "svelte-routing";
-  import { create } from "../../lib/controllers/libraries";
   import routes from "../routes";
+  import { create } from "../../lib/controllers/libraryPaths";
 
-  let libraryName = $state("");
+  let libraryPath = $state("");
   let submitting = $state(false);
+
+  /** @type {{libraryId: string}}*/
+  let { libraryId } = $props();
+  /** @type {{libraryName: string}}*/
+  let { libraryName } = history.state;
 
   async function handleSubmit(e) {
     e.preventDefault();
     submitting = true;
 
     try {
-      await create(libraryName);
+      await create(libraryId, libraryPath);
 
       navigate(routes.libraries);
     } catch (e) {
@@ -23,16 +28,16 @@
 </script>
 
 <div class="container">
-  <h1 class="title is-1">Create Library</h1>
+  <h1 class="title is-1">New Path for {libraryName}</h1>
   <form onsubmit={handleSubmit}>
     <div class="field">
-      <label class="label" for="library-name">Library Name</label>
+      <label class="label" for="library-path">Path</label>
       <div class="control">
         <input
           class="input"
-          name="library-name"
-          bind:value={libraryName}
-          placeholder="Library name"
+          name="library-path"
+          bind:value={libraryPath}
+          placeholder="/"
           disabled={submitting}
         />
       </div>

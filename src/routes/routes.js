@@ -1,11 +1,30 @@
 const routes = {
     people: "/people",
     libraries: "/libraries",
+    /**
+     * @param {string} id
+     * @returns {string}
+     */
+    libraryFunc: (id) => (`/libraries/${id}`),
+    library: "/libraries/:id",
+    libraryPaths: "/library-paths",
+    libraryPath: "/library-paths/:id",
+    /**
+     * @param {string} id
+     * @returns {string}
+     */
+    libraryPathFunc: (id) => (`/library-paths/${id}`),
     home: "/",
     login: "/login",
     logout: "/logout",
     create: {
-        library: "/create/library"
+        library: "/create/library",
+        /** 
+         * @param {string} id
+         * @returns {string}
+        */
+        libraryPathFunc: (id) => (`/create/library-path/${id}`),
+        libraryPath: "/create/library-path/:libraryId",
     }
 }
 export default routes;
