@@ -1,4 +1,4 @@
-/** @import { Library, LibraryPath } from "../types/models.js" */
+/** @import { Library, LibraryPath } from "../types/index" */
 import { server } from "../env.js";
 import { fetch } from "./fetch.js";
 

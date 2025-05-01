@@ -1,4 +1,4 @@
-/** @import {LibraryPath} from "../types/models" */
+/** @import {LibraryPath} from "../types/index" */
 import { server } from "../env"
 import { fetch } from "./fetch"
 
