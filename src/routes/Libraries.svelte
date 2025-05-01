@@ -31,9 +31,3 @@
     {/await}
   </div>
 </div>
-
-<style>
-  .inline {
-    display: inline;
-  }
-</style>

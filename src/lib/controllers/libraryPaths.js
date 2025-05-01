@@ -1,4 +1,4 @@
-/** @import {LibraryPath} from "../types/models" */
+/** @import {LibraryPath} from "../types/index" */
 import { server } from "../env"
 import { fetch } from "./fetch"
 
@@ -16,3 +16,14 @@ export const create = async (libraryId, path) => {
   return await res.json()
 }
 
+/**
+ * @param {string} id 
+ * @returns {Promise<LibraryPath>}
+ */
+export const get = async (id) => {
+  const res = await fetch(
+    `${server()}/libraryPaths/${id}`
+  )
+
+  return await res.json()
+}
