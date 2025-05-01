@@ -1,6 +1,6 @@
 <script>
     import { navigate } from "svelte-routing";
-    import { userState } from "../shared/state/userState.svelte.js";
+    import { userState } from "../lib/state/userState.svelte.js";
     import { login } from "../lib/controllers/authentication.js";
     import routes from "./routes.js";
 
