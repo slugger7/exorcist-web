@@ -12,7 +12,7 @@
 <div class="card">
     <div class="card-image">
         <figure class="image is16by9">
-            <Link to={routes.videoFunc(video.id)}
+            <Link to={routes.videoFunc(video.id)} state={video}
                 ><img
                     src={imageUrlById(video.thumbnailId)}
                     alt={video.title}
