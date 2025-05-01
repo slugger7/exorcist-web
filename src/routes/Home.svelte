@@ -1,12 +1,16 @@
 <script>
   import Pagination from "../lib/components/Pagination.svelte";
-  import VideoCard from "../lib/components/VideoCard.svelte"
+  import VideoCard from "../lib/components/VideoCard.svelte";
   import { getVideos } from "../lib/controllers/videos";
+  import routes from "./routes";
+
+  let page = $state(1);
+  let limit = $state(100);
 </script>
 
 <div class="container is-fluid">
   <h1 class="title is-1">Home</h1>
-  {#await getVideos()}
+  {#await getVideos(page, limit)}
     <strong>loading</strong>
   {:then videosPage}
     <div class="grid">
@@ -18,7 +22,12 @@
         <p>no data here</p>
       {/each}
     </div>
-   <Pagination />
+    <Pagination
+      bind:page
+      bind:limit
+      total={videosPage.total}
+      url={routes.home}
+    />
   {:catch e}
     <pre>Something went wrong</pre>
   {/await}

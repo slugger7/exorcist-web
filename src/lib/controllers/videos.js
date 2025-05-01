@@ -5,8 +5,8 @@ import { fetch } from './fetch.js'
 /**
  * @returns {Promise<Page<Video>>}
  */
-export const getVideos = async () => {
-  const res = await fetch(`${server()}/videos`)
+export const getVideos = async (page = 1, limit = 48) => {
+  const res = await fetch(`${server()}/videos?skip=${(page - 1) * limit}&limit=${limit}`)
 
   return await res.json()
 }
