@@ -1,5 +1,6 @@
 <script>
-  import VideoCard from "../lib/components/VideoCard.svelte";
+  import Pagination from "../lib/components/Pagination.svelte";
+  import VideoCard from "../lib/components/VideoCard.svelte"
   import { getVideos } from "../lib/controllers/videos";
 </script>
 
@@ -17,6 +18,7 @@
         <p>no data here</p>
       {/each}
     </div>
+   <Pagination />
   {:catch e}
     <pre>Something went wrong</pre>
   {/await}
