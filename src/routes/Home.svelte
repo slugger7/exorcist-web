@@ -28,6 +28,7 @@
       total={videosPage.total}
       url={routes.home}
     />
+    <div class="section"></div>
   {:catch e}
     <pre>Something went wrong</pre>
   {/await}
