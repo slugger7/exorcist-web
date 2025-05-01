@@ -1,9 +1,9 @@
 <script>
-  import VideoCard from "../lib/components/VideoCard.svelte"
+  import VideoCard from "../lib/components/VideoCard.svelte";
   import { getVideos } from "../lib/controllers/videos";
 </script>
 
-<div class="container">
+<div class="container is-fluid">
   <h1 class="title is-1">Home</h1>
   {#await getVideos()}
     <strong>loading</strong>
