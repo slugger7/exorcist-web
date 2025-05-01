@@ -10,6 +10,7 @@
     import CreateLibraryPath from "./create/LibraryPath.svelte";
     import Library from "./Library.svelte";
     import LibraryPath from "./LibraryPath.svelte";
+  import Video from "./Video.svelte";
 </script>
 
 <main>
@@ -26,4 +27,5 @@
         ><LibraryPath id={params.id} /></Route
     >
     <Route path={routes.home}><Home /></Route>
+    <Route path={routes.video} let:params><Video id={params.id} /></Route>
 </main>

@@ -1,4 +1,4 @@
-/** @import { Page, Video } from "../types/index" */
+/** @import { Page, Video } from "../types" */
 import { server } from '../env.js'
 import { fetch } from './fetch.js'
 
