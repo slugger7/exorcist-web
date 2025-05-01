@@ -3,13 +3,13 @@ import { server } from "../env";
 import { fetch } from "./fetch";
 
 /**
- * @param {JobTypeEnum} type 
+ * @param {JobTypeEnum.scanPath} type 
  * @param {ScanPathData} data 
  * @returns {Promise<Job>}
  */
 export const create = async (type, data) => {
   const stringData = JSON.stringify(data)
-  const res = await fetch(`${server()}/job`, {
+  const res = await fetch(`${server()}/jobs`, {
     method: "POST",
     body: JSON.stringify({
       type,

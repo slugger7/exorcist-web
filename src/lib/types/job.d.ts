@@ -14,7 +14,7 @@ export enum JobStatusEnum {
 }
 
 export type ScanPathData = {
-  libraryId: string;
+  libraryPathId: string;
 }
 
 export type Job = {

@@ -7,8 +7,9 @@
     import Logout from "./Logout.svelte";
     import Libraries from "./Libraries.svelte";
     import CreateLibrary from "./create/Library.svelte";
-    import LibraryPath from "./create/LibraryPath.svelte";
+    import CreateLibraryPath from "./create/LibraryPath.svelte";
     import Library from "./Library.svelte";
+    import LibraryPath from "./LibraryPath.svelte";
 </script>
 
 <main>
@@ -17,9 +18,12 @@
     <Route path={routes.people}><People /></Route>
     <Route path={routes.libraries}><Libraries /></Route>
     <Route path={routes.create.library}><CreateLibrary /></Route>
-    <Route path={routes.create.libraryPath} let:params
-        ><LibraryPath libraryId={params.libraryId} /></Route
-    >
     <Route path={routes.library} let:params><Library id={params.id} /></Route>
+    <Route path={routes.create.libraryPath} let:params
+        ><CreateLibraryPath libraryId={params.libraryId} /></Route
+    >
+    <Route path={routes.libraryPath} let:params
+        ><LibraryPath id={params.id} /></Route
+    >
     <Route path={routes.home}><Home /></Route>
 </main>
