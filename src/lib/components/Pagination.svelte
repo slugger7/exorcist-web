@@ -2,8 +2,8 @@
   /**
    * @typedef props
    * @type {object}
-   * @property {number} [page]
-   * @property {number} [limit]
+   * @property {number} page
+   * @property {number} limit
    * @property {number} total
    * @property {string} url
    */
@@ -11,37 +11,42 @@
   import { Link } from "svelte-routing";
 
   /** @type {props}*/
-  let { page = $bindable(1), limit = $bindable(100), total, url } = $props();
+  let { page = $bindable(), limit = $bindable(), total, url } = $props();
   let pages = Math.trunc(total / limit) + 1;
 
-  //const urlForPage = (page) => `${url}?page=${page}&limit=${limit}`;
+  const urlForPage = (page) => `${url}?page=${page}&limit=${limit}`;
+
+  const clickHandler = (pn) => () => {
+    page = pn;
+  };
 </script>
 
 {#snippet pageLine(pn)}
   <li>
-    <button
-      onclick={() => {
-        page = pn;
-      }}
+    <Link
+      to={urlForPage(pn)}
+      onclick={clickHandler(pn)}
       class="pagination-link {page === pn ? 'is-current' : ''}"
-      aria-label="Goto page {pn}">{pn}</button
+      aria-label="Goto page {pn}">{pn}</Link
     >
   </li>
 {/snippet}
 
 <nav class="pagination is-centered" aria-label="pagination">
-  <button
-    class="pagination-previous"
-    disabled={page === 1}
-    onclick={() => {
-      page = page - 1;
-    }}>Previous</button
-  >
-  <button
-    class="pagination-next"
-    disabled={page === pages}
-    onclick={() => (page = page + 1)}>Next page</button
-  >
+  {#if page - 1 > 1}
+    <Link
+      onclick={clickHandler(page - 1)}
+      class="pagination-previous"
+      to={urlForPage(page - 1)}>Previous</Link
+    >
+  {/if}
+  {#if page + 1 <= pages}
+    <Link
+      onclick={clickHandler(page + 1)}
+      class="pagination-next"
+      to={urlForPage(page + 1)}>Next page</Link
+    >
+  {/if}
   <ul class="pagination-list">
     {@render pageLine(1)}
 

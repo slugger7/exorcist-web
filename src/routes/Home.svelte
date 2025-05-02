@@ -4,8 +4,19 @@
   import { getVideos } from "../lib/controllers/videos";
   import routes from "./routes";
 
-  let page = $state(1);
-  let limit = $state(100);
+  const getIntSearchParamOrDefault = (param, def) => {
+    const params = new URLSearchParams(window.location.search);
+    const val = parseInt(params.get(param));
+    if (isNaN(val)) {
+      return def;
+    }
+    return val;
+  };
+
+  let page = getIntSearchParamOrDefault("page", 1);
+  let limit = getIntSearchParamOrDefault("limit", 48);
+
+  console.log({ page, limit });
 </script>
 
 <div class="container is-fluid">
