@@ -30,6 +30,5 @@
 <style>
     .card {
         height: 100%;
-        max-height: 20vh;
     }
 </style>
