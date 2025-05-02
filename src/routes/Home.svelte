@@ -1,15 +1,43 @@
 <script>
+  import Pagination from "../lib/components/Pagination.svelte";
+  import VideoCard from "../lib/components/VideoCard.svelte";
   import { getVideos } from "../lib/controllers/videos";
+  import routes from "./routes";
+
+  const getIntSearchParamOrDefault = (param, def) => {
+    const params = new URLSearchParams(window.location.search);
+    const val = parseInt(params.get(param));
+    if (isNaN(val)) {
+      return def;
+    }
+    return val;
+  };
+
+  let page = getIntSearchParamOrDefault("page", 1);
+  let limit = getIntSearchParamOrDefault("limit", 48);
 </script>
 
-<div class="container">
+<div class="container is-fluid">
   <h1 class="title is-1">Home</h1>
-  {#await getVideos()}
+  {#await getVideos(page, limit)}
     <strong>loading</strong>
-  {:then videos}
-    <pre>
-      {JSON.stringify(videos, null, 2)}
-    </pre>
+  {:then videosPage}
+    <div class="grid is-col-min-15">
+      {#each videosPage.data as video (video.id)}
+        <div class="cell">
+          <VideoCard {video} />
+        </div>
+      {:else}
+        <p>no data here</p>
+      {/each}
+    </div>
+    <Pagination
+      bind:page
+      bind:limit
+      total={videosPage.total}
+      url={routes.home}
+    />
+    <div class="section"></div>
   {:catch e}
     <pre>Something went wrong</pre>
   {/await}

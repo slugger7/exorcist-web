@@ -15,6 +15,12 @@ const routes = {
      */
     libraryPathFunc: (id) => (`/library-paths/${id}`),
     home: "/",
+    video: "/videos/:id",
+    /** 
+         * @param {string} id
+         * @returns {string}
+        */
+    videoFunc: (id) => (`/videos/${id}`),
     login: "/login",
     logout: "/logout",
     create: {

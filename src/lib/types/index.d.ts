@@ -6,7 +6,7 @@ export type Video = {
   id: string;
   title: string;
   path: string;
-  thumbnailPath: string
+  thumbnailId: string
 }
 
 export type LoginResult = {
