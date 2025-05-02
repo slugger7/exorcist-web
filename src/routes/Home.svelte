@@ -15,8 +15,6 @@
 
   let page = getIntSearchParamOrDefault("page", 1);
   let limit = getIntSearchParamOrDefault("limit", 48);
-
-  console.log({ page, limit });
 </script>
 
 <div class="container is-fluid">

@@ -12,7 +12,7 @@
 
   /** @type {props}*/
   let { page = $bindable(), limit = $bindable(), total, url } = $props();
-  let pages = Math.trunc(total / limit) + 1;
+  let pages = Math.trunc(total / limit);
 
   const urlForPage = (page) => `${url}?page=${page}&limit=${limit}`;
 
