@@ -12,7 +12,7 @@
 <div class="card">
     <div class="card-image">
         <figure class="image is16by9">
-            <Link to={routes.videoFunc(video.id)} state={video}
+            <Link to={routes.videoFunc(video.id)}
                 ><img
                     src={imageUrlById(video.thumbnailId)}
                     alt={video.title}
@@ -26,3 +26,10 @@
         >
     </header>
 </div>
+
+<style>
+    .card {
+        height: 100%;
+        max-height: 20vh;
+    }
+</style>

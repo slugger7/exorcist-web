@@ -14,7 +14,6 @@
   let { page = $bindable(1), limit = $bindable(100), total, url } = $props();
   let pages = Math.trunc(total / limit) + 1;
 
-  console.log({ page, total, limit, pages });
   //const urlForPage = (page) => `${url}?page=${page}&limit=${limit}`;
 </script>
 

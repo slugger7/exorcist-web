@@ -13,7 +13,7 @@
   {#await getVideos(page, limit)}
     <strong>loading</strong>
   {:then videosPage}
-    <div class="grid">
+    <div class="grid is-col-min-15">
       {#each videosPage.data as video (video.id)}
         <div class="cell">
           <VideoCard {video} />

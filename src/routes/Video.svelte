@@ -1,24 +1,29 @@
 <script>
     import { imageUrlById } from "../lib/controllers/image";
-    import { videoUrlById } from "../lib/controllers/videos";
+    import { videoUrlById, get } from "../lib/controllers/videos";
 
-    /** @import { Video } from "../lib/types"*/
     /** @type {{id: string}}*/
     let { id } = $props();
-
-    /** @type {?Video}*/
-    let { thumbnailId, title } = history.state;
 </script>
 
-<div class="container is-fluid">
-    <!-- svelte-ignore a11y_media_has_caption -->
-    <video src={videoUrlById(id)} controls poster={imageUrlById(thumbnailId)}
-    ></video>
+{#await get(id)}
+    <p>loading</p>
+{:then { thumbnailId, title }}
+    <div class="container is-fluid">
+        <!-- svelte-ignore a11y_media_has_caption -->
+        <video
+            src={videoUrlById(id)}
+            controls
+            poster={imageUrlById(thumbnailId)}
+        ></video>
 
-    <div class="container">
-        <h1 class="title is-1">{title}</h1>
+        <div class="container">
+            <h1 class="title is-1">{title}</h1>
+        </div>
     </div>
-</div>
+{:catch}
+    <p>something went wrong</p>
+{/await}
 
 <style>
     video {

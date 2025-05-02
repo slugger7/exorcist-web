@@ -16,3 +16,15 @@ export const getVideos = async (page = 1, limit = 48) => {
  * @returns {string}
  */
 export const videoUrlById = (id) => `${server()}/media/video/${id}`
+
+/**
+ * @param {string} id
+ * @returns {Promise<Video>}
+ */
+export const get = async (id) => {
+  const res = await fetch(
+    `${server()}/videos/${id}`
+  )
+
+  return await res.json()
+}
