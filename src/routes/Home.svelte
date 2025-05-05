@@ -2,8 +2,12 @@
   import Pagination from "../lib/components/Pagination.svelte";
   import VideoCard from "../lib/components/VideoCard.svelte";
   import { getVideos } from "../lib/controllers/videos";
-  import routes from "./routes";
 
+  /**
+   * @param {string} param
+   * @param {number} def
+   * @returns {number}
+  */
   const getIntSearchParamOrDefault = (param, def) => {
     const params = new URLSearchParams(window.location.search);
     const val = parseInt(params.get(param));
@@ -13,8 +17,8 @@
     return val;
   };
 
-  let page = getIntSearchParamOrDefault("page", 1);
-  let limit = getIntSearchParamOrDefault("limit", 48);
+  let page = $state(getIntSearchParamOrDefault("page", 1));
+  let limit = $state(getIntSearchParamOrDefault("limit", 48));
 </script>
 
 <div class="container is-fluid">
@@ -35,7 +39,6 @@
       bind:page
       bind:limit
       total={videosPage.total}
-      url={routes.home}
     />
     <div class="section"></div>
   {:catch e}
