@@ -1,4 +1,4 @@
-/** @import {Job, JobTypeEnum, JobData} from "../types/index" */
+/** @import { Job, JobTypeEnum, JobData } from "../types/index" */
 import { server } from "../env";
 import { fetch } from "./fetch";
 
