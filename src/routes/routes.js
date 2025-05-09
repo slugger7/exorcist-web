@@ -23,6 +23,7 @@ const routes = {
     videoFunc: (id) => (`/videos/${id}`),
     login: "/login",
     logout: "/logout",
+    jobs: "/jobs",
     create: {
         library: "/create/library",
         /** 

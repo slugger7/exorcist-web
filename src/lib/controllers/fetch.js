@@ -1,10 +1,9 @@
 import { navigate } from 'svelte-routing'
 
 /**
- * 
  * @param {string} resource 
  * @param {RequestInit} config 
- * @returns 
+ * @returns {Promise<Response>}
  */
 export async function fetch(resource, config = null) {
   if (!config) {
@@ -14,7 +13,7 @@ export async function fetch(resource, config = null) {
     config.credentials = "include"
   }
 
-  const response = await window.fetch(resource, config);
+  const response = await window.fetch(resource, config)
 
   if (response.status == 401) {
     navigate(`/login?returnUrl=${encodeURIComponent(window.location.pathname)}${window.location.search}`)

@@ -1,4 +1,4 @@
-/** @import {Job, JobTypeEnum, JobData} from "../types/index" */
+/** @import { Job, JobTypeEnum, JobData, Page } from "../types/index" */
 import { server } from "../env";
 import { fetch } from "./fetch";
 
@@ -15,6 +15,28 @@ export const create = async (type, data) => {
       data
     })
   })
+
+  return await res.json()
+}
+
+
+/**
+ * 
+ * @param {string} parent 
+ * @param {string[]} statuses 
+ * @returns {Promise<Page<Job>>}
+ */
+export const getAll = async (parent, statuses) => {
+  let query = []
+  if (parent) {
+    query.push(`parent=${parent}`)
+  }
+
+  if (statuses && statuses.length) {
+    query = query.concat(statuses.map(status => `statuses[]=${status}`))
+  }
+
+  const res = await fetch(`${server()}/jobs?${query.join('&')}`)
 
   return await res.json()
 }

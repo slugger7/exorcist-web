@@ -1,4 +1,4 @@
-/** @import { LoginResult } from "../types/index" */
+/** @import { LoginResult } from "../types" */
 import { server } from "../env.js";
 import { fetch } from "./fetch.js";
 

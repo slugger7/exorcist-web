@@ -5,16 +5,25 @@
    * @property {number} page
    * @property {number} limit
    * @property {number} total
-   * @property {string} url
+   * @property {string} [url]
    */
-
   import { Link } from "svelte-routing";
 
   /** @type {props}*/
-  let { page = $bindable(), limit = $bindable(), total, url } = $props();
+  let { page = $bindable(), limit = $bindable(), total, url = "" } = $props();
   let pages = Math.trunc(total / limit);
 
-  const urlForPage = (page) => `${url}?page=${page}&limit=${limit}`;
+  /**
+   * @param {number} pn
+   * @returns {string}
+   */
+  const urlForPage = (pn) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("page", pn.toString());
+    params.set("limit", limit.toString());
+
+    return `${url}?${params.toString()}`;
+  };
 
   const clickHandler = (pn) => () => {
     page = pn;
@@ -50,10 +59,10 @@
   <ul class="pagination-list">
     {@render pageLine(1)}
 
-    {#if page <= 3}
-      {@render pageLine(2)}
-      {@render pageLine(3)}
-      {@render pageLine(4)}
+    {#if page <= 3 && pages > 1}
+      {#each { length: pages - 1 }, pn}
+        {@render pageLine(pn + 2)}
+      {/each}
     {/if}
 
     {#if page > 3 && pages > 5}
