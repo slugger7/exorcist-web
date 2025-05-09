@@ -31,7 +31,7 @@
                 class="navbar-menu {isMenuActive ? 'is-active' : ''}"
             >
                 <Link class="navbar-item" to={routes.libraries}>Libraries</Link>
-                <Link class="navbar-item" to={routes.people}>People</Link>
+                <Link class="navbar-item" to={routes.jobs}>Jobs</Link>
                 <div class="navbar-end">
                     <div
                         class="navbar-item has-dropdown {userDropdownActive
