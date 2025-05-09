@@ -13,7 +13,17 @@
   let { page = $bindable(), limit = $bindable(), total, url = "" } = $props();
   let pages = Math.trunc(total / limit);
 
-  const urlForPage = (page) => `${url}?page=${page}&limit=${limit}`;
+  /**
+   * @param {number} pn
+   * @returns {string}
+   */
+  const urlForPage = (pn) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("page", pn.toString());
+    params.set("limit", limit.toString());
+
+    return `${url}?${params.toString()}`;
+  };
 
   const clickHandler = (pn) => () => {
     page = pn;
