@@ -2,20 +2,7 @@
   import Pagination from "../lib/components/Pagination.svelte";
   import VideoCard from "../lib/components/VideoCard.svelte";
   import { getVideos } from "../lib/controllers/videos";
-
-  /**
-   * @param {string} param
-   * @param {number} def
-   * @returns {number}
-  */
-  const getIntSearchParamOrDefault = (param, def) => {
-    const params = new URLSearchParams(window.location.search);
-    const val = parseInt(params.get(param));
-    if (isNaN(val)) {
-      return def;
-    }
-    return val;
-  };
+  import { getIntSearchParamOrDefault } from "../lib/searchParams";
 
   let page = $state(getIntSearchParamOrDefault("page", 1));
   let limit = $state(getIntSearchParamOrDefault("limit", 48));
@@ -35,11 +22,7 @@
         <p>no data here</p>
       {/each}
     </div>
-    <Pagination
-      bind:page
-      bind:limit
-      total={videosPage.total}
-    />
+    <Pagination bind:page bind:limit total={videosPage.total} />
     <div class="section"></div>
   {:catch e}
     <pre>Something went wrong</pre>
