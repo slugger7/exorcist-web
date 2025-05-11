@@ -33,7 +33,7 @@ export const getAll = async (parent, statuses) => {
   }
 
   if (statuses && statuses.length) {
-    query = query.concat(statuses.map(status => `statuses[]=${status}`))
+    query = query.concat(statuses.map(status => `status=${status}`))
   }
 
   const res = await fetch(`${server()}/jobs?${query.join('&')}`)

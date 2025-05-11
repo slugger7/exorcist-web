@@ -9,7 +9,7 @@
   import routes from "./routes";
 
   let parent = $state(getStringSearchParamOrDefault("parent", ""));
-  let statuses = $state(getArrayOfStringsSearchParamOrDefault("statuses", []));
+  let statuses = $state(getArrayOfStringsSearchParamOrDefault("status", []));
   let page = $state(getIntSearchParamOrDefault("page", 1));
   let limit = $state(getIntSearchParamOrDefault("limit", 100));
 </script>
