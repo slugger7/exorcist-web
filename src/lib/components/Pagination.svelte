@@ -20,7 +20,6 @@
   const urlForPage = (pn) => {
     const params = new URLSearchParams(window.location.search);
     params.set("page", pn.toString());
-    params.set("limit", limit.toString());
 
     return `${url}?${params.toString()}`;
   };
