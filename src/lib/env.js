@@ -10,3 +10,17 @@ export const server = () => {
 
   return `${url}/api`
 }
+
+export const ws = () => {
+  let url = ""
+  if (import.meta.env.DEV) {
+    url = `${import.meta.env.VITE_SERVER_WEBSOCKET_PROTOCOL}://${import.meta.env.VITE_SERVER_HOSTNAME}:${import.meta.env.VITE_SERVER_PORT}`
+  }
+
+  // need to figure out if it is https or http and change the websocket accordingly
+  if (import.meta.env.PROD) {
+    url = `ws://${window.location.host}`
+  }
+
+  return `${url}/api`
+}
