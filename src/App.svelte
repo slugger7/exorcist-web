@@ -16,7 +16,9 @@
         userState.id = userId;
         userState.username = username;
 
-        setupWebsocket();
+        if (userId) {
+            setupWebsocket();
+        }
     });
 </script>
 

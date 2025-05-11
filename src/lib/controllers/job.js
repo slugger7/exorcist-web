@@ -26,17 +26,22 @@ export const create = async (type, data) => {
  * @param {string[]} statuses 
  * @returns {Promise<Page<Job>>}
  */
-export const getAll = async (parent, statuses) => {
-  let query = []
+export const getAll = async (page, limit, parent, statuses = [], types = []) => {
+  const params = new URLSearchParams()
   if (parent) {
-    query.push(`parent=${parent}`)
+    params.set("parent", parent)
   }
 
-  if (statuses && statuses.length) {
-    query = query.concat(statuses.map(status => `status=${status}`))
-  }
+  statuses.forEach(status => {
+    params.set("status", status)
+  });
+  types.forEach(type => {
+    params.set("type", type)
+  })
+  params.set("limit", limit)
+  params.set("skip", (limit * (page - 1)).toString())
 
-  const res = await fetch(`${server()}/jobs?${query.join('&')}`)
+  const res = await fetch(`${server()}/jobs?${params.toString()}`)
 
   return await res.json()
 }
