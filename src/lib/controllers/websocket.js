@@ -27,7 +27,11 @@ let pingInterval
 let pongTimeout
 
 window.addEventListener("beforeunload", () => {
+	if (conn) {
 	conn.close()
+	}
+	clearInterval(pingInterval)
+	clearTimeout(pongTimeout)
 })
 
 export const setupWebsocket = () => {
@@ -40,7 +44,7 @@ export const setupWebsocket = () => {
 			conn.addEventListener("message", onMessage)
 			conn.addEventListener("error", onError)
 		} catch (e) {
-			console.error("could not open websocket to server")
+			console.error("could not open websocket to server", e)
 			conn == null
 		}
 	}

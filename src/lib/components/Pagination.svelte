@@ -6,11 +6,12 @@
    * @property {number} limit
    * @property {number} total
    * @property {string} [url]
+   * @property {Function} [onchange]
    */
   import { Link } from "svelte-routing";
 
   /** @type {props}*/
-  let { page = $bindable(), limit = $bindable(), total, url = "" } = $props();
+  let { page = $bindable(), limit = $bindable(), total, url = "", onchange } = $props();
   let pages = $derived(Math.ceil(total / limit));
 
   $inspect(page, limit, total, pages);
@@ -27,6 +28,9 @@
 
   const clickHandler = (pn) => () => {
     page = pn;
+    if (onchange) {
+      onchange()
+    }
   };
 </script>
 

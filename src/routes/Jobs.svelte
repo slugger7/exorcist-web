@@ -16,32 +16,37 @@
   let page = $state(getIntSearchParamOrDefault("page", 1));
   let limit = $state(getIntSearchParamOrDefault("limit", 100));
   let loading = $state(false);
+  let error = $state()
 
-  const syncJobs = async (page, limit, parent, statuses, types) => {
+  const syncJobs = async () => {
     loading = true;
     try {
       const jobs = await getAll(page, limit, parent, statuses, types);
       jobsState.page = jobs;
 
       return jobsState.page;
+    } catch (e) {
+      error = e
     } finally {
       loading = false;
     }
   };
 
-  // onMount(async () => {
-  //   await syncJobs();
-  // });
+  onMount(async () => {
+    await syncJobs();
+  });
 </script>
 
 <div class="container">
   <h1 class="title is-1">Jobs</h1>
-  {#await syncJobs(page, limit, parent, statuses, types)}
+  {#if loading}
     <p>loading</p>
-  {:then jobsPage}
+  {:else if !error}
     <div class="block">
-      <pre>{JSON.stringify(jobsPage, null, 2)}</pre>
+      <pre>{JSON.stringify(jobsState.page, null, 2)}</pre>
     </div>
-    <Pagination bind:page bind:limit total={jobsPage.total} url={routes.jobs} />
-  {/await}
+    <Pagination bind:page bind:limit total={jobsState.page.total} url={routes.jobs} onchange={syncJobs}/>
+    {:else}
+    <p>something went wrong ${error.message}</p>
+  {/if}
 </div>
