@@ -47,7 +47,7 @@ export const get = async (id) => {
   return await res.json()
 }
 
-export const orderinals = [
+export const ordinals = [
   {
     text: "Added",
     value: "added"

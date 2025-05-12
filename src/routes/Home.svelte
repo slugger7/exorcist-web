@@ -2,7 +2,7 @@
   import Pagination from "../lib/components/Pagination.svelte";
   import Search from "../lib/components/Search.svelte";
   import VideoCard from "../lib/components/VideoCard.svelte";
-  import { getVideos, orderinals } from "../lib/controllers/videos";
+  import { getVideos, ordinals } from "../lib/controllers/videos";
   import {
     getBoolParamOrDefault,
     getIntSearchParamOrDefault,
@@ -10,7 +10,6 @@
     setValueAndNavigate,
   } from "../lib/searchParams";
   import routes from "./routes";
-  import Select from "../lib/components/Select.svelte";
 
   let page = $state(getIntSearchParamOrDefault("page", 1));
   let limit = $state(getIntSearchParamOrDefault("limit", 48));
@@ -50,8 +49,14 @@
 <div class="container is-fluid">
   <h1 class="title is-1">Home</h1>
   <div class="block">
-    <Search onkeyup={onSearchChange} value={search} onclear={onSearchClear} />
-    <Select options={orderinals} bind:value={orderBy} bind:ascending />
+    <Search
+      onkeyup={onSearchChange}
+      value={search}
+      onclear={onSearchClear}
+      bind:orderBy
+      bind:ascending
+      {ordinals}
+    />
   </div>
   {#await getVideos(page, limit, search, orderBy, ascending)}
     <strong>loading</strong>
