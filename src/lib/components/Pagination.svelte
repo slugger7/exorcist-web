@@ -11,7 +11,13 @@
   import { Link } from "svelte-routing";
 
   /** @type {props}*/
-  let { page = $bindable(), limit = $bindable(), total, url = "", onchange } = $props();
+  let {
+    page = $bindable(),
+    limit = $bindable(),
+    total,
+    url = "",
+    onchange,
+  } = $props();
   let pages = $derived(Math.ceil(total / limit));
 
   $inspect(page, limit, total, pages);
@@ -29,7 +35,7 @@
   const clickHandler = (pn) => () => {
     page = pn;
     if (onchange) {
-      onchange()
+      onchange();
     }
   };
 </script>
@@ -46,7 +52,7 @@
 {/snippet}
 
 <nav class="pagination is-centered" aria-label="pagination">
-  {#if page - 1 >= 1}
+  {#if page - 1 > 1}
     <Link
       onclick={clickHandler(page - 1)}
       class="pagination-previous"
@@ -63,10 +69,17 @@
   <ul class="pagination-list">
     {@render pageLine(1)}
 
+    {#if page <= 3 && page != 1}
+      {@render pageLine(page)}
+    {/if}
     {#if page <= 3 && pages > 1}
-      {#each { length: pages - 1 }, pn}
-        {@render pageLine(pn + 2)}
-      {/each}
+      {@render pageLine(page + 1)}
+    {/if}
+    {#if page <= 3 && pages > 2}
+      {@render pageLine(page + 2)}
+    {/if}
+    {#if page <= 3 && pages > 3}
+      {@render pageLine(page + 3)}
     {/if}
 
     {#if page > 3 && pages > 5}
