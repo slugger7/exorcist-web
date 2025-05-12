@@ -1,7 +1,7 @@
 import { ws } from "../env"
 import { jobsState } from "../state/jobState.svelte"
 
-const heartbeat = 10000
+const heartbeat = parseInt(import.meta.env.VITE_WEBSOCKET_HEARTBEAT)
 const pingTime = heartbeat * 9 / 10
 const pongTime = heartbeat
 
