@@ -3,10 +3,21 @@ import { server } from '../env.js'
 import { fetch } from './fetch.js'
 
 /**
+ * @param {number} [page]
+ * @param {number} [limit]
+ * @param {string} [search]
  * @returns {Promise<Page<Video>>}
  */
-export const getVideos = async (page = 1, limit = 48) => {
-  const res = await fetch(`${server()}/videos?skip=${(page - 1) * limit}&limit=${limit}`)
+export const getVideos = async (page = 1, limit = 48, search = "") => {
+  const params = new URLSearchParams()
+  params.set("skip", ((page - 1) * limit).toString())
+  params.set("limit", limit.toString())
+
+  if (search !== "") {
+    params.set("search", search)
+  }
+
+  const res = await fetch(`${server()}/videos?${params.toString()}`)
 
   return await res.json()
 }
