@@ -20,9 +20,9 @@
             >
         </figure>
     </div>
-    <header class="card-header">
+    <header class="card-header overflow-none">
         <Link class="card-header-title" to={routes.videoFunc(video.id)}
-            >{video.title}</Link
+            ><span class="overflow-none">{video.title}</span></Link
         >
     </header>
 </div>
@@ -30,5 +30,11 @@
 <style>
     .card {
         height: 100%;
+    }
+
+    .overflow-none {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 </style>
