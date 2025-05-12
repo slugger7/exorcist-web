@@ -29,7 +29,7 @@
   {#if value !== ""}
     <p class="control">
       <button
-        class="button is-primary"
+        class="button"
         aria-label="clear search"
         onclick={() => {
           value = "";
