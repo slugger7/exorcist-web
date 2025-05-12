@@ -1,4 +1,6 @@
 <script>
+  import Select from "./Select.svelte";
+
   /**
    * @import { ChangeEventHandler } from "svelte/elements";
    *
@@ -7,14 +9,25 @@
    * @property {string} [value]
    * @property {ChangeEventHandler<HTMLInputElement>} onkeyup
    * @property {Function} [onclear]
+   * @property {any} ordinals
+   * @property {string} orderBy
+   * @property {boolean} [ascending]
    */
 
   /** @type {props} */
-  let { value = $bindable(""), onkeyup, onclear = () => {} } = $props();
+  let {
+    value = $bindable(""),
+    onkeyup,
+    onclear = () => {},
+    ordinals,
+    orderBy = $bindable(),
+    ascending = $bindable(),
+  } = $props();
 </script>
 
 <div class="field has-addons">
-  <p class="control has-icons-left">
+  <Select options={ordinals} bind:value={orderBy} bind:ascending />
+  <p class="control has-icons-left is-expanded">
     <input
       class="input"
       type="text"

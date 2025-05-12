@@ -1,3 +1,5 @@
+import { navigate } from "svelte-routing";
+
 /**
   * @param {string} param
   * @param {number} def
@@ -45,3 +47,34 @@ export const getArrayOfStringsSearchParamOrDefault = (param, def) => {
 
   return val
 }
+
+/**
+ * @param {string} param
+ * @param {boolean} def
+ * @returns {boolean}
+ */
+export const getBoolParamOrDefault = (param, def) => {
+  const params = new URLSearchParams(window.location.search)
+
+  const val = params.get(param)
+
+  if (val === 'false') return false
+  if (val === 'true') return true
+
+  return def
+}
+
+/**
+ * @param {string} key 
+ * @param {string|boolean} val 
+ * @param {string} route 
+ */
+export const setValueAndNavigate = (key, val, route) => {
+  const params = new URLSearchParams(window.location.search);
+  if (val === "") {
+    params.delete(key);
+  } else {
+    params.set(key, val.toString());
+  }
+  navigate(`${route}?${params.toString()}`, { preserveScroll: true });
+};
