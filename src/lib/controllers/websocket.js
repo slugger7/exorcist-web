@@ -28,7 +28,7 @@ let pongTimeout
 
 window.addEventListener("beforeunload", () => {
 	if (conn) {
-	conn.close()
+		conn.close()
 	}
 	clearInterval(pingInterval)
 	clearTimeout(pongTimeout)
@@ -83,7 +83,7 @@ export const setupWebsocket = () => {
 	const ping = () => {
 		pingInterval = setInterval(() => {
 			console.debug("ping")
-			if (conn.readyState !== WebSocket.CLOSED) {
+			if (conn && conn.readyState !== WebSocket.CLOSED) {
 				conn.send("ping")
 			}
 		}, pingTime)
