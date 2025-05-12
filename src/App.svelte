@@ -5,6 +5,7 @@
     import Header from "./Header.svelte";
     import Routes from "./routes/Routes.svelte";
     import "./app.css";
+    import { setupWebsocket } from "./lib/controllers/websocket.js";
 
     onMount(() => {
         if (window.location.pathname !== "/") {
@@ -14,6 +15,10 @@
         const username = localStorage.getItem("username");
         userState.id = userId;
         userState.username = username;
+
+        if (userId) {
+            setupWebsocket();
+        }
     });
 </script>
 

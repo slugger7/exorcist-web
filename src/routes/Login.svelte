@@ -3,6 +3,7 @@
     import { userState } from "../lib/state/userState.svelte.js";
     import { login } from "../lib/controllers/authentication.js";
     import routes from "./routes.js";
+    import { setupWebsocket } from "../lib/controllers/websocket.js";
 
     let username = $state(import.meta.env.DEV ? "admin" : "");
     let password = $state(import.meta.env.DEV ? "admin" : "");
@@ -19,6 +20,8 @@
             const user = await login(username, password);
             userState.id = user.userId;
             userState.username = user.username;
+
+            setupWebsocket();
 
             if (returnUrl === null) {
                 navigate(routes.home);

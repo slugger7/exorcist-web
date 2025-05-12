@@ -6,13 +6,15 @@
    * @property {number} limit
    * @property {number} total
    * @property {string} [url]
+   * @property {Function} [onchange]
    */
   import { Link } from "svelte-routing";
 
   /** @type {props}*/
-  let { page = $bindable(), limit = $bindable(), total, url = "" } = $props();
-  let pages = Math.trunc(total / limit);
+  let { page = $bindable(), limit = $bindable(), total, url = "", onchange } = $props();
+  let pages = $derived(Math.ceil(total / limit));
 
+  $inspect(page, limit, total, pages);
   /**
    * @param {number} pn
    * @returns {string}
@@ -20,13 +22,15 @@
   const urlForPage = (pn) => {
     const params = new URLSearchParams(window.location.search);
     params.set("page", pn.toString());
-    params.set("limit", limit.toString());
 
     return `${url}?${params.toString()}`;
   };
 
   const clickHandler = (pn) => () => {
     page = pn;
+    if (onchange) {
+      onchange()
+    }
   };
 </script>
 
@@ -42,7 +46,7 @@
 {/snippet}
 
 <nav class="pagination is-centered" aria-label="pagination">
-  {#if page - 1 > 1}
+  {#if page - 1 >= 1}
     <Link
       onclick={clickHandler(page - 1)}
       class="pagination-previous"
