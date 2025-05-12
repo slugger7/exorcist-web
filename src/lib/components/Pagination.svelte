@@ -11,8 +11,9 @@
 
   /** @type {props}*/
   let { page = $bindable(), limit = $bindable(), total, url = "" } = $props();
-  let pages = Math.trunc(total / limit);
+  let pages = $derived(Math.ceil(total / limit));
 
+  $inspect(page, limit, total, pages);
   /**
    * @param {number} pn
    * @returns {string}
@@ -41,7 +42,7 @@
 {/snippet}
 
 <nav class="pagination is-centered" aria-label="pagination">
-  {#if page - 1 > 1}
+  {#if page - 1 >= 1}
     <Link
       onclick={clickHandler(page - 1)}
       class="pagination-previous"
