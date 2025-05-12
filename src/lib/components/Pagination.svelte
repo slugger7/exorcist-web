@@ -69,17 +69,14 @@
   <ul class="pagination-list">
     {@render pageLine(1)}
 
-    {#if page <= 3 && page != 1}
-      {@render pageLine(page)}
+    {#if page <= 3 && pages >= 2}
+      {@render pageLine(2)}
     {/if}
-    {#if page <= 3 && pages > 1}
-      {@render pageLine(page + 1)}
-    {/if}
-    {#if page <= 3 && pages > 2}
-      {@render pageLine(page + 2)}
+    {#if page <= 3 && pages >= 3}
+      {@render pageLine(3)}
     {/if}
     {#if page <= 3 && pages > 3}
-      {@render pageLine(page + 3)}
+      {@render pageLine(4)}
     {/if}
 
     {#if page > 3 && pages > 5}
