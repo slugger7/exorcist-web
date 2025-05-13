@@ -46,8 +46,21 @@
     setValueAndNavigate("ascending", ascending, routes.home, { replace: true });
   });
 
+  const onPopState = () => {
+    page = getIntSearchParamOrDefault("page", 1)
+    limit = getIntSearchParamOrDefault("limit", 48)
+    search = getStringSearchParamOrDefault("search", "")
+    orderBy = getStringSearchParamOrDefault("orderBy", "added")
+    ascending = getBoolParamOrDefault("ascending", true)
+  }
+
   onMount(() => {
-    console.log("mounting");
+    window.addEventListener("popstate", onPopState)
+
+    return () => {
+      console.log("removing event listener")
+      window.removeEventListener("popstate", onPopState)
+    }
   });
 </script>
 
