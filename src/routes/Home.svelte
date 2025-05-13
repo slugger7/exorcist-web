@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import Pagination from "../lib/components/Pagination.svelte";
   import Search from "../lib/components/Search.svelte";
   import VideoCard from "../lib/components/VideoCard.svelte";
@@ -17,6 +17,9 @@
   let search = $state(getStringSearchParamOrDefault("search", ""));
   let orderBy = $state(getStringSearchParamOrDefault("orderBy", "added"));
   let ascending = $state(getBoolParamOrDefault("ascending", true));
+
+  /** @type {{ [key: string]: HTMLDivElement}}*/
+  const vids = $state({});
 
   const setSearchAndNavigate = (s) => {
     search = s;
@@ -47,20 +50,31 @@
   });
 
   const onPopState = () => {
-    page = getIntSearchParamOrDefault("page", 1)
-    limit = getIntSearchParamOrDefault("limit", 48)
-    search = getStringSearchParamOrDefault("search", "")
-    orderBy = getStringSearchParamOrDefault("orderBy", "added")
-    ascending = getBoolParamOrDefault("ascending", true)
-  }
+    page = getIntSearchParamOrDefault("page", 1);
+    limit = getIntSearchParamOrDefault("limit", 48);
+    search = getStringSearchParamOrDefault("search", "");
+    orderBy = getStringSearchParamOrDefault("orderBy", "added");
+    ascending = getBoolParamOrDefault("ascending", true);
+  };
 
-  onMount(() => {
-    window.addEventListener("popstate", onPopState)
+  onDestroy(() => {
+    window.removeEventListener("popstate", onPopState);
+  });
 
-    return () => {
-      console.log("removing event listener")
-      window.removeEventListener("popstate", onPopState)
-    }
+  onMount(async () => {
+    window.addEventListener("popstate", onPopState);
+  });
+
+  // scrolling effect
+  $effect(() => {
+    setTimeout(async () => {
+      const item = localStorage.getItem("item");
+      const vid = vids[item];
+      if (vid) {
+        vid.scrollIntoView({ behavior: "smooth" });
+      }
+      localStorage.removeItem("item");
+    }, 250);
   });
 </script>
 
@@ -77,11 +91,12 @@
     />
   </div>
   {#await getVideos(page, limit, search, orderBy, ascending)}
-    <strong>loading</strong>
+    <strong style="height: 10000px;">loading</strong>
   {:then videosPage}
+    {console.log("start render")}
     <div class="grid is-col-min-15">
       {#each videosPage.data as video (video.id)}
-        <div class="cell">
+        <div class="cell" bind:this={vids[video.id]}>
           <VideoCard {video} />
         </div>
       {:else}
