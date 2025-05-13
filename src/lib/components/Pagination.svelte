@@ -20,7 +20,6 @@
   } = $props();
   let pages = $derived(Math.ceil(total / limit));
 
-  $inspect(page, limit, total, pages);
   /**
    * @param {number} pn
    * @returns {string}
