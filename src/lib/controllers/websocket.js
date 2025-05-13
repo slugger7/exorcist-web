@@ -84,7 +84,11 @@ export const setupWebsocket = () => {
 		pingInterval = setInterval(() => {
 			console.debug("ping")
 			if (conn && conn.readyState !== WebSocket.CLOSED) {
-				conn.send("ping")
+				try {
+					conn.send("ping")
+				} catch (e) {
+					console.error("error sending ping on websocket", e)
+				}
 			}
 		}, pingTime)
 	}
