@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import Pagination from "../lib/components/Pagination.svelte";
   import Search from "../lib/components/Search.svelte";
   import VideoCard from "../lib/components/VideoCard.svelte";
@@ -20,7 +21,7 @@
   const setSearchAndNavigate = (s) => {
     search = s;
 
-    setValueAndNavigate("search", search, routes.home);
+    setValueAndNavigate("search", search, routes.home, { replace: true });
   };
 
   let searchTimeout;
@@ -38,11 +39,15 @@
   };
 
   $effect(() => {
-    setValueAndNavigate("orderBy", orderBy, routes.home);
+    setValueAndNavigate("orderBy", orderBy, routes.home, { replace: true });
   });
 
   $effect(() => {
-    setValueAndNavigate("ascending", ascending, routes.home);
+    setValueAndNavigate("ascending", ascending, routes.home, { replace: true });
+  });
+
+  onMount(() => {
+    console.log("mounting");
   });
 </script>
 
