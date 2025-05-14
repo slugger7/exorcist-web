@@ -1,26 +1,10 @@
 import { ws } from "../env"
 import { tryParseIntOrDefault } from "../parsing"
-import { jobsState } from "../state/jobState.svelte"
+import { wsState } from "../state/wsState.svelte"
 
 const heartbeat = tryParseIntOrDefault(import.meta.env.VITE_WEBSOCKET_HEARTBEAT, 30000)
 const pingTime = heartbeat * 9 / 10
 const pongTime = heartbeat
-
-const topics = {
-	"job_update": (job) => {
-		jobsState.page.data = jobsState.page.data.map(j => {
-			if (j.id === job.id) {
-				// check to make sure this update is newer than the current job
-				return job
-			}
-			return j
-		})
-	},
-	"job_create": (job) => {
-		jobsState.page.total = jobsState.page.total + 1
-		jobsState.page.data.push(job)
-	}
-}
 
 /** @type {WebSocket} */
 let conn
@@ -54,6 +38,8 @@ export const setupWebsocket = () => {
 		console.warn("Websocket connection closed")
 		clearInterval(pingInterval)
 		clearTimeout(pongTimeout)
+		wsState.active = false
+		wsState.connection = null
 		connect()
 	}
 
@@ -63,16 +49,12 @@ export const setupWebsocket = () => {
 			pong()
 			return
 		}
-		/** @type {{topic: string, data: any}} */
-		const data = JSON.parse(evt.data)
-		const topic = topics[data.topic]
-		if (topic) {
-			topic(data.data)
-		}
 	}
 
 	const onOpen = (evt) => {
 		console.info("Websoceket opened")
+		wsState.active = true;
+		wsState.connection = conn
 		ping()
 		pong()
 	}
@@ -101,6 +83,8 @@ export const setupWebsocket = () => {
 			clearInterval(pingInterval)
 			clearTimeout(pongTimeout)
 			conn.close()
+			wsState.connection = null
+			wsState.active = false
 			connect()
 		}, pongTime)
 	}
