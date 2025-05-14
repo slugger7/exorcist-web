@@ -71,7 +71,7 @@
       const item = localStorage.getItem("item");
       const vid = vids[item];
       if (vid) {
-        vid.scrollIntoView({ behavior: "smooth" });
+        vid.scrollIntoView({ behavior: "auto" });
       }
       localStorage.removeItem("item");
     }, 250);
@@ -91,10 +91,10 @@
     />
   </div>
   {#await getVideos(page, limit, search, orderBy, ascending)}
-    <strong style="height: 10000px;">loading</strong>
+    <strong>loading</strong>
   {:then videosPage}
     {console.log("start render")}
-    <div class="grid is-col-min-15">
+    <div class="grid is-col-min-13 is-gap-1">
       {#each videosPage.data as video (video.id)}
         <div class="cell" bind:this={vids[video.id]}>
           <VideoCard {video} />
