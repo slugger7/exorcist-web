@@ -1,7 +1,8 @@
 import { ws } from "../env"
+import { tryParseIntOrDefault } from "../parsing"
 import { jobsState } from "../state/jobState.svelte"
 
-const heartbeat = parseInt(import.meta.env.VITE_WEBSOCKET_HEARTBEAT)
+const heartbeat = tryParseIntOrDefault(import.meta.env.VITE_WEBSOCKET_HEARTBEAT, 30000)
 const pingTime = heartbeat * 9 / 10
 const pongTime = heartbeat
 
