@@ -1,16 +1,28 @@
 <script>
-    import { Link } from "svelte-routing";
-    import routes from "../../routes/routes";
-    import { imageUrlById } from "../controllers/image";
+  import { Link } from "svelte-routing";
+  import routes from "../../routes/routes";
+  import { imageUrlById } from "../controllers/image";
 
-    /** @import { Video } from "../types"*/
+  /** @import { Video } from "../types"*/
 
-    /** @type {{video: Video}} */
-    let { video } = $props();
+  /** @type {{video: Video}} */
+  let { video } = $props();
+  /** @type {HTMLElement}*/
+  let element = $state();
+
+  $effect(() => {
+    requestAnimationFrame(() => {
+      const item = localStorage.getItem("item");
+      if (item === video.id) {
+        element.scrollIntoView({ behavior: "smooth" });
+        localStorage.removeItem("item")
+      }
+    });
+  });
 </script>
 
-<figure class="image">
-    <Link to={routes.videoFunc(video.id)}
-        ><img src={imageUrlById(video.thumbnailId)} alt={video.title} /></Link
-    >
+<figure class="image" bind:this={element}>
+  <Link to={routes.videoFunc(video.id)}
+    ><img src={imageUrlById(video.thumbnailId)} alt={video.title} /></Link
+  >
 </figure>
