@@ -16,7 +16,7 @@
         userState.id = userId;
         userState.username = username;
 
-        if (userId) {
+        if (userId && import.meta.env.VITE_WS) {
             setupWebsocket();
         }
     });

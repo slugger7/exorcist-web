@@ -1,7 +1,8 @@
 import { ws } from "../env"
+import { tryParseIntOrDefault } from "../parsing"
 import { jobsState } from "../state/jobState.svelte"
 
-const heartbeat = parseInt(import.meta.env.VITE_WEBSOCKET_HEARTBEAT)
+const heartbeat = tryParseIntOrDefault(import.meta.env.VITE_WEBSOCKET_HEARTBEAT, 30000)
 const pingTime = heartbeat * 9 / 10
 const pongTime = heartbeat
 
@@ -84,7 +85,11 @@ export const setupWebsocket = () => {
 		pingInterval = setInterval(() => {
 			console.debug("ping")
 			if (conn && conn.readyState !== WebSocket.CLOSED) {
-				conn.send("ping")
+				try {
+					conn.send("ping")
+				} catch (e) {
+					console.error("error sending ping on websocket", e)
+				}
 			}
 		}, pingTime)
 	}

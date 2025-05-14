@@ -26,7 +26,24 @@
 </script>
 
 <div class="field has-addons">
-  <Select options={ordinals} bind:value={orderBy} bind:ascending />
+  <p class="control">
+    <button
+      class="button"
+      aria-label="change sort order"
+      onclick={() => {
+        ascending = !ascending;
+      }}
+    >
+      <span class="icon is-left">
+        {#if ascending}
+          <i class="fas fa-arrow-up-short-wide"></i>
+        {:else}
+          <i class="fas fa-arrow-up-wide-short"></i>
+        {/if}
+      </span>
+    </button>
+  </p>
+  <Select options={ordinals} bind:value={orderBy} />
   <p class="control has-icons-left is-expanded">
     <input
       class="input"

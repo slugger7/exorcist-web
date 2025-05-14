@@ -1,9 +1,14 @@
 <script>
+    import { onMount } from "svelte";
     import { imageUrlById } from "../lib/controllers/image";
     import { videoUrlById, get } from "../lib/controllers/videos";
 
     /** @type {{id: string}}*/
     let { id } = $props();
+
+    onMount(() => {
+        localStorage.setItem("item", id);
+    });
 </script>
 
 {#await get(id)}

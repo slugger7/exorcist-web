@@ -1,4 +1,5 @@
 <script>
+  import { onDestroy, onMount } from "svelte";
   import Pagination from "../lib/components/Pagination.svelte";
   import Search from "../lib/components/Search.svelte";
   import VideoCard from "../lib/components/VideoCard.svelte";
@@ -17,10 +18,13 @@
   let orderBy = $state(getStringSearchParamOrDefault("orderBy", "added"));
   let ascending = $state(getBoolParamOrDefault("ascending", true));
 
+  /** @type {{ [key: string]: HTMLDivElement}}*/
+  const vids = $state({});
+
   const setSearchAndNavigate = (s) => {
     search = s;
 
-    setValueAndNavigate("search", search, routes.home);
+    setValueAndNavigate("search", search, routes.home, { replace: true });
   };
 
   let searchTimeout;
@@ -38,11 +42,39 @@
   };
 
   $effect(() => {
-    setValueAndNavigate("orderBy", orderBy, routes.home);
+    setValueAndNavigate("orderBy", orderBy, routes.home, { replace: true });
   });
 
   $effect(() => {
-    setValueAndNavigate("ascending", ascending, routes.home);
+    setValueAndNavigate("ascending", ascending, routes.home, { replace: true });
+  });
+
+  const onPopState = () => {
+    page = getIntSearchParamOrDefault("page", 1);
+    limit = getIntSearchParamOrDefault("limit", 48);
+    search = getStringSearchParamOrDefault("search", "");
+    orderBy = getStringSearchParamOrDefault("orderBy", "added");
+    ascending = getBoolParamOrDefault("ascending", true);
+  };
+
+  onDestroy(() => {
+    window.removeEventListener("popstate", onPopState);
+  });
+
+  onMount(async () => {
+    window.addEventListener("popstate", onPopState);
+  });
+
+  // scrolling effect
+  $effect(() => {
+    setTimeout(async () => {
+      const item = localStorage.getItem("item");
+      const vid = vids[item];
+      if (vid) {
+        vid.scrollIntoView({ behavior: "auto" });
+      }
+      localStorage.removeItem("item");
+    }, 250);
   });
 </script>
 
@@ -61,9 +93,10 @@
   {#await getVideos(page, limit, search, orderBy, ascending)}
     <strong>loading</strong>
   {:then videosPage}
-    <div class="grid is-col-min-15">
+    {console.log("start render")}
+    <div class="grid is-col-min-13 is-gap-1">
       {#each videosPage.data as video (video.id)}
-        <div class="cell">
+        <div class="cell" bind:this={vids[video.id]}>
           <VideoCard {video} />
         </div>
       {:else}

@@ -5,13 +5,17 @@
 
     let isMenuActive = $state(false);
     let userDropdownActive = $state(false);
+
+    const onclick = () => {
+        isMenuActive = false;
+    };
 </script>
 
 <header>
     <nav class="navbar" aria-label="main navigation">
         {#if userState.id}
             <div class="navbar-brand">
-                <Link class="navbar-item" to="/">Exorcist</Link>
+                <Link class="navbar-item" to="/" {onclick}>Exorcist</Link>
                 <button
                     class="navbar-burger {isMenuActive ? 'is-active' : ''}"
                     aria-label="menu"
@@ -30,8 +34,10 @@
                 id="exorcistNavbar"
                 class="navbar-menu {isMenuActive ? 'is-active' : ''}"
             >
-                <Link class="navbar-item" to={routes.libraries}>Libraries</Link>
-                <Link class="navbar-item" to={routes.jobs}>Jobs</Link>
+                <Link class="navbar-item" to={routes.libraries} {onclick}
+                    >Libraries</Link
+                >
+                <Link class="navbar-item" to={routes.jobs} {onclick}>Jobs</Link>
                 <div class="navbar-end">
                     <div
                         class="navbar-item has-dropdown {userDropdownActive
