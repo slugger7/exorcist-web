@@ -19,7 +19,6 @@ export const create = async (type, data) => {
   return await res.json()
 }
 
-
 /**
  * 
  * @param {string} parent 
