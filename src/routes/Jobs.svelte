@@ -1,5 +1,5 @@
 <script>
-  /** @import { Job, WSMessage, Page } from "../lib/types"*/
+  /** @import { Job, WSMessage, WSTopicMap, Page } from "../lib/types"*/
   import { onDestroy, onMount } from "svelte";
   import Pagination from "../lib/components/Pagination.svelte";
   import { getAll } from "../lib/controllers/job";
@@ -53,15 +53,16 @@
   const onmessage = (e) => {
     if (e.data === PONG) return;
 
-    /** @type {WSMessage}*/
+    /** @type {WSMessage<Job>}*/
     const data = JSON.parse(e.data);
 
-    const topic = topics[data.topic];
-    if (topic) {
-      topic(data.data);
+    const topicFn = topics[data.topic];
+    if (topicFn) {
+      topicFn(data.data);
     }
   };
 
+  /** @type {WSTopicMap<Job>}*/
   const topics = {
     job_update: (job) => {
       jobPage.data = jobPage.data.map((j) => {
@@ -74,7 +75,7 @@
     job_create: (job) => {
       jobPage.total = jobPage.total + 1;
       jobPage.data.push(job);
-    },
+    }
   };
 </script>
 

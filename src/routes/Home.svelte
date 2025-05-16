@@ -1,5 +1,5 @@
 <script>
-  /** @import { WSMessage, Page, Video } from "../lib/types"*/
+  /** @import { WSMessage, WSTopicMap, Page, Video } from "../lib/types"*/
   import { onDestroy, onMount } from "svelte";
   import Pagination from "../lib/components/Pagination.svelte";
   import Search from "../lib/components/Search.svelte";
@@ -14,7 +14,6 @@
   import routes from "./routes";
   import { PONG } from "../lib/constants/websocket";
   import { wsState } from "../lib/state/wsState.svelte";
-  import { mergeDeepRight } from "ramda";
 
   let page = $state(getIntSearchParamOrDefault("page", 1));
   let limit = $state(getIntSearchParamOrDefault("limit", 48));
@@ -25,6 +24,8 @@
   let error = $state();
   /** @type {Page<Video>}*/
   let videosPage = $state();
+  /** @type {Video[]} */
+  let newVideos = $state([])
 
   const fetchPage = async () => {
     loading = true;
@@ -97,7 +98,7 @@
   const onWsMessage = (e) => {
     if (e.data === PONG) return;
 
-    /** @type {WSMessage}*/
+    /** @type {WSMessage<Video>}*/
     const data = JSON.parse(e.data);
 
     const topic = topics[data.topic];
@@ -106,13 +107,19 @@
     }
   };
 
+  /** @type {WSTopicMap<Video>}*/
   const topics = {
+    video_create: (video) => {
+      newVideos.push(video)
+    },
     video_update: (video) => {
       console.log({ video });
       if (videosPage) {
         videosPage.data = videosPage.data.map((v) => {
           if (v.id === video.id) {
-            return mergeDeepRight(v, video);
+            return {
+              ...v, ...video
+            }
           }
           return v;
         });
