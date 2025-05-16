@@ -1,3 +1,4 @@
+import { PING, PONG } from "../constants/websocket"
 import { ws } from "../env"
 import { tryParseIntOrDefault } from "../parsing"
 import { wsState } from "../state/wsState.svelte"
@@ -44,8 +45,8 @@ export const setupWebsocket = () => {
 	}
 
 	const onMessage = (evt) => {
-		if (evt.data == "pong") {
-			console.debug("pong")
+		if (evt.data === PONG) {
+			console.debug(PONG)
 			pong()
 			return
 		}
@@ -65,10 +66,10 @@ export const setupWebsocket = () => {
 
 	const ping = () => {
 		pingInterval = setInterval(() => {
-			console.debug("ping")
+			console.debug(PING)
 			if (conn && conn.readyState !== WebSocket.CLOSED) {
 				try {
-					conn.send("ping")
+					conn.send(PING)
 				} catch (e) {
 					console.error("error sending ping on websocket", e)
 				}
