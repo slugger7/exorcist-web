@@ -1,5 +1,6 @@
 <script>
-  import { onDestroy, onMount, tick } from "svelte";
+  /** @import { WSMessage, WSTopicMap, Page, Video } from "../lib/types"*/
+  import { onDestroy, onMount } from "svelte";
   import Pagination from "../lib/components/Pagination.svelte";
   import Search from "../lib/components/Search.svelte";
   import VideoCard from "../lib/components/VideoCard.svelte";
@@ -11,12 +12,45 @@
     setValueAndNavigate,
   } from "../lib/searchParams";
   import routes from "./routes";
+  import { PONG } from "../lib/constants/websocket";
+  import { wsState } from "../lib/state/wsState.svelte";
 
   let page = $state(getIntSearchParamOrDefault("page", 1));
   let limit = $state(getIntSearchParamOrDefault("limit", 48));
   let search = $state(getStringSearchParamOrDefault("search", ""));
   let orderBy = $state(getStringSearchParamOrDefault("orderBy", "added"));
   let ascending = $state(getBoolParamOrDefault("ascending", true));
+  let loading = $state(false);
+  let error = $state();
+  /** @type {Page<Video>}*/
+  let videosPage = $state();
+  /** @type {Video[]} */
+  let newVideos = $state([])
+
+  const fetchPage = async () => {
+    loading = true;
+    try {
+      videosPage = await getVideos(page, limit, search, orderBy, ascending);
+    } catch (e) {
+      error = e;
+    } finally {
+      loading = false;
+    }
+  };
+
+  onDestroy(() => {
+    window.removeEventListener("popstate", onPopState);
+
+    if (wsState.active) {
+      wsState.connection.removeEventListener("message", onWsMessage);
+    }
+  });
+
+  onMount(async () => {
+    window.addEventListener("popstate", onPopState);
+
+    await fetchPage();
+  });
 
   const setSearchAndNavigate = (s) => {
     search = s;
@@ -54,13 +88,51 @@
     ascending = getBoolParamOrDefault("ascending", true);
   };
 
-  onDestroy(() => {
-    window.removeEventListener("popstate", onPopState);
+  $effect(() => {
+    if (wsState.active) {
+      wsState.connection.addEventListener("message", onWsMessage);
+    }
   });
 
-  onMount(async () => {
-    window.addEventListener("popstate", onPopState);
-  });
+  /** @param {MessageEvent<string>} e */
+  const onWsMessage = (e) => {
+    if (e.data === PONG) return;
+
+    /** @type {WSMessage<Video>}*/
+    const data = JSON.parse(e.data);
+
+    const topic = topics[data.topic];
+    if (topic) {
+      topic(data.data);
+    }
+  };
+
+  /** @type {WSTopicMap<Video>}*/
+  const topics = {
+    video_create: (video) => {
+      newVideos.push(video)
+    },
+    video_update: (video) => {
+      console.log({ video });
+      newVideos = newVideos.map((v) => {
+        if (v.id === video.id) {
+          return {...v, ...video}
+        }
+        return v
+      })
+
+      if (videosPage) {
+        videosPage.data = videosPage.data.map((v) => {
+          if (v.id === video.id) {
+            return {
+              ...v, ...video
+            }
+          }
+          return v;
+        });
+      }
+    },
+  };
 </script>
 
 <div class="container is-fluid">
@@ -75,9 +147,12 @@
       {ordinals}
     />
   </div>
-  {#await getVideos(page, limit, search, orderBy, ascending)}
+  {#if loading}
     <strong>loading</strong>
-  {:then videosPage}
+  {:else if !error && videosPage}
+    {#if newVideos} 
+      <pre>{JSON.stringify(newVideos, null ,2)}</pre>
+    {/if}
     <div class="grid is-col-min-13 is-gap-1">
       {#each videosPage.data as video (video.id)}
         <div class="cell">
@@ -89,7 +164,7 @@
     </div>
     <Pagination bind:page bind:limit total={videosPage.total} />
     <div class="section"></div>
-  {:catch e}
-    <pre>Something went wrong</pre>
-  {/await}
+  {:else if error}
+    <pre>Something went wrong {error}</pre>
+  {/if}
 </div>

@@ -7,7 +7,6 @@ export * from "./library"
 export type Video = {
   id: string;
   title: string;
-  path: string;
   thumbnailId: string
 }
 
@@ -24,12 +23,17 @@ export type Page<T> = {
 }
 
 export type WSTopicEnum =
-| "job_update"
-| "job_create"
+  | "job_update"
+  | "job_create"
+  | "video_create"
+  | "video_update"
+  | "video_delete"
 
-export type WSTopicData = | Job
+export type WSTopicMap<T> = {
+  [key in WSTopicEnum]?: (data: T) => void
+}
 
-export type WSMessage = {
+export type WSMessage<T> = {
   topic: WSTopicEnum
-  data: WSTopicData
+  data: T
 }
