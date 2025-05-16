@@ -114,6 +114,13 @@
     },
     video_update: (video) => {
       console.log({ video });
+      newVideos = newVideos.map((v) => {
+        if (v.id === video.id) {
+          return {...v, ...video}
+        }
+        return v
+      })
+
       if (videosPage) {
         videosPage.data = videosPage.data.map((v) => {
           if (v.id === video.id) {
@@ -143,6 +150,9 @@
   {#if loading}
     <strong>loading</strong>
   {:else if !error && videosPage}
+    {#if newVideos} 
+      <pre>{JSON.stringify(newVideos, null ,2)}</pre>
+    {/if}
     <div class="grid is-col-min-13 is-gap-1">
       {#each videosPage.data as video (video.id)}
         <div class="cell">
