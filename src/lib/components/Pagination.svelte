@@ -8,15 +8,15 @@
    * @property {string} [url]
    * @property {Function} [onchange]
    */
-  import { Link } from "svelte-routing";
+  import { Link, navigate } from "svelte-routing";
 
   /** @type {props}*/
   let {
-    page = $bindable(),
-    limit = $bindable(),
+    page = $bindable(1),
+    limit = $bindable(50),
     total,
     url = "",
-    onchange,
+    onchange = () => {},
   } = $props();
   let pages = $derived(Math.ceil(total / limit));
 
@@ -33,22 +33,20 @@
 
   const clickHandler = (pn) => () => {
     page = pn;
-    if (onchange) {
-      onchange();
-    }
+    onchange();
+  };
+
+  let pageChangeTimeout;
+  const onPageChange = (event) => {
+    clearTimeout(pageChangeTimeout);
+    setTimeout(() => {
+      const newPage = parseInt(event.target.value);
+      if (!isNaN(newPage)) {
+        clickHandler(newPage)();
+      }
+    }, 250);
   };
 </script>
-
-{#snippet pageLine(pn)}
-  <li>
-    <Link
-      to={urlForPage(pn)}
-      onclick={clickHandler(pn)}
-      class="pagination-link {page === pn ? 'is-current' : ''}"
-      aria-label="Goto page {pn}">{pn}</Link
-    >
-  </li>
-{/snippet}
 
 <nav class="pagination is-centered" aria-label="pagination">
   {#if page - 1 > 1}
@@ -61,49 +59,34 @@
   {#if page + 1 <= pages}
     <Link
       onclick={clickHandler(page + 1)}
-      class="pagination-next"
+      class="pagination-next is-right"
       to={urlForPage(page + 1)}>Next page</Link
     >
   {/if}
-  <ul class="pagination-list">
-    {@render pageLine(1)}
-
-    {#if page <= 3 && pages >= 2}
-      {@render pageLine(2)}
-    {/if}
-    {#if page <= 3 && pages >= 3}
-      {@render pageLine(3)}
-    {/if}
-    {#if page <= 3 && pages > 3}
-      {@render pageLine(4)}
-    {/if}
-
-    {#if page > 3 && pages > 5}
-      <li><span class="pagination-ellipsis">&hellip;</span></li>
-      {#if pages - page >= 3}
-        {@render pageLine(page - 1)}
-      {/if}
-    {/if}
-
-    {#if pages > 5 && page > 3 && pages - page >= 3}
-      {@render pageLine(page)}
-    {/if}
-
-    {#if pages - page >= 3 && pages > 5}
-      {#if page > 3}
-        {@render pageLine(page + 1)}
-      {/if}
-      <li><span class="pagination-ellipsis">&hellip;</span></li>
-    {/if}
-
-    {#if pages - page < 3 && pages > 5}
-      {@render pageLine(pages - 3)}
-      {@render pageLine(pages - 2)}
-      {@render pageLine(pages - 1)}
-    {/if}
-
-    {#if pages > 3}
-      {@render pageLine(pages)}
-    {/if}
-  </ul>
+  <div class="pagination-list">
+    <div class="field has-addons">
+      <div class="control">
+        <div class="select">
+          <select bind:value={limit} onchange={() => onchange()}>
+            <option value={10}>10</option>
+            <option value={30}>30</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+            <option value={200}>200</option>
+          </select>
+        </div>
+      </div>
+      <p class="control">
+        <input
+          type="number"
+          class="input"
+          value={page}
+          onchange={onPageChange}
+        />
+      </p>
+      <p class="control">
+        <button class="button is-static">of {pages} ({total})</button>
+      </p>
+    </div>
+  </div>
 </nav>
