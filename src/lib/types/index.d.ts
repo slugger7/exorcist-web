@@ -7,7 +7,8 @@ export * from "./library"
 export type Video = {
   id: string;
   title: string;
-  thumbnailId: string
+  thumbnailId: string;
+  deleted: boolean = false;
 }
 
 export type LoginResult = {
