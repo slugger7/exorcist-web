@@ -7,11 +7,13 @@
     getArrayOfStringsSearchParamOrDefault,
     getIntSearchParamOrDefault,
     getStringSearchParamOrDefault,
+    setValueAndNavigate,
   } from "../lib/searchParams";
   import routes from "./routes";
   import { wsState } from "../lib/state/wsState.svelte";
   import { PONG } from "../lib/constants/websocket";
   import JobCard from "../lib/components/JobCard.svelte";
+  import { set } from "ramda";
 
   let parent = $state(getStringSearchParamOrDefault("parent", ""));
   let statuses = $state(getArrayOfStringsSearchParamOrDefault("status", []));
@@ -48,6 +50,16 @@
   $effect(() => {
     if (!wsState.active || !wsState.connection) return;
     wsState.connection.addEventListener("message", onmessage);
+  });
+
+  $effect(() => {
+    setValueAndNavigate("page", page.toString(), routes.jobs);
+  });
+
+  $effect(() => {
+    setValueAndNavigate("limit", limit.toString(), routes.jobs, {
+      replace: false,
+    });
   });
 
   /** @param {MessageEvent<string>} e */
