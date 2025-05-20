@@ -11,6 +11,7 @@
   import routes from "./routes";
   import { wsState } from "../lib/state/wsState.svelte";
   import { PONG } from "../lib/constants/websocket";
+  import JobCard from "../lib/components/JobCard.svelte";
 
   let parent = $state(getStringSearchParamOrDefault("parent", ""));
   let statuses = $state(getArrayOfStringsSearchParamOrDefault("status", []));
@@ -75,7 +76,7 @@
     job_create: (job) => {
       jobPage.total = jobPage.total + 1;
       jobPage.data.push(job);
-    }
+    },
   };
 </script>
 
@@ -84,9 +85,10 @@
   {#if loading}
     <p>loading</p>
   {:else if !error && jobPage}
-    <div class="block">
-      <pre>{JSON.stringify(jobPage, null, 2)}</pre>
-    </div>
+    {#each jobPage.data as job (job.id)}
+      <JobCard {job} />
+    {/each}
+
     <Pagination
       bind:page
       bind:limit
