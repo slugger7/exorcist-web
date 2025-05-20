@@ -16,7 +16,7 @@
   import { wsState } from "../lib/state/wsState.svelte";
 
   let page = $state(getIntSearchParamOrDefault("page", 1));
-  let limit = $state(getIntSearchParamOrDefault("limit", 48));
+  let limit = $state(getIntSearchParamOrDefault("limit", 50));
   let search = $state(getStringSearchParamOrDefault("search", ""));
   let orderBy = $state(getStringSearchParamOrDefault("orderBy", "added"));
   let ascending = $state(getBoolParamOrDefault("ascending", true));
@@ -25,7 +25,9 @@
   /** @type {Page<Video>}*/
   let videosPage = $state();
   /** @type {Video[]} */
-  let newVideos = $state([])
+  let newVideos = $state([]);
+
+  $inspect(page, limit);
 
   const fetchPage = async () => {
     loading = true;
@@ -56,6 +58,7 @@
     search = s;
 
     setValueAndNavigate("search", search, routes.home, { replace: true });
+    fetchPage();
   };
 
   let searchTimeout;
@@ -74,10 +77,24 @@
 
   $effect(() => {
     setValueAndNavigate("orderBy", orderBy, routes.home, { replace: true });
+    fetchPage();
   });
 
   $effect(() => {
     setValueAndNavigate("ascending", ascending, routes.home, { replace: true });
+    fetchPage();
+  });
+
+  $effect(() => {
+    setValueAndNavigate("limit", limit.toString(), routes.home, {
+      replace: true,
+    });
+    fetchPage();
+  });
+
+  $effect(() => {
+    setValueAndNavigate("page", page.toString(), routes.home);
+    fetchPage();
   });
 
   const onPopState = () => {
@@ -110,23 +127,24 @@
   /** @type {WSTopicMap<Video>}*/
   const topics = {
     video_create: (video) => {
-      newVideos.push(video)
+      newVideos.push(video);
     },
     video_update: (video) => {
       console.log({ video });
       newVideos = newVideos.map((v) => {
         if (v.id === video.id) {
-          return {...v, ...video}
+          return { ...v, ...video };
         }
-        return v
-      })
+        return v;
+      });
 
       if (videosPage) {
         videosPage.data = videosPage.data.map((v) => {
           if (v.id === video.id) {
             return {
-              ...v, ...video
-            }
+              ...v,
+              ...video,
+            };
           }
           return v;
         });
@@ -150,8 +168,8 @@
   {#if loading}
     <strong>loading</strong>
   {:else if !error && videosPage}
-    {#if newVideos} 
-      <pre>{JSON.stringify(newVideos, null ,2)}</pre>
+    {#if newVideos}
+      <pre>{JSON.stringify(newVideos, null, 2)}</pre>
     {/if}
     <div class="grid is-col-min-13 is-gap-1">
       {#each videosPage.data as video (video.id)}
