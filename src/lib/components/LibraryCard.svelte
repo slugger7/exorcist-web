@@ -8,7 +8,11 @@
 
 <div class="card">
   <header class="card-header">
-    <Link class="card-header-title" to={routes.libraryFunc(id)}>{name}</Link>
+    <Link
+      class="card-header-title"
+      to={routes.libraryFunc(id)}
+      state={{ libraryName: name }}>{name}</Link
+    >
     <Link
       class="card-header-icon"
       aria-label="more-options"
