@@ -27,8 +27,6 @@
   /** @type {Video[]} */
   let newVideos = $state([]);
 
-  $inspect(page, limit);
-
   const fetchPage = async () => {
     loading = true;
     try {
@@ -130,7 +128,6 @@
       newVideos.push(video);
     },
     video_update: (video) => {
-      console.log({ video });
       newVideos = newVideos.map((v) => {
         if (v.id === video.id) {
           return { ...v, ...video };
@@ -168,9 +165,6 @@
   {#if loading}
     <strong>loading</strong>
   {:else if !error && videosPage}
-    {#if newVideos}
-      <pre>{JSON.stringify(newVideos, null, 2)}</pre>
-    {/if}
     <div class="grid is-col-min-13 is-gap-1">
       {#each videosPage.data as video (video.id)}
         <div class="cell">
