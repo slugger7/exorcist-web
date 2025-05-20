@@ -49,7 +49,7 @@
 </script>
 
 <nav class="pagination is-centered" aria-label="pagination">
-  {#if page - 1 > 1}
+  {#if page - 1 >= 1}
     <Link
       onclick={clickHandler(page - 1)}
       class="pagination-previous"
