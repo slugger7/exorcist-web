@@ -1,7 +1,9 @@
 <script>
+  import { Link } from "svelte-routing";
   import HeaderIconButton from "../lib/components/HeaderIconButton.svelte";
   import { create } from "../lib/controllers/job";
   import { get } from "../lib/controllers/libraryPaths";
+  import routes from "./routes";
 
   /** @type {{id: string}}*/
   let { id } = $props();
@@ -31,7 +33,34 @@
   {#await get(id)}
     <p>loading</p>
   {:then libraryPath}
-    <pre>{JSON.stringify(libraryPath, null, 2)}</pre>
+    <table class="table">
+      <tbody>
+        <tr>
+          <th>ID</th>
+          <td>{libraryPath.id}</td>
+        </tr>
+        <tr>
+          <th>Library ID</th>
+          <td
+            ><Link to={routes.libraryFunc(libraryPath.libraryId)}
+              >{libraryPath.libraryId}</Link
+            ></td
+          >
+        </tr>
+        <tr>
+          <th>Path</th>
+          <td>{libraryPath.path}</td>
+        </tr>
+        <tr>
+          <th>Created</th>
+          <td>{libraryPath.created}</td>
+        </tr>
+        <tr>
+          <th>Modified</th>
+          <td>{libraryPath.modified}</td>
+        </tr>
+      </tbody>
+    </table>
   {:catch}
     <p>something went wrong</p>
   {/await}
