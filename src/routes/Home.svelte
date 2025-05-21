@@ -14,6 +14,7 @@
   import routes from "./routes";
   import { PONG } from "../lib/constants/websocket";
   import { wsState } from "../lib/state/wsState.svelte";
+  import { Link } from "svelte-routing";
 
   let page = $state(getIntSearchParamOrDefault("page", 1));
   let limit = $state(getIntSearchParamOrDefault("limit", 50));
@@ -150,6 +151,7 @@
 
 <div class="container is-fluid">
   <h1 class="title is-1">Home</h1>
+  {#if videosPage && videosPage.data.length !== 0}
   <div class="block">
     <Search
       onkeyup={onSearchChange}
@@ -160,8 +162,16 @@
       {ordinals}
     />
   </div>
+  {/if}
+  
   {#if loading}
-    <strong>loading</strong>
+    <div class="grid is-col-min-13 is-gap-1">
+      {#each Array.apply(null, Array(limit)) as sk }
+        <div class="cell">
+          <figure class="image is-16x9 is-skeleton"></figure>
+        </div>
+      {/each}
+    </div>
   {:else if !error && videosPage}
     <div class="grid is-col-min-13 is-gap-1">
       {#each videosPage.data as video (video.id)}
@@ -169,11 +179,24 @@
           <VideoCard {video} />
         </div>
       {:else}
-        <p>no data here</p>
+      <div class="cell content">
+          <p>Nothing to see here</p>
+          <br />
+          <p>Start by doing the following steps</p>
+          <ol>
+            <li>Create a library <Link to={routes.create.library}>Create Library</Link></li>
+            <li>Create a library path on the library</li>
+            <li>Scan the library path</li>
+          </ol>
+        </div>
+        <!-- display guide on how to get data into the library here -->
       {/each}
-    </div>
-    <Pagination bind:page bind:limit total={videosPage.total} />
-    <div class="section"></div>
+      </div>
+      {#if videosPage.total > 0} 
+        <Pagination bind:page bind:limit total={videosPage.total} />
+        <div class="section"></div>
+      {/if}
+    
   {:else if error}
     <pre>Something went wrong {error}</pre>
   {/if}
