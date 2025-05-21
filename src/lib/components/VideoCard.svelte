@@ -21,7 +21,7 @@
   });
 </script>
 
-<figure class="image" bind:this={element}>
+<figure class={`image ${video.thumbnailId === "00000000-0000-0000-000000000000" ? "is-skeleton" : ""}`} bind:this={element}>
   <Link to={routes.videoFunc(video.id)}
     ><img src={imageUrlById(video.thumbnailId)} alt={video.title} /></Link
   >

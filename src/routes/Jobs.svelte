@@ -7,10 +7,13 @@
     getArrayOfStringsSearchParamOrDefault,
     getIntSearchParamOrDefault,
     getStringSearchParamOrDefault,
+    setValueAndNavigate,
   } from "../lib/searchParams";
   import routes from "./routes";
   import { wsState } from "../lib/state/wsState.svelte";
   import { PONG } from "../lib/constants/websocket";
+  import JobCard from "../lib/components/JobCard.svelte";
+  import { set } from "ramda";
 
   let parent = $state(getStringSearchParamOrDefault("parent", ""));
   let statuses = $state(getArrayOfStringsSearchParamOrDefault("status", []));
@@ -25,6 +28,7 @@
   $inspect(jobPage);
 
   const syncJobs = async () => {
+    console.log("syncing jobs")
     loading = true;
     try {
       jobPage = await getAll(page, limit, parent, statuses, types);
@@ -35,9 +39,10 @@
     }
   };
 
-  onMount(async () => {
-    await syncJobs();
-  });
+  $effect(() => {
+    console.log("effecting jobs")
+    syncJobs()
+  })
 
   onDestroy(() => {
     if (!wsState.active || !wsState.connection) return;
@@ -47,6 +52,16 @@
   $effect(() => {
     if (!wsState.active || !wsState.connection) return;
     wsState.connection.addEventListener("message", onmessage);
+  });
+
+  $effect(() => {
+    setValueAndNavigate("page", page.toString(), routes.jobs);
+  });
+
+  $effect(() => {
+    setValueAndNavigate("limit", limit.toString(), routes.jobs, {
+      replace: false,
+    });
   });
 
   /** @param {MessageEvent<string>} e */
@@ -75,7 +90,7 @@
     job_create: (job) => {
       jobPage.total = jobPage.total + 1;
       jobPage.data.push(job);
-    }
+    },
   };
 </script>
 
@@ -84,16 +99,19 @@
   {#if loading}
     <p>loading</p>
   {:else if !error && jobPage}
-    <div class="block">
-      <pre>{JSON.stringify(jobPage, null, 2)}</pre>
-    </div>
+    {#each jobPage.data as job (job.id)}
+      <JobCard {job} />
+    {:else}
+      <p>No jobs here</p>
+    {/each}
+
     <Pagination
       bind:page
       bind:limit
       total={jobPage.total}
       url={routes.jobs}
-      onchange={syncJobs}
     />
+    <div class="section"></div>
   {:else if error}
     <p>something went wrong ${error.message}</p>
   {/if}

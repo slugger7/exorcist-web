@@ -14,6 +14,7 @@
   import routes from "./routes";
   import { PONG } from "../lib/constants/websocket";
   import { wsState } from "../lib/state/wsState.svelte";
+  import { Link } from "svelte-routing";
 
   let page = $state(getIntSearchParamOrDefault("page", 1));
   let limit = $state(getIntSearchParamOrDefault("limit", 50));
@@ -27,8 +28,6 @@
   /** @type {Video[]} */
   let newVideos = $state([]);
 
-  $inspect(page, limit);
-
   const fetchPage = async () => {
     loading = true;
     try {
@@ -40,6 +39,10 @@
     }
   };
 
+  $effect(() => {
+    fetchPage()
+  })
+
   onDestroy(() => {
     window.removeEventListener("popstate", onPopState);
 
@@ -50,15 +53,12 @@
 
   onMount(async () => {
     window.addEventListener("popstate", onPopState);
-
-    await fetchPage();
   });
 
   const setSearchAndNavigate = (s) => {
     search = s;
 
     setValueAndNavigate("search", search, routes.home, { replace: true });
-    fetchPage();
   };
 
   let searchTimeout;
@@ -77,24 +77,20 @@
 
   $effect(() => {
     setValueAndNavigate("orderBy", orderBy, routes.home, { replace: true });
-    fetchPage();
   });
 
   $effect(() => {
     setValueAndNavigate("ascending", ascending, routes.home, { replace: true });
-    fetchPage();
   });
 
   $effect(() => {
     setValueAndNavigate("limit", limit.toString(), routes.home, {
       replace: true,
     });
-    fetchPage();
   });
 
   $effect(() => {
     setValueAndNavigate("page", page.toString(), routes.home);
-    fetchPage();
   });
 
   const onPopState = () => {
@@ -128,9 +124,9 @@
   const topics = {
     video_create: (video) => {
       newVideos.push(video);
+      videosPage.total++;
     },
     video_update: (video) => {
-      console.log({ video });
       newVideos = newVideos.map((v) => {
         if (v.id === video.id) {
           return { ...v, ...video };
@@ -155,6 +151,7 @@
 
 <div class="container is-fluid">
   <h1 class="title is-1">Home</h1>
+  {#if videosPage && videosPage.data.length !== 0}
   <div class="block">
     <Search
       onkeyup={onSearchChange}
@@ -165,23 +162,41 @@
       {ordinals}
     />
   </div>
+  {/if}
+  
   {#if loading}
-    <strong>loading</strong>
+    <div class="grid is-col-min-13 is-gap-1">
+      {#each Array.apply(null, Array(limit)) as sk }
+        <div class="cell">
+          <figure class="image is-16x9 is-skeleton"></figure>
+        </div>
+      {/each}
+    </div>
   {:else if !error && videosPage}
-    {#if newVideos}
-      <pre>{JSON.stringify(newVideos, null, 2)}</pre>
-    {/if}
     <div class="grid is-col-min-13 is-gap-1">
       {#each videosPage.data as video (video.id)}
         <div class="cell">
           <VideoCard {video} />
         </div>
       {:else}
-        <p>no data here</p>
+      <div class="cell content">
+          <p>Nothing to see here</p>
+          <br />
+          <p>Start by doing the following steps</p>
+          <ol>
+            <li>Create a library <Link to={routes.create.library}>Create Library</Link></li>
+            <li>Create a library path on the library</li>
+            <li>Scan the library path</li>
+          </ol>
+        </div>
+        <!-- display guide on how to get data into the library here -->
       {/each}
-    </div>
-    <Pagination bind:page bind:limit total={videosPage.total} />
-    <div class="section"></div>
+      </div>
+      {#if videosPage.total > 0} 
+        <Pagination bind:page bind:limit total={videosPage.total} />
+        <div class="section"></div>
+      {/if}
+    
   {:else if error}
     <pre>Something went wrong {error}</pre>
   {/if}
