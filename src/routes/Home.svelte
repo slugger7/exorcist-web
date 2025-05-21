@@ -126,6 +126,7 @@
   const topics = {
     video_create: (video) => {
       newVideos.push(video);
+      videosPage.total++;
     },
     video_update: (video) => {
       newVideos = newVideos.map((v) => {
