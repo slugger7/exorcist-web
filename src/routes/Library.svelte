@@ -14,7 +14,7 @@
   <HeaderIconLink
     icon="fa-solid fa-plus"
     ariaLabel="create library"
-    to={routes.create.libraryPath}
+    to={routes.create.libraryPathFunc(libraryId)}
     state={{ libraryName }}
   />
 
