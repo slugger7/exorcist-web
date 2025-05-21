@@ -20,8 +20,10 @@ export type JobData =
 
 export type Job = {
   id: string;
+  parent: string;
   jobType: JobTypeEnum;
   status: JobStatusEnum;
+  priority: number;
   data: ?string;
   outcome: ?string;
   created: Date;

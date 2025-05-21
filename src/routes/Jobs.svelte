@@ -99,6 +99,8 @@
   {:else if !error && jobPage}
     {#each jobPage.data as job (job.id)}
       <JobCard {job} />
+    {:else}
+      <p>No jobs here</p>
     {/each}
 
     <Pagination
@@ -108,6 +110,7 @@
       url={routes.jobs}
       onchange={syncJobs}
     />
+    <div class="section"></div>
   {:else if error}
     <p>something went wrong ${error.message}</p>
   {/if}
