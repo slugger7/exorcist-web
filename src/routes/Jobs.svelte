@@ -28,6 +28,7 @@
   $inspect(jobPage);
 
   const syncJobs = async () => {
+    console.log("syncing jobs")
     loading = true;
     try {
       jobPage = await getAll(page, limit, parent, statuses, types);
@@ -38,9 +39,10 @@
     }
   };
 
-  onMount(async () => {
-    await syncJobs();
-  });
+  $effect(() => {
+    console.log("effecting jobs")
+    syncJobs()
+  })
 
   onDestroy(() => {
     if (!wsState.active || !wsState.connection) return;
@@ -108,7 +110,6 @@
       bind:limit
       total={jobPage.total}
       url={routes.jobs}
-      onchange={syncJobs}
     />
     <div class="section"></div>
   {:else if error}

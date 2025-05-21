@@ -38,6 +38,10 @@
     }
   };
 
+  $effect(() => {
+    fetchPage()
+  })
+
   onDestroy(() => {
     window.removeEventListener("popstate", onPopState);
 
@@ -48,15 +52,12 @@
 
   onMount(async () => {
     window.addEventListener("popstate", onPopState);
-
-    await fetchPage();
   });
 
   const setSearchAndNavigate = (s) => {
     search = s;
 
     setValueAndNavigate("search", search, routes.home, { replace: true });
-    fetchPage();
   };
 
   let searchTimeout;
@@ -75,24 +76,20 @@
 
   $effect(() => {
     setValueAndNavigate("orderBy", orderBy, routes.home, { replace: true });
-    fetchPage();
   });
 
   $effect(() => {
     setValueAndNavigate("ascending", ascending, routes.home, { replace: true });
-    fetchPage();
   });
 
   $effect(() => {
     setValueAndNavigate("limit", limit.toString(), routes.home, {
       replace: true,
     });
-    fetchPage();
   });
 
   $effect(() => {
     setValueAndNavigate("page", page.toString(), routes.home);
-    fetchPage();
   });
 
   const onPopState = () => {
