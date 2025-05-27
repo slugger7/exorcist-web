@@ -4,7 +4,7 @@
   import Pagination from "../lib/components/Pagination.svelte";
   import Search from "../lib/components/Search.svelte";
   import VideoCard from "../lib/components/VideoCard.svelte";
-  import { getVideos, ordinals } from "../lib/controllers/videos";
+  import { getAll, ordinals } from "../lib/controllers/media";
   import {
     getBoolParamOrDefault,
     getIntSearchParamOrDefault,
@@ -31,7 +31,7 @@
   const fetchPage = async () => {
     loading = true;
     try {
-      videosPage = await getVideos(page, limit, search, orderBy, ascending);
+      videosPage = await getAll(page, limit, search, orderBy, ascending);
     } catch (e) {
       error = e;
     } finally {

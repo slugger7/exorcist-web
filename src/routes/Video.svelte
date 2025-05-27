@@ -1,7 +1,7 @@
 <script>
     import { onDestroy, onMount } from "svelte";
     import { imageUrlById } from "../lib/controllers/image";
-    import { videoUrlById, get } from "../lib/controllers/videos";
+    import { videoUrlById, get } from "../lib/controllers/media";
 
     /** @type {{id: string}}*/
     let { id } = $props();
