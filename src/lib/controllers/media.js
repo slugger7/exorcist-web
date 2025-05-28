@@ -1,4 +1,4 @@
-/** @import { Page, Video } from "../types" */
+/** @import { Page, Video } from "../types/index.js" */
 import { server } from '../env.js'
 import { fetch } from './fetch.js'
 
@@ -10,7 +10,7 @@ import { fetch } from './fetch.js'
  * @param {boolean} [ascending]
  * @returns {Promise<Page<Video>>}
  */
-export const getVideos = async (page = 1, limit = 48, search = "", orderBy = "", ascending = true) => {
+export const getAll = async (page = 1, limit = 48, search = "", orderBy = "", ascending = true) => {
   const params = new URLSearchParams()
   params.set("skip", ((page - 1) * limit).toString())
   params.set("limit", limit.toString())
@@ -24,7 +24,7 @@ export const getVideos = async (page = 1, limit = 48, search = "", orderBy = "",
     params.set("orderBy", orderBy)
   }
 
-  const res = await fetch(`${server()}/videos?${params.toString()}`)
+  const res = await fetch(`${server()}/media?${params.toString()}`)
 
   return await res.json()
 }
@@ -33,7 +33,7 @@ export const getVideos = async (page = 1, limit = 48, search = "", orderBy = "",
  * @param {string} id 
  * @returns {string}
  */
-export const videoUrlById = (id) => `${server()}/media/video/${id}`
+export const videoUrlById = (id) => `${server()}/videos/${id}`
 
 /**
  * @param {string} id
@@ -41,7 +41,7 @@ export const videoUrlById = (id) => `${server()}/media/video/${id}`
  */
 export const get = async (id) => {
   const res = await fetch(
-    `${server()}/videos/${id}`
+    `${server()}/media/${id}`
   )
 
   return await res.json()
