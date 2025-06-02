@@ -1,5 +1,5 @@
 <script>
-  /** @import { JobStatusEnum } from '../../lib/types'*/
+  /** @import { JobStatusEnum } from '../../dto/model'*/
 
   /** @type {{ status: JobStatusEnum}}*/
   let { status } = $props();

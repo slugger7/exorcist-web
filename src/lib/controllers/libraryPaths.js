@@ -1,11 +1,11 @@
-/** @import {LibraryPath} from "../types/index" */
+/** @import {LibraryPathDTO} from "../../dto" */
 import { server } from "../env"
 import { fetch } from "./fetch"
 
 /**
  * @param {string} libraryId
  * @param {string} path
- * @returns {Promise<LibraryPath>}
+ * @returns {Promise<LibraryPathDTO>}
  */
 export const create = async (libraryId, path) => {
   const res = await fetch(
@@ -18,7 +18,7 @@ export const create = async (libraryId, path) => {
 
 /**
  * @param {string} id 
- * @returns {Promise<LibraryPath>}
+ * @returns {Promise<LibraryPathDTO>}
  */
 export const get = async (id) => {
   const res = await fetch(

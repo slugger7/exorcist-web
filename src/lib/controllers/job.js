@@ -1,11 +1,15 @@
-/** @import { Job, JobTypeEnum, JobData, Page } from "../types/index" */
+/** 
+ * @import { JobDTO, PageDTO } from "../../dto"
+ * @import { JobStatusEnum, JobTypeEnum } from "../../dto/model"
+ * @import { JobData } from "../types"
+ */
 import { server } from "../env";
 import { fetch } from "./fetch";
 
 /**
  * @param {JobTypeEnum} type 
  * @param {JobData} data 
- * @returns {Promise<Job>}
+ * @returns {Promise<JobDTO>}
  */
 export const create = async (type, data) => {
   const res = await fetch(`${server()}/jobs`, {
@@ -22,8 +26,8 @@ export const create = async (type, data) => {
 /**
  * 
  * @param {string} parent 
- * @param {string[]} statuses 
- * @returns {Promise<Page<Job>>}
+ * @param {JobStatusEnum[]} statuses 
+ * @returns {Promise<PageDTO<JobDTO>>}
  */
 export const getAll = async (page, limit, parent, statuses = [], types = []) => {
   const params = new URLSearchParams()

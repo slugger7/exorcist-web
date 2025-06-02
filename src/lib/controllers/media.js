@@ -1,4 +1,4 @@
-/** @import { Page, Video } from "../types/index.js" */
+/** @import { PageDTO, MediaDTO, MediaOverviewDTO } from "../../dto" */
 import { server } from '../env.js'
 import { fetch } from './fetch.js'
 
@@ -8,7 +8,7 @@ import { fetch } from './fetch.js'
  * @param {string} [search]
  * @param {string} [orderBy]
  * @param {boolean} [ascending]
- * @returns {Promise<Page<Video>>}
+ * @returns {Promise<PageDTO<MediaOverviewDTO>>}
  */
 export const getAll = async (page = 1, limit = 48, search = "", orderBy = "", ascending = true) => {
   const params = new URLSearchParams()
@@ -37,7 +37,7 @@ export const videoUrlById = (id) => `${server()}/videos/${id}`
 
 /**
  * @param {string} id
- * @returns {Promise<Video>}
+ * @returns {Promise<MediaDTO>}
  */
 export const get = async (id) => {
   const res = await fetch(

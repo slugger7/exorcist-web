@@ -1,6 +1,9 @@
 <script>
-  /** @import { Job, WSMessage, WSTopicMap, Page } from "../lib/types"*/
-  import { onDestroy, onMount } from "svelte";
+  /**
+   * @import { WSMessage, WSTopicMap } from "../lib/types"
+   * @import { JobDTO, PageDTO } from '../dto'
+   */
+  import { onDestroy } from "svelte";
   import Pagination from "../lib/components/Pagination.svelte";
   import { getAll } from "../lib/controllers/job";
   import {
@@ -13,7 +16,6 @@
   import { wsState } from "../lib/state/wsState.svelte";
   import { PONG } from "../lib/constants/websocket";
   import JobCard from "../lib/components/JobCard.svelte";
-  import { set } from "ramda";
 
   let parent = $state(getStringSearchParamOrDefault("parent", ""));
   let statuses = $state(getArrayOfStringsSearchParamOrDefault("status", []));
@@ -22,13 +24,13 @@
   let limit = $state(getIntSearchParamOrDefault("limit", 100));
   let loading = $state(false);
   let error = $state();
-  /** @type {Page<Job>}*/
+  /** @type {PageDTO<JobDTO>}*/
   let jobPage = $state();
 
   $inspect(jobPage);
 
   const syncJobs = async () => {
-    console.log("syncing jobs")
+    console.log("syncing jobs");
     loading = true;
     try {
       jobPage = await getAll(page, limit, parent, statuses, types);
@@ -40,9 +42,9 @@
   };
 
   $effect(() => {
-    console.log("effecting jobs")
-    syncJobs()
-  })
+    console.log("effecting jobs");
+    syncJobs();
+  });
 
   onDestroy(() => {
     if (!wsState.active || !wsState.connection) return;
@@ -68,7 +70,7 @@
   const onmessage = (e) => {
     if (e.data === PONG) return;
 
-    /** @type {WSMessage<Job>}*/
+    /** @type {WSMessage<JobDTO>}*/
     const data = JSON.parse(e.data);
 
     const topicFn = topics[data.topic];
@@ -77,7 +79,7 @@
     }
   };
 
-  /** @type {WSTopicMap<Job>}*/
+  /** @type {WSTopicMap<JobDTO>}*/
   const topics = {
     job_update: (job) => {
       jobPage.data = jobPage.data.map((j) => {
@@ -105,12 +107,7 @@
       <p>No jobs here</p>
     {/each}
 
-    <Pagination
-      bind:page
-      bind:limit
-      total={jobPage.total}
-      url={routes.jobs}
-    />
+    <Pagination bind:page bind:limit total={jobPage.total} url={routes.jobs} />
     <div class="section"></div>
   {:else if error}
     <p>something went wrong ${error.message}</p>

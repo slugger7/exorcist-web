@@ -1,9 +1,9 @@
-/** @import { Library, LibraryPath } from "../types/index" */
+/** @import { LibraryDTO, LibraryPathDTO } from "../../dto" */
 import { server } from "../env.js";
 import { fetch } from "./fetch.js";
 
 /**
- * @returns {Promise<[Library]>}
+ * @returns {Promise<[LibraryDTO]>}
  */
 export const getLibraries = async () => {
   const res = await fetch(`${server()}/libraries`);
@@ -17,7 +17,7 @@ export const getLibraries = async () => {
 
 /**
  * @param {string} name
- * @returns {Promise<Library>}
+ * @returns {Promise<LibraryDTO>}
  */
 export const create = async (name) => {
   const res = await fetch(
@@ -30,7 +30,7 @@ export const create = async (name) => {
 
 /**
  * @param {string} id
- * @returns {Promise<[LibraryPath]>}
+ * @returns {Promise<[LibraryPathDTO]>}
  */
 export const getPaths = async (id) => {
   const res = await fetch(
