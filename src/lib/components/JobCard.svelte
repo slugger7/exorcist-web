@@ -3,8 +3,8 @@
   import JobStatusTag from "./JobStatusTag.svelte";
   import routes from "../../routes/routes";
 
-  /** @import { Job } from "../../lib/types"*/
-  /** @type {{job: Job}}*/
+  /** @import { JobDTO } from "../../dto" */
+  /** @type {{job: JobDTO}}*/
   let { job } = $props();
 </script>
 

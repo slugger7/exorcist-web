@@ -1,5 +1,8 @@
 <script>
-  /** @import { WSMessage, WSTopicMap, Page, Video } from "../lib/types"*/
+  /**
+   * @import { WSMessage, WSTopicMap } from "../lib/types"
+   * @import { PageDTO, MediaOverviewDTO } from "../dto"
+   */
   import { onDestroy, onMount } from "svelte";
   import Pagination from "../lib/components/Pagination.svelte";
   import Search from "../lib/components/Search.svelte";
@@ -23,9 +26,9 @@
   let ascending = $state(getBoolParamOrDefault("ascending", true));
   let loading = $state(false);
   let error = $state();
-  /** @type {Page<Video>}*/
+  /** @type {PageDTO<MediaOverviewDTO>}*/
   let videosPage = $state();
-  /** @type {Video[]} */
+  /** @type {MediaOverviewDTO[]} */
   let newVideos = $state([]);
 
   const fetchPage = async () => {
@@ -40,8 +43,8 @@
   };
 
   $effect(() => {
-    fetchPage()
-  })
+    fetchPage();
+  });
 
   onDestroy(() => {
     window.removeEventListener("popstate", onPopState);
@@ -111,7 +114,7 @@
   const onWsMessage = (e) => {
     if (e.data === PONG) return;
 
-    /** @type {WSMessage<Video>}*/
+    /** @type {WSMessage<MediaOverviewDTO>}*/
     const data = JSON.parse(e.data);
 
     const topic = topics[data.topic];
@@ -120,7 +123,7 @@
     }
   };
 
-  /** @type {WSTopicMap<Video>}*/
+  /** @type {WSTopicMap<MediaOverviewDTO>}*/
   const topics = {
     video_create: (video) => {
       newVideos.push(video);
@@ -152,21 +155,21 @@
 <div class="container is-fluid">
   <h1 class="title is-1">Home</h1>
   {#if videosPage && videosPage.data.length !== 0}
-  <div class="block">
-    <Search
-      onkeyup={onSearchChange}
-      value={search}
-      onclear={onSearchClear}
-      bind:orderBy
-      bind:ascending
-      {ordinals}
-    />
-  </div>
+    <div class="block">
+      <Search
+        onkeyup={onSearchChange}
+        value={search}
+        onclear={onSearchClear}
+        bind:orderBy
+        bind:ascending
+        {ordinals}
+      />
+    </div>
   {/if}
-  
+
   {#if loading}
     <div class="grid is-col-min-13 is-gap-1">
-      {#each Array.apply(null, Array(limit)) as sk }
+      {#each Array.apply(null, Array(limit)) as sk}
         <div class="cell">
           <figure class="image is-16x9 is-skeleton"></figure>
         </div>
@@ -179,24 +182,27 @@
           <VideoCard {video} />
         </div>
       {:else}
-      <div class="cell content">
+        <div class="cell content">
           <p>Nothing to see here</p>
           <br />
           <p>Start by doing the following steps</p>
           <ol>
-            <li>Create a library <Link to={routes.create.library}>Create Library</Link></li>
+            <li>
+              Create a library <Link to={routes.create.library}
+                >Create Library</Link
+              >
+            </li>
             <li>Create a library path on the library</li>
             <li>Scan the library path</li>
           </ol>
         </div>
         <!-- display guide on how to get data into the library here -->
       {/each}
-      </div>
-      {#if videosPage.total > 0} 
-        <Pagination bind:page bind:limit total={videosPage.total} />
-        <div class="section"></div>
-      {/if}
-    
+    </div>
+    {#if videosPage.total > 0}
+      <Pagination bind:page bind:limit total={videosPage.total} />
+      <div class="section"></div>
+    {/if}
   {:else if error}
     <pre>Something went wrong {error}</pre>
   {/if}
