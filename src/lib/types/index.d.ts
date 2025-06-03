@@ -1,4 +1,5 @@
 import type { Job } from "./job";
+import type { WSTopicAllValues } from "../../dto"
 
 // https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
 export * from "./job"
@@ -9,18 +10,11 @@ export type LoginResult = {
   username: string;
 }
 
-export type WSTopicEnum =
-  | "job_update"
-  | "job_create"
-  | "video_create"
-  | "video_update"
-  | "video_delete"
-
 export type WSTopicMap<T> = {
-  [key in WSTopicEnum]?: (data: T) => void
+  [key in WSTopicAllValues]?: (data: T) => void
 }
 
 export type WSMessage<T> = {
-  topic: WSTopicEnum
+  topic: WSTopicAllValues
   data: T
 }

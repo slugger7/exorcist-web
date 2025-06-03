@@ -1,0 +1,7 @@
+export type JobOrdinalAllValues = "created" | "modified" | "priority"
+export type MediaOrdinalAllValues = "created" | "modified" | "added" | "path" | "size" | "title"
+export type JobStatusAllValues = "not_started" | "in_progress" | "failed" | "completed" | "cancelled"
+export type JobTypeAllValues = "update_existing_videos" | "scan_path" | "generate_checksum" | "generate_thumbnail"
+export type MediaTypeAllValues = "primary" | "asset"
+export type MediaRelationTypeAllValues = "thumbnail" | "chapter" | "media"
+export type WSTopicAllValues = "job_update" | "job_create" | "video_update" | "video_create" | "video_delete"
