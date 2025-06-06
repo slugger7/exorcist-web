@@ -4,9 +4,9 @@
  * @returns {number}
  */
 export const tryParseIntOrDefault = (val, def) => {
- const i = parseInt(val)
- if (isNaN(i)) {
-	return def
- }
- return i
-}
+  const i = parseInt(val);
+  if (isNaN(i)) {
+    return def;
+  }
+  return i;
+};

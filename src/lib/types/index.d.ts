@@ -1,20 +1,20 @@
 import type { Job } from "./job";
-import type { WSTopicAllValues } from "../../dto"
+import type { WSTopicAllValues } from "../../dto";
 
 // https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
-export * from "./job"
-export * from "./library"
+export * from "./job";
+export * from "./library";
 
 export type LoginResult = {
   userId: string;
   username: string;
-}
+};
 
 export type WSTopicMap<T> = {
-  [key in WSTopicAllValues]?: (data: T) => void
-}
+  [key in WSTopicAllValues]?: (data: T) => void;
+};
 
 export type WSMessage<T> = {
-  topic: WSTopicAllValues
-  data: T
-}
+  topic: WSTopicAllValues;
+  data: T;
+};

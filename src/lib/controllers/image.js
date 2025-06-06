@@ -1,7 +1,7 @@
 import { server } from "../env";
 
 /**
- * @param {string} id 
+ * @param {string} id
  * @returns {string}
  */
-export const imageUrlById = (id) => `${server()}/images/${id}`
+export const imageUrlById = (id) => `${server()}/images/${id}`;

@@ -1,5 +1,3 @@
-import { ScanPathData, GenerateThumbnailData } from "../../dto"
+import { ScanPathData, GenerateThumbnailData } from "../../dto";
 
-export type JobData =
-  | ScanPathData
-  | GenerateThumbnailData
+export type JobData = ScanPathData | GenerateThumbnailData;

@@ -1,10 +1,10 @@
 import { navigate } from "svelte-routing";
 
 /**
-  * @param {string} param
-  * @param {number} def
-  * @returns {number}
-  */
+ * @param {string} param
+ * @param {number} def
+ * @returns {number}
+ */
 export const getIntSearchParamOrDefault = (param, def) => {
   const params = new URLSearchParams(window.location.search);
   const val = parseInt(params.get(param));
@@ -20,16 +20,16 @@ export const getIntSearchParamOrDefault = (param, def) => {
  * @returns {string}
  */
 export const getStringSearchParamOrDefault = (param, def) => {
-  const params = new URLSearchParams(window.location.search)
+  const params = new URLSearchParams(window.location.search);
 
-  const val = params.get(param)
+  const val = params.get(param);
 
   if (!val) {
-    return def
+    return def;
   }
 
-  return val
-}
+  return val;
+};
 
 /**
  * @param {string} param
@@ -37,16 +37,16 @@ export const getStringSearchParamOrDefault = (param, def) => {
  * @returns {string[]}
  */
 export const getArrayOfStringsSearchParamOrDefault = (param, def) => {
-  const params = new URLSearchParams(window.location.search)
+  const params = new URLSearchParams(window.location.search);
 
-  const val = params.getAll(param)
+  const val = params.getAll(param);
 
   if (!val) {
-    return def
+    return def;
   }
 
-  return val
-}
+  return val;
+};
 
 /**
  * @param {string} param
@@ -54,20 +54,20 @@ export const getArrayOfStringsSearchParamOrDefault = (param, def) => {
  * @returns {boolean}
  */
 export const getBoolParamOrDefault = (param, def) => {
-  const params = new URLSearchParams(window.location.search)
+  const params = new URLSearchParams(window.location.search);
 
-  const val = params.get(param)
+  const val = params.get(param);
 
-  if (val === 'false') return false
-  if (val === 'true') return true
+  if (val === "false") return false;
+  if (val === "true") return true;
 
-  return def
-}
+  return def;
+};
 
-/** 
- * @param {string} key 
- * @param {string|boolean} val 
- * @param {string} route 
+/**
+ * @param {string} key
+ * @param {string|boolean} val
+ * @param {string} route
  * @param {{replace: boolean}} [options]
  */
 export const setValueAndNavigate = (key, val, route, options) => {
