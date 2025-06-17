@@ -93,6 +93,17 @@ export interface Media {
 }
 
 //////////
+// source: media_person.go
+
+export interface MediaPerson {
+  ID: string /* UUID */;
+  Created: Date;
+  Modified: Date;
+  MediaID: string /* UUID */;
+  PersonID: string /* UUID */;
+}
+
+//////////
 // source: media_relation.go
 
 export interface MediaRelation {
@@ -113,6 +124,17 @@ export const MediaRelationTypeEnum_Chapter: MediaRelationTypeEnum = "chapter";
 export const MediaRelationTypeEnum_Media: MediaRelationTypeEnum = "media";
 
 //////////
+// source: media_tag.go
+
+export interface MediaTag {
+  ID: string /* UUID */;
+  Created: Date;
+  Modified: Date;
+  MediaID: string /* UUID */;
+  TagID: string /* UUID */;
+}
+
+//////////
 // source: media_type_enum.go
 
 export type MediaTypeEnum = string;
@@ -120,11 +142,53 @@ export const MediaTypeEnum_Primary: MediaTypeEnum = "primary";
 export const MediaTypeEnum_Asset: MediaTypeEnum = "asset";
 
 //////////
+// source: person.go
+
+export interface Person {
+  ID: string /* UUID */;
+  Name: string;
+  Created: Date;
+  Modified: Date;
+}
+
+//////////
+// source: person_alias.go
+
+export interface PersonAlias {
+  ID: string /* UUID */;
+  Alias: string;
+  Created: Date;
+  Modified: Date;
+  PersonID: string /* UUID */;
+}
+
+//////////
 // source: schema_migrations.go
 
 export interface SchemaMigrations {
   Version: number /* int64 */;
   Dirty: boolean;
+}
+
+//////////
+// source: tag.go
+
+export interface Tag {
+  ID: string /* UUID */;
+  Name: string;
+  Created: Date;
+  Modified: Date;
+}
+
+//////////
+// source: tag_alias.go
+
+export interface TagAlias {
+  ID: string /* UUID */;
+  Alias: string;
+  Created: Date;
+  Modified: Date;
+  TagID: string /* UUID */;
 }
 
 //////////
