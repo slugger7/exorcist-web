@@ -1,15 +1,16 @@
 <script>
   import ModifyTags from "./ModifyTags.svelte";
-  import { getAll } from "../controllers/tags";
+  import { getAll, remove } from "../controllers/tags";
   import HeaderIconButton from "./HeaderIconButton.svelte";
   /** @import { TagDTO } from "../../dto"*/
   /**
    * @typedef props
    * @type {object}
    * @property {TagDTO[]} tags
+   * @property {string} mediaId
    */
   /** @type {props}*/
-  let { tags } = $props();
+  let { tags, mediaId } = $props();
 
   let editing = $state(false);
   let allTags = $state([]);
@@ -36,6 +37,17 @@
   const handleItemToggle = (item) => {
     console.log({item})
   }
+
+  const handleRemoveTag = (tag) => async () => {
+    // a cool strat could be to remove the tag first from the list then fire it off to the backend
+    // if there is an issue with the backend then we can revert this in the catch block.
+    try {
+      await remove(mediaId, tag.id)
+      // remove tag from list of tags that are on the media
+    } catch (e) {
+      console.error(e)
+    }
+  }
 </script>
 
 <div>
@@ -61,6 +73,7 @@
           <span class="tag is-link">{tag.name}</span>
           {#if editing}
             <button class="tag is-delete" aria-label="delete {tag.name} tag"
+            onclick={handleRemoveTag(tag)}
             ></button>
           {/if}
         </div>

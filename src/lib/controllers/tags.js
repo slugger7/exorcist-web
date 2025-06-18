@@ -12,3 +12,9 @@ export const getAll = async () => {
 
   return await res.json()
 }
+
+export const remove = async (mediaId, tagId) => {
+  const res = await fetch(`${server()}/media/${mediaId}/tags/${tagId}`, {method: "DELETE"})
+
+  return await res.json()
+}
