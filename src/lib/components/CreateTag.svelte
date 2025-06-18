@@ -1,30 +1,24 @@
 <script>
-  /** @import { TagDTO } from "../../dto" */
-  import { onMount } from "svelte";
-  import { getAll } from "../controllers/tags";
+  /**
+   * @import { Item } from "../../lib/types"
+   * @typedef props
+   * @type {object}
+   * @property {boolean} loading
+   * @property {Item[]} items
+   * @property {Item[]} selectedItems
+   * @property {Function} toggle
+   */
+  /** @type {props}*/
+  let { loading, items, selectedItems, toggle } = $props();
 
-  /** @type {TagDTO[]}*/
-  let tags = $state([]);
-  let loadingTags = $state(false);
-  let tagsError = $state(null);
+  const itemsInViewCount = 5;
 
+  let query = $state("");
   let active = $state(false);
-  let items = $state([]);
+  let itemsInView = $state([]);
+  let selectedIndex = $state(null);
 
-  const fetchTags = async () => {
-    loadingTags = true;
-    try {
-      tags = await getAll();
-    } catch {
-      tagsError = "could not fetch tags";
-    } finally {
-      loadingTags = false;
-    }
-  };
-
-  onMount(() => {
-    fetchTags();
-  });
+  $inspect(query);
 
   const onDropdownFocus = () => {
     active = true && items.length > 0;
@@ -34,24 +28,65 @@
     active = false;
   };
 
+  const handleUpArrow = () => {
+    if (selectedIndex === null) {
+      selectedIndex = itemsInView.length + 1;
+    } else if (selectedIndex === 0) {
+      selectedIndex = itemsInView.length + 1;
+    } else {
+      selectedIndex--;
+    }
+  };
+
+  const handleDownArrow = () => {
+    if (selectedIndex === null) {
+      selectedIndex = 0;
+    } else if (selectedIndex === itemsInView.length + 1) {
+      selectedIndex = 0;
+    } else {
+      selectedIndex++;
+    }
+  };
+
+  const handleEnter = () => {
+    const item = itemsInView[selectedIndex];
+
+    toggle(item);
+  };
+
   const onKeyUp = (e) => {
     if (e.code === "ArrowUp") {
-      console.log("Arrow Up");
+      return handleUpArrow();
     }
     if (e.code === "ArrowDown") {
-      console.log("ArrowDown");
+      return handleDownArrow();
     }
     if (e.code === "Enter") {
-      console.log("Enter");
+      return handleEnter();
     }
 
-    items = tags
+    selectedIndex = null;
+    itemsInView = items
       .filter((t) => t.name.toLocaleLowerCase().includes(e.target.value))
-      .slice(0, 5);
+      .slice(0, itemsInViewCount);
     if (items.length > 0) {
       active = true;
     }
+
+    if (items.length === 1) {
+      selectedIndex = 0;
+    }
   };
+
+  const onQueryChange = (e) => {
+    query = e.target.value;
+  };
+
+  /**
+   * @param {Item} item
+   */
+  const itemInSelection = (item) =>
+    selectedItems.find((selectedItem) => item.id === selectedItem.id);
 </script>
 
 <div class="field is-grouped">
@@ -62,23 +97,37 @@
           class="input"
           type="text"
           placeholder="new tag"
+          value={query}
           onfocus={onDropdownFocus}
           onblur={onDropdownBlur}
           onkeyup={onKeyUp}
+          onchange={onQueryChange}
         />
       </div>
       <div class="dropdown-menu">
         <div class="dropdown-content">
-          {#if loadingTags}
+          {#if loading}
             <p class="dropdown-item">Loading tags</p>
           {:else}
-            {#each items as tag}
-              <button class="dropdown-item"
-                ><span class="icon has-text-danger"
-                  ><i class="fas fa-trash"></i></span
-                >{tag.name}</button
+            {#each itemsInView as item, i (item.id)}
+              <button
+                class={`dropdown-item ${i === selectedIndex ? "is-active" : ""}`}
+                onclick={() => toggle(item)}
+              >
+                {#if itemInSelection(item)}
+                  <span class="icon has-text-success"
+                    ><i class="fas fa-square-check"></i></span
+                  >
+                {/if}
+                {item.name}</button
               >
             {/each}
+            {#if query.length >= 1}
+              <button
+                class={`dropdown-item ${selectedIndex === itemsInViewCount + 1}`}
+                >Create {query}</button
+              >
+            {/if}
           {/if}
         </div>
       </div>

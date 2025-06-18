@@ -24,3 +24,8 @@ export type WSMessage<T> = {
   topic: WSTopicEnum
   data: T
 }
+
+export type Item = {
+  id: string
+  name: string
+}

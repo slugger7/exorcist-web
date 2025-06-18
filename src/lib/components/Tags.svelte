@@ -1,20 +1,48 @@
 <script>
   import CreateTag from "./CreateTag.svelte";
-
+  import { getAll } from "../controllers/tags";
   /** @import { TagDTO } from "../../dto"*/
   /**
    * @typedef props
    * @type {object}
    * @property {TagDTO[]} tags
-   * @property {boolean} [editing]
    */
   /** @type {props}*/
-  let { tags, editing = true } = $props();
+  let { tags } = $props();
+
+  let editing = $state(true);
+  let allTags = $state([]);
+  let loadingTags = $state(false);
+  let tagsError = $state();
+
+  const fetchTags = async () => {
+    loadingTags = true;
+    try {
+      allTags = await getAll();
+    } catch {
+      tagsError = "could not fetch tags";
+    } finally {
+      loadingTags = false;
+    }
+  };
+
+  $effect(() => {
+    if (editing === true) {
+      fetchTags();
+    }
+  });
 </script>
 
 <div>
   {#if editing}
-    <CreateTag />
+    <CreateTag
+      items={allTags}
+      selectedItems={tags}
+      loading={loadingTags}
+      toggle={(item) => {
+        console.log("item toggled", item);
+      }}
+    />
   {/if}
   <div class="field is-grouped is-grouped-multiline">
     {#each tags as tag}
