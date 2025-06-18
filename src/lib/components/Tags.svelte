@@ -1,5 +1,5 @@
 <script>
-  import CreateTag from "./ModifyTags.svelte";
+  import ModifyTags from "./ModifyTags.svelte";
   import { getAll } from "../controllers/tags";
   /** @import { TagDTO } from "../../dto"*/
   /**
@@ -35,7 +35,7 @@
 
 <div>
   {#if editing}
-    <CreateTag
+    <ModifyTags
       items={allTags}
       selectedItems={tags}
       loading={loadingTags}
