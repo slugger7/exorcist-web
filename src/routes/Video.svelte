@@ -28,7 +28,6 @@
         </div>
         <br />
         <div class="container">
-            <h2 class="title is-2">Tags</h2>
             <Tags {tags} />
         </div>
         <div class="section"></div>
