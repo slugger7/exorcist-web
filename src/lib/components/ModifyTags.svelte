@@ -1,6 +1,6 @@
 <script>
   /**
-   * @import { Item } from "../../lib/types"
+   * @import { Item } from "../types"
    * @typedef props
    * @type {object}
    * @property {boolean} loading
@@ -19,6 +19,8 @@
   let selectedIndex = $state(null);
 
   $inspect(query);
+  $inspect(selectedIndex)
+  $inspect(itemsInView)
 
   const onDropdownFocus = () => {
     active = true && items.length > 0;
@@ -55,6 +57,7 @@
   };
 
   const onKeyUp = (e) => {
+    e.preventDefault()
     if (e.code === "ArrowUp") {
       return handleUpArrow();
     }
@@ -79,6 +82,7 @@
   };
 
   const onQueryChange = (e) => {
+    e.preventDefault()
     query = e.target.value;
   };
 
@@ -90,7 +94,7 @@
 </script>
 
 <div class="field is-grouped">
-  <div class="control is-expanded">
+  <div class="control">
     <div class="dropdown {active ? 'is-active' : ''}">
       <div class="dropdown-trigger">
         <input
@@ -101,10 +105,10 @@
           onfocus={onDropdownFocus}
           onblur={onDropdownBlur}
           onkeyup={onKeyUp}
-          onchange={onQueryChange}
+          oninput={onQueryChange}
         />
       </div>
-      <div class="dropdown-menu">
+      <div class="dropdown-menu" role="menu">
         <div class="dropdown-content">
           {#if loading}
             <p class="dropdown-item">Loading tags</p>
@@ -112,19 +116,27 @@
             {#each itemsInView as item, i (item.id)}
               <button
                 class={`dropdown-item ${i === selectedIndex ? "is-active" : ""}`}
-                onclick={() => toggle(item)}
+                onclick={() => {
+                  console.log("Hello world")
+                  toggle(item)}
+                }
               >
                 {#if itemInSelection(item)}
                   <span class="icon has-text-success"
                     ><i class="fas fa-square-check"></i></span
+                  >
+                  {:else}
+                  <span class="icon"
+                    ><i class="far fa-square-check"></i></span
                   >
                 {/if}
                 {item.name}</button
               >
             {/each}
             {#if query.length >= 1}
+            <hr class="dropdown-divider" />
               <button
-                class={`dropdown-item ${selectedIndex === itemsInViewCount + 1}`}
+                class={`dropdown-item ${selectedIndex === itemsInViewCount + 1 ? "is-active" : ""}`}
                 >Create {query}</button
               >
             {/if}

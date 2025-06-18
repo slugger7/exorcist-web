@@ -1,5 +1,5 @@
 <script>
-  import CreateTag from "./CreateTag.svelte";
+  import CreateTag from "./ModifyTags.svelte";
   import { getAll } from "../controllers/tags";
   /** @import { TagDTO } from "../../dto"*/
   /**
