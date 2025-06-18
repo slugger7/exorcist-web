@@ -46,12 +46,14 @@
   {/if}
   <div class="field is-grouped is-grouped-multiline">
     {#each tags as tag}
-      <div class="tags has-addons is-medium">
-        <span class="tag is-link">{tag.name}</span>
-        {#if editing}
-          <button class="tag is-delete" aria-label="delete {tag.name} tag"
-          ></button>
-        {/if}
+      <div class="control">
+        <div class="tags has-addons is-medium">
+          <span class="tag is-link">{tag.name}</span>
+          {#if editing}
+            <button class="tag is-delete" aria-label="delete {tag.name} tag"
+            ></button>
+          {/if}
+        </div>
       </div>
     {/each}
   </div>
