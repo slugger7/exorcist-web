@@ -17,12 +17,14 @@
   let active = $state(false);
   let itemsInView = $state([]);
   let selectedIndex = $state(null);
+  let showCreateItem = $derived(query.length >= 1 && !items.find(item => item.name === query))
+  let selectionBoundary = $derived(showCreateItem ? itemsInView.length : itemsInView.length - 1)
 
   $inspect(selectedIndex, query);
   $inspect(itemsInView);
 
   const onDropdownFocus = () => {
-    active = true && items.length > 0;
+    active = true && itemsInView.length > 0;
   };
 
   const onDropdownBlur = () => {
@@ -30,21 +32,19 @@
   };
 
   const handleUpArrow = () => {
-    console.log({ selectedIndex });
     if (selectedIndex === null) {
-      selectedIndex = itemsInView.length;
+      selectedIndex = selectionBoundary;
     } else if (selectedIndex === 0) {
-      selectedIndex = itemsInView.length;
+      selectedIndex = selectionBoundary;
     } else {
       selectedIndex--;
     }
   };
 
   const handleDownArrow = () => {
-    console.log({ selectedIndex });
     if (selectedIndex === null) {
       selectedIndex = 0;
-    } else if (selectedIndex === itemsInView.length + 1) {
+    } else if (selectedIndex === selectionBoundary) {
       selectedIndex = 0;
     } else {
       selectedIndex++;
@@ -77,7 +77,7 @@
         t.name.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase()),
       )
       .slice(0, itemsInViewCount);
-    if (items.length > 0) {
+    if (itemsInView.length > 0) {
       active = true;
     }
 
@@ -97,7 +97,6 @@
   const itemInSelection = (item) =>
     selectedItems.find((selectedItem) => item.id === selectedItem.id);
 
-  const queryInItems = (query) => items.find((item) => item.name === query);
 </script>
 
 <div class="field is-grouped">
@@ -138,7 +137,7 @@
                 {item.name}</button
               >
             {/each}
-            {#if query.length >= 1 && !queryInItems(query)}
+            {#if showCreateItem}
               <hr class="dropdown-divider" />
               <button
                 class={`dropdown-item ${selectedIndex === itemsInView.length ? "is-active" : ""}`}
