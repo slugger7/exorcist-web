@@ -8,7 +8,7 @@
    * @property {string} [url]
    * @property {Function} [onchange]
    */
-  import { Link, navigate } from "svelte-routing";
+  import { Link } from "svelte-routing";
 
   /** @type {props}*/
   let {
