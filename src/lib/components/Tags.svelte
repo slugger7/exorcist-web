@@ -1,6 +1,6 @@
 <script>
   import ModifyTags from "./ModifyTags.svelte";
-  import { getAll, remove } from "../controllers/tags";
+  import { add, getAll, remove } from "../controllers/tags";
   import HeaderIconButton from "./HeaderIconButton.svelte";
   /** @import { TagDTO } from "../../dto"*/
   /**
@@ -35,19 +35,42 @@
   });
 
   const handleItemToggle = (item) => {
-    console.log({item})
-  }
+    const existing = !!tags.find((t) => t.id === item.id);
+    if (existing) {
+      removeTag(item);
+      return;
+    }
+
+    addTag(item);
+  };
+
+  const addTag = async (tag) => {
+    tags.push(tag);
+
+    try {
+      await add(mediaId, tag.id);
+    } catch (e) {
+      console.error(e);
+
+      await fetchTags();
+    }
+  };
+
+  const removeTag = async (tag) => {
+    tags = tags.filter((t) => t.id !== tag.id);
+
+    try {
+      await remove(mediaId, tag.id);
+    } catch (e) {
+      console.error(e);
+
+      await fetchTags();
+    }
+  };
 
   const handleRemoveTag = (tag) => async () => {
-    // a cool strat could be to remove the tag first from the list then fire it off to the backend
-    // if there is an issue with the backend then we can revert this in the catch block.
-    try {
-      await remove(mediaId, tag.id)
-      // remove tag from list of tags that are on the media
-    } catch (e) {
-      console.error(e)
-    }
-  }
+    removeTag(tag);
+  };
 </script>
 
 <div>
@@ -55,9 +78,10 @@
   <HeaderIconButton
     icon="fas fa-pen-to-square"
     ariaLabel="edit tags"
-    iconClass={editing ? "has-text-info": ""}
+    iconClass={editing ? "has-text-info" : ""}
     buttonClass="mb-2"
-    onclick={() => editing = !editing} />
+    onclick={() => (editing = !editing)}
+  />
   {#if editing}
     <ModifyTags
       items={allTags}
@@ -72,8 +96,10 @@
         <div class="tags has-addons is-medium">
           <span class="tag is-link">{tag.name}</span>
           {#if editing}
-            <button class="tag is-delete" aria-label="delete {tag.name} tag"
-            onclick={handleRemoveTag(tag)}
+            <button
+              class="tag is-delete"
+              aria-label="delete {tag.name} tag"
+              onclick={handleRemoveTag(tag)}
             ></button>
           {/if}
         </div>
