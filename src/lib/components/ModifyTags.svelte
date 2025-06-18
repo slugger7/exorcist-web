@@ -54,7 +54,12 @@
     toggle(item);
   };
 
+  const handleEscape = () => {
+    active = false
+  }
+
   const onKeyDown = (e) => {
+    console.log("Code", e.code)
     if (e.code === "ArrowUp") {
       e.preventDefault();
       return handleUpArrow();
@@ -66,6 +71,10 @@
     if (e.code === "Enter") {
       e.preventDefault();
       return handleEnter();
+    }
+    if (e.code === "Escape") {
+      e.preventDefault();
+      return handleEscape();
     }
 
     selectedIndex = 0;
