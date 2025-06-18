@@ -24,3 +24,5 @@ export const ws = () => {
 
   return `${url}/api`
 }
+
+export const WS_ACTIVE = () => import.meta.env.VITE_WS.toLowerCase() === "true"
