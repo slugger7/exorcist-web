@@ -28,6 +28,11 @@
     active = false;
   };
 
+  const onMouseDown = item => (e) => {
+    e.preventDefault()
+    toggle(item);
+  }
+
   const handleUpArrow = () => {
     if (selectedIndex === null) {
       selectedIndex = selectionBoundary;
@@ -128,10 +133,7 @@
             {#each itemsInView as item, i (item.id)}
               <button
                 class={`dropdown-item ${i === selectedIndex ? "is-active" : ""}`}
-                onclick={() => {
-                  console.log("Hello world");
-                  toggle(item);
-                }}
+                onmousedown={onMouseDown(item)}
               >
                 {#if itemInSelection(item)}
                   <span class="icon has-text-success"
