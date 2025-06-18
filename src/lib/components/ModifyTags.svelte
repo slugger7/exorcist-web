@@ -20,9 +20,6 @@
   let showCreateItem = $derived(query.length >= 1 && !items.find(item => item.name === query))
   let selectionBoundary = $derived(showCreateItem ? itemsInView.length : itemsInView.length - 1)
 
-  $inspect(selectedIndex, query);
-  $inspect(itemsInView);
-
   const onDropdownFocus = () => {
     active = true && itemsInView.length > 0;
   };
