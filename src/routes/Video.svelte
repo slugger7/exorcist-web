@@ -28,7 +28,7 @@
         </div>
         <br />
         <div class="container">
-            <Tags {tags} mediaId={id}/>
+            <Tags {tags} mediaId={id} />
         </div>
         <div class="section"></div>
     </div>

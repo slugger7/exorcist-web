@@ -17,8 +17,12 @@
   let active = $state(false);
   let itemsInView = $state([]);
   let selectedIndex = $state(null);
-  let showCreateItem = $derived(query.length >= 1 && !items.find(item => item.name === query))
-  let selectionBoundary = $derived(showCreateItem ? itemsInView.length : itemsInView.length - 1)
+  let showCreateItem = $derived(
+    query.length >= 1 && !items.find((item) => item.name === query),
+  );
+  let selectionBoundary = $derived(
+    showCreateItem ? itemsInView.length : itemsInView.length - 1,
+  );
 
   const onDropdownFocus = () => {
     active = true && itemsInView.length > 0;
@@ -28,10 +32,10 @@
     active = false;
   };
 
-  const onMouseDown = item => (e) => {
-    e.preventDefault()
+  const onMouseDown = (item) => (e) => {
+    e.preventDefault();
     toggle(item);
-  }
+  };
 
   const handleUpArrow = () => {
     if (selectedIndex === null) {
@@ -60,11 +64,10 @@
   };
 
   const handleEscape = () => {
-    active = false
-  }
+    active = false;
+  };
 
   const onKeyDown = (e) => {
-    console.log("Code", e.code)
     if (e.code === "ArrowUp") {
       e.preventDefault();
       return handleUpArrow();
@@ -81,6 +84,11 @@
       e.preventDefault();
       return handleEscape();
     }
+  };
+
+  const onQueryChange = (e) => {
+    e.preventDefault();
+    query = e.target.value;
 
     selectedIndex = 0;
     itemsInView = items
@@ -97,17 +105,11 @@
     }
   };
 
-  const onQueryChange = (e) => {
-    e.preventDefault();
-    query = e.target.value;
-  };
-
   /**
    * @param {Item} item
    */
   const itemInSelection = (item) =>
     selectedItems.find((selectedItem) => item.id === selectedItem.id);
-
 </script>
 
 <div class="field is-grouped">

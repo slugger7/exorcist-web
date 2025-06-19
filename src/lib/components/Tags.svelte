@@ -2,6 +2,7 @@
   import ModifyTags from "./ModifyTags.svelte";
   import { add, getAll, remove } from "../controllers/tags";
   import HeaderIconButton from "./HeaderIconButton.svelte";
+  import { onMount } from "svelte";
   /** @import { TagDTO } from "../../dto"*/
   /**
    * @typedef props
@@ -13,9 +14,14 @@
   let { tags, mediaId } = $props();
 
   let editing = $state(false);
+  let selectedTags = $state([]);
   let allTags = $state([]);
   let loadingTags = $state(false);
   let tagsError = $state();
+
+  onMount(() => {
+    selectedTags = [...tags];
+  });
 
   const fetchTags = async () => {
     loadingTags = true;
@@ -35,7 +41,7 @@
   });
 
   const handleItemToggle = (item) => {
-    const existing = !!tags.find((t) => t.id === item.id);
+    const existing = !!selectedTags.find((t) => t.id === item.id);
     if (existing) {
       removeTag(item);
       return;
@@ -45,7 +51,7 @@
   };
 
   const addTag = async (tag) => {
-    tags.push(tag);
+    selectedTags.push(tag);
 
     try {
       await add(mediaId, tag.id);
@@ -57,7 +63,7 @@
   };
 
   const removeTag = async (tag) => {
-    tags = tags.filter((t) => t.id !== tag.id);
+    selectedTags = selectedTags.filter((t) => t.id !== tag.id);
 
     try {
       await remove(mediaId, tag.id);
@@ -85,13 +91,13 @@
   {#if editing}
     <ModifyTags
       items={allTags}
-      selectedItems={tags}
+      selectedItems={selectedTags}
       loading={loadingTags}
       toggle={handleItemToggle}
     />
   {/if}
   <div class="field is-grouped is-grouped-multiline">
-    {#each tags as tag}
+    {#each selectedTags as tag}
       <div class="control">
         <div class="tags has-addons is-medium">
           <span class="tag is-link">{tag.name}</span>
