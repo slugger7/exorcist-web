@@ -7,9 +7,10 @@
    * @property {Item[]} items
    * @property {Item[]} selectedItems
    * @property {Function} toggle
+   * @property {Function} createTag
    */
   /** @type {props}*/
-  let { loading, items, selectedItems, toggle } = $props();
+  let { loading, items, selectedItems, toggle, createTag } = $props();
 
   const itemsInViewCount = 5;
 
@@ -151,7 +152,7 @@
               <hr class="dropdown-divider" />
               <button
                 class={`dropdown-item ${selectedIndex === itemsInView.length ? "is-active" : ""}`}
-                >Create {query}</button
+                onmousedown={() => createTag(query)}>Create {query}</button
               >
             {/if}
           {/if}

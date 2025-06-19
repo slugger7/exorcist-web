@@ -24,3 +24,9 @@ export const add = async (mediaId, tagId) => {
 
   return await res.json()
 }
+
+export const create = async (tagNames) => {
+  const res = await fetch(`${server()}/tags`, { method: "POST", body: JSON.stringify(tagNames) })
+
+  return await res.json()
+}

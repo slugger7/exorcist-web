@@ -1,6 +1,6 @@
 <script>
   import ModifyTags from "./ModifyTags.svelte";
-  import { add, getAll, remove } from "../controllers/tags";
+  import { add, create, getAll, remove } from "../controllers/tags";
   import HeaderIconButton from "./HeaderIconButton.svelte";
   import { onMount } from "svelte";
   /** @import { TagDTO } from "../../dto"*/
@@ -19,7 +19,7 @@
   let loadingTags = $state(false);
   let tagsError = $state();
 
-  onMount(() => {
+  $effect(() => {
     selectedTags = [...tags];
   });
 
@@ -77,6 +77,18 @@
   const handleRemoveTag = (tag) => async () => {
     removeTag(tag);
   };
+
+  const handleCreateTag = async (tagName) => {
+    try {
+      const createdTags = await create([tagName]);
+
+      if (createdTags.length > 0) {
+        addTag(createdTags[0]);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 </script>
 
 <div>
@@ -94,6 +106,7 @@
       selectedItems={selectedTags}
       loading={loadingTags}
       toggle={handleItemToggle}
+      createTag={handleCreateTag}
     />
   {/if}
   <div class="field is-grouped is-grouped-multiline">
