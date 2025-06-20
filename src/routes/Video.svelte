@@ -1,7 +1,8 @@
 <script>
-    import { onDestroy, onMount } from "svelte";
+    import { onDestroy } from "svelte";
     import { imageUrlById } from "../lib/controllers/image";
     import { videoUrlById, get } from "../lib/controllers/media";
+    import Tags from "../lib/components/Tags.svelte";
 
     /** @type {{id: string}}*/
     let { id } = $props();
@@ -13,7 +14,7 @@
 
 {#await get(id)}
     <p>loading</p>
-{:then { thumbnailId, title }}
+{:then { thumbnailId, title, tags }}
     <div class="container is-fluid">
         <!-- svelte-ignore a11y_media_has_caption -->
         <video
@@ -25,6 +26,11 @@
         <div class="container">
             <h1 class="title is-1">{title}</h1>
         </div>
+        <br />
+        <div class="container">
+            <Tags {tags} mediaId={id} />
+        </div>
+        <div class="section"></div>
     </div>
 {:catch}
     <p>something went wrong</p>

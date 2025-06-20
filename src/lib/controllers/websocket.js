@@ -1,5 +1,5 @@
 import { PING, PONG } from "../constants/websocket"
-import { ws } from "../env"
+import { ws, WS_ACTIVE } from "../env"
 import { tryParseIntOrDefault } from "../parsing"
 import { wsState } from "../state/wsState.svelte"
 
@@ -22,6 +22,10 @@ window.addEventListener("beforeunload", () => {
 
 export const setupWebsocket = () => {
 	const connect = () => {
+		if (!WS_ACTIVE()) { 
+			console.log("No websockets running")
+			return 
+		}
 		try {
 			conn = new WebSocket(`${ws()}/ws`)
 

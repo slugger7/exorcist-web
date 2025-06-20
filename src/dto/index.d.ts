@@ -131,6 +131,8 @@ export interface MediaDTO {
   image?: ImageDTO;
   video?: VideoDTO;
   thumbnailId?: string /* UUID */;
+  people: PersonDTO[];
+  tags: TagDTO[];
 }
 export interface ImageDTO {
   id: string /* UUID */;
@@ -159,6 +161,26 @@ export interface PageRequestDTO {
   skip: number /* int */;
   limit: number /* int */;
   asc: boolean;
+}
+
+//////////
+// source: person.go
+
+export interface PersonDTO {
+  id: string /* UUID */;
+  name: string;
+  created: Date;
+  modified: Date;
+}
+
+//////////
+// source: tag.go
+
+export interface TagDTO {
+  id: string /* UUID */;
+  name: string;
+  created: Date;
+  modified: Date;
 }
 
 //////////
