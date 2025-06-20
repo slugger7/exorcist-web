@@ -3,7 +3,7 @@ import type { WSTopicAllValues } from "../../dto"
 
 // https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
 export * from "./job"
-export * from "./library"
+export * from "./item"
 
 export type LoginResult = {
   userId: string;
@@ -17,9 +17,4 @@ export type WSTopicMap<T> = {
 export type WSMessage<T> = {
   topic: WSTopicAllValues
   data: T
-}
-
-export type Item = {
-  id: string
-  name: string
 }

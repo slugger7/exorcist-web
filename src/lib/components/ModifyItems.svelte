@@ -1,16 +1,23 @@
 <script>
   /**
    * @import { Item } from "../types"
+   * 
+   * @callback ToggleItem
+   * @param {Item} item
+   * 
+   * @callback CreateItemNoReturn
+   * @param {string} itemName
+   * 
    * @typedef props
    * @type {object}
    * @property {boolean} loading
    * @property {Item[]} items
    * @property {Item[]} selectedItems
-   * @property {Function} toggle
-   * @property {Function} createTag
+   * @property {ToggleItem} toggle
+   * @property {CreateItemNoReturn} create
    */
   /** @type {props}*/
-  let { loading, items, selectedItems, toggle, createTag } = $props();
+  let { loading, items, selectedItems, toggle, create } = $props();
 
   const itemsInViewCount = 5;
 
@@ -64,7 +71,7 @@
 
       toggle(item);
     } else if (showCreateItem) {
-      createTag(query);
+      create(query);
     }
     query = "";
     active = false;
@@ -170,7 +177,7 @@
               <hr class="dropdown-divider" />
               <button
                 class={`dropdown-item ${selectedIndex === itemsInView.length ? "is-active" : ""}`}
-                onmousedown={() => createTag(query)}>Create {query}</button
+                onmousedown={() => create(query)}>Create {query}</button
               >
             {/if}
           {/if}
