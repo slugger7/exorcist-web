@@ -2,7 +2,6 @@
   import ModifyTags from "./ModifyTags.svelte";
   import { add, create, getAll, remove } from "../controllers/tags";
   import HeaderIconButton from "./HeaderIconButton.svelte";
-  import { onMount } from "svelte";
   /** @import { TagDTO } from "../../dto"*/
   /**
    * @typedef props
@@ -19,14 +18,24 @@
   let loadingTags = $state(false);
   let tagsError = $state();
 
+  /**
+   * @param {TagDTO[]} items
+   * @returns {TagDTO[]}
+   */
+  const sortTags = (items) =>
+    items.sort((a, b) => (a.name === b.name ? 0 : a.name < b.name ? -1 : 1));
+
   $effect(() => {
-    selectedTags = [...tags];
+    if (tags !== null && tags !== undefined) {
+      selectedTags = [...sortTags(tags)];
+    }
   });
 
   const fetchTags = async () => {
     loadingTags = true;
     try {
-      allTags = await getAll();
+      const items = await getAll();
+      allTags = sortTags(items);
     } catch {
       tagsError = "could not fetch tags";
     } finally {
@@ -83,7 +92,9 @@
       const createdTags = await create([tagName]);
 
       if (createdTags.length > 0) {
-        addTag(createdTags[0]);
+        const createdTag = createdTags[0];
+        allTags.push(createdTag);
+        addTag(createdTag);
       }
     } catch (e) {
       console.error(e);

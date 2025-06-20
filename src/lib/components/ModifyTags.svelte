@@ -26,7 +26,7 @@
   );
 
   const onDropdownFocus = () => {
-    active = true && itemsInView.length > 0;
+    active = query.length > 0;
   };
 
   const onDropdownBlur = () => {
@@ -59,9 +59,16 @@
   };
 
   const handleEnter = () => {
-    const item = itemsInView[selectedIndex];
+    if (selectedIndex < itemsInView.length) {
+      const item = itemsInView[selectedIndex];
 
-    toggle(item);
+      toggle(item);
+    } else if (showCreateItem) {
+      createTag(query);
+    }
+    query = "";
+    active = false;
+    itemsInView = [];
   };
 
   const handleEscape = () => {
@@ -97,9 +104,8 @@
         t.name.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase()),
       )
       .slice(0, itemsInViewCount);
-    if (itemsInView.length > 0) {
-      active = true;
-    }
+
+    active = query.length > 0;
 
     if (items.length === 1) {
       selectedIndex = 0;
