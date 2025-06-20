@@ -99,11 +99,23 @@
     query = e.target.value;
 
     selectedIndex = 0;
+
+    
     itemsInView = items
       .filter((t) =>
-        t.name.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase()),
+        t.name.toLowerCase().includes(e.target.value.toLowerCase()),
       )
       .slice(0, itemsInViewCount);
+
+    const exact = items.find(tag => tag.name.toLowerCase() === query.toLowerCase())
+    if (exact) {
+      itemsInView = itemsInView.filter(t => t.name.toLowerCase() !== exact.name)
+      itemsInView = [exact, ...itemsInView]
+
+      if (itemsInView.length > itemsInViewCount) {
+        itemsInView.pop()
+      }
+    }
 
     active = query.length > 0;
 

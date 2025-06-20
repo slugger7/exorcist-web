@@ -94,6 +94,7 @@
       if (createdTags.length > 0) {
         const createdTag = createdTags[0];
         allTags.push(createdTag);
+        allTags = sortTags(allTags)
         addTag(createdTag);
       }
     } catch (e) {
