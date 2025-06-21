@@ -1,13 +1,13 @@
 <script>
   /**
    * @import { Item } from "../types"
-   * 
+   *
    * @callback ToggleItem
    * @param {Item} item
-   * 
+   *
    * @callback CreateItemNoReturn
    * @param {string} itemName
-   * 
+   *
    * @typedef props
    * @type {object}
    * @property {boolean} loading
@@ -40,9 +40,17 @@
     active = false;
   };
 
+  const reset = () => {
+    query = "";
+    active = false;
+    itemsInView = [];
+    selectedIndex = null;
+  };
+
   const onMouseDown = (item) => (e) => {
     e.preventDefault();
     toggle(item);
+    reset();
   };
 
   const handleUpArrow = () => {
@@ -73,9 +81,7 @@
     } else if (showCreateItem) {
       create(query);
     }
-    query = "";
-    active = false;
-    itemsInView = [];
+    reset();
   };
 
   const handleEscape = () => {
@@ -107,20 +113,23 @@
 
     selectedIndex = 0;
 
-    
     itemsInView = items
       .filter((t) =>
         t.name.toLowerCase().includes(e.target.value.toLowerCase()),
       )
       .slice(0, itemsInViewCount);
 
-    const exact = items.find(tag => tag.name.toLowerCase() === query.toLowerCase())
+    const exact = items.find(
+      (tag) => tag.name.toLowerCase() === query.toLowerCase(),
+    );
     if (exact) {
-      itemsInView = itemsInView.filter(t => t.name.toLowerCase() !== exact.name)
-      itemsInView = [exact, ...itemsInView]
+      itemsInView = itemsInView.filter(
+        (t) => t.name.toLowerCase() !== exact.name,
+      );
+      itemsInView = [exact, ...itemsInView];
 
       if (itemsInView.length > itemsInViewCount) {
-        itemsInView.pop()
+        itemsInView.pop();
       }
     }
 
@@ -136,6 +145,11 @@
    */
   const itemInSelection = (item) =>
     selectedItems.find((selectedItem) => item.id === selectedItem.id);
+
+  const onMouseDownCreate = () => {
+    create(query);
+    reset();
+  };
 </script>
 
 <div class="field is-grouped">
@@ -177,7 +191,7 @@
               <hr class="dropdown-divider" />
               <button
                 class={`dropdown-item ${selectedIndex === itemsInView.length ? "is-active" : ""}`}
-                onmousedown={() => create(query)}>Create {query}</button
+                onmousedown={onMouseDownCreate}>Create {query}</button
               >
             {/if}
           {/if}

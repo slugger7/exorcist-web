@@ -1,9 +1,9 @@
 <script>
   import ModifyItems from "./ModifyItems.svelte";
   import HeaderIconButton from "./HeaderIconButton.svelte";
-  /** 
+  /**
    * @import { Item, FetchItems, RemoveItem, AddItem, CreateItem } from '../types'
-   * 
+   *
    * @typedef props
    * @type {object}
    * @property {string} title
@@ -38,7 +38,7 @@
   const refreshItems = async () => {
     loadingItems = true;
     try {
-      const items = await fetch()
+      const items = await fetch();
       allItems = sortItems(items);
     } catch {
       itemsError = "could not fetch tags";
@@ -63,21 +63,20 @@
       return;
     }
 
-    addTag(item);
+    addItem(item);
   };
 
-  const addTag = async (tag) => {
-    selectedItems.push(tag);
+  const addItem = async (item) => {
+    selectedItems.push(item);
 
     try {
-      await add(tag.id);
+      await add(item.id);
     } catch (e) {
       console.error(e);
 
       await refreshItems();
     }
   };
-
 
   /** @param {Item} item */
   const removeItem = async (item) => {
@@ -101,10 +100,11 @@
   const handleCreateItem = async (itemName) => {
     try {
       const createdTag = await create(itemName);
-
+      console.log("created tag", createdTag);
       allItems.push(createdTag);
-      allItems = sortItems(allItems)
-      addTag(createdTag);
+      allItems = sortItems(allItems);
+      addItem(createdTag);
+      createdTag;
     } catch (e) {
       console.error(e);
     }
@@ -123,7 +123,7 @@
   {#if editing}
     <ModifyItems
       items={allItems}
-      selectedItems={selectedItems}
+      {selectedItems}
       loading={loadingItems}
       toggle={handleItemToggle}
       create={handleCreateItem}
