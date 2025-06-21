@@ -1,11 +1,21 @@
 <script>
-    /** @import { Item } from "../lib/types";*/
+  /** @import { Item } from "../lib/types";*/
   import { onDestroy } from "svelte";
   import { imageUrlById } from "../lib/controllers/image";
   import { videoUrlById, get } from "../lib/controllers/media";
   import Items from "../lib/components/Items.svelte";
-  import { add, create, getAll, remove } from "../lib/controllers/tags";
-  
+  import {
+    add as addTag,
+    create as createTags,
+    getAll as getAllTags,
+    remove as removeTag,
+  } from "../lib/controllers/tags";
+  import {
+    getAll as getAllPeople,
+    add as addPerson,
+    create as createPeople,
+    remove as removePerson,
+  } from "../lib/controllers/people";
 
   /** @type {{id: string}}*/
   let { id } = $props();
@@ -14,22 +24,35 @@
     localStorage.setItem("item", id);
   });
 
-  /** @param {string} tagName 
+  /** @param {string} tagName
    * @returns {Promise<Item>}*/
-  const createTag = async (tagName) => {
-    const createdTags = await create([tagName])
+  const createTagHandler = async (tagName) => {
+    const createdTags = await createTags([tagName]);
 
     if (createdTags.length > 0) {
-        return createdTags[0]
+      return createdTags[0];
     }
 
-    throw Error("No tags returned after create")
-  }
+    throw Error("No tags returned after create");
+  };
+
+  /** @param {string} personName
+   * @returns {Promise<Item>}
+   */
+  const createPersonHandler = async (personName) => {
+    const createdPeople = await createPeople([personName]);
+
+    if (createdPeople.length > 0) {
+      return createdPeople[0];
+    }
+
+    throw Error("No people returned after create");
+  };
 </script>
 
 {#await get(id)}
   <p>loading</p>
-{:then { thumbnailId, title, tags }}
+{:then { thumbnailId, title, tags, people }}
   <div class="container is-fluid">
     <!-- svelte-ignore a11y_media_has_caption -->
     <video src={videoUrlById(id)} controls poster={imageUrlById(thumbnailId)}
@@ -43,10 +66,20 @@
       <Items
         title="Tags"
         items={tags}
-        fetch={async () => getAll()}
-        remove={async (tagId) => remove(id, tagId)}
-        add={async (tagId) => add(id, tagId)}
-        create={createTag}
+        fetch={getAllTags}
+        remove={async (tagId) => removeTag(id, tagId)}
+        add={async (tagId) => addTag(id, tagId)}
+        create={createTagHandler}
+      />
+    </div>
+    <div class="container">
+      <Items
+        title="People"
+        items={people}
+        fetch={getAllPeople}
+        remove={async (personId) => removePerson(id, personId)}
+        add={async (personId) => addPerson(id, personId)}
+        create={createPersonHandler}
       />
     </div>
     <div class="section"></div>

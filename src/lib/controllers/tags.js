@@ -4,9 +4,7 @@
 import { server } from "../env";
 import { fetch } from "./fetch";
 
-/**
- * @returns {Promise<TagDTO[]>}
- */
+/** @returns {Promise<TagDTO[]>} */
 export const getAll = async () => {
   const res = await fetch(`${server()}/tags`)
 
@@ -25,6 +23,7 @@ export const add = async (mediaId, tagId) => {
   return await res.json()
 }
 
+/** @param {string[]} tagNames */
 export const create = async (tagNames) => {
   const res = await fetch(`${server()}/tags`, { method: "POST", body: JSON.stringify(tagNames) })
 
