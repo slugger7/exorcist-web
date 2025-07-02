@@ -1,4 +1,5 @@
 /** @import { PageDTO, MediaDTO, MediaOverviewDTO } from "../../dto" */
+/** @import {Ordinal} from "../types" */
 import { server } from '../env.js'
 import { fetch } from './fetch.js'
 
@@ -24,6 +25,14 @@ export const getAll = async (page = 1, limit = 48, search = "", orderBy = "", as
     params.set("orderBy", orderBy)
   }
 
+  return getAllWithParams(params)
+}
+
+/**
+ * @param {URLSearchParams} [params]
+ * @returns {Promise<PageDTO<MediaOverviewDTO>>}
+ */
+export const getAllWithParams = async (params = new URLSearchParams()) => {
   const res = await fetch(`${server()}/media?${params.toString()}`)
 
   return await res.json()
@@ -47,6 +56,7 @@ export const get = async (id) => {
   return await res.json()
 }
 
+/** @type {Ordinal[]} */
 export const ordinals = [
   {
     text: "Added",

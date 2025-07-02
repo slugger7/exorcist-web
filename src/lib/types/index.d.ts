@@ -4,6 +4,7 @@ import type { WSTopicAllValues } from "../../dto"
 // https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
 export * from "./job"
 export * from "./item"
+export * from "./media"
 
 export type LoginResult = {
   userId: string;
@@ -20,3 +21,8 @@ export type WSMessage<T> = {
 }
 
 export type UrlFn = (id: string) => string
+
+export type Ordinal = {
+  text: string
+  value: string
+}
