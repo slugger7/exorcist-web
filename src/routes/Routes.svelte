@@ -12,12 +12,14 @@
     import LibraryPath from "./LibraryPath.svelte";
     import Video from "./Video.svelte";
     import Jobs from "./Jobs.svelte";
+    import Person from "./Person.svelte";
 </script>
 
 <main>
     <Route path={routes.login}><Login /></Route>
     <Route path={routes.logout}><Logout /></Route>
     <Route path={routes.people}><People /></Route>
+    <Route path={routes.person} let:params><Person id={params.id} /></Route>
     <Route path={routes.libraries}><Libraries /></Route>
     <Route path={routes.create.library}><CreateLibrary /></Route>
     <Route path={routes.library} let:params><Library id={params.id} /></Route>
