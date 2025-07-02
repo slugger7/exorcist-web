@@ -18,3 +18,5 @@ export type WSMessage<T> = {
   topic: WSTopicAllValues
   data: T
 }
+
+export type UrlFn = (id: string) => string

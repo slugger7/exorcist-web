@@ -16,6 +16,7 @@
     create as createPeople,
     remove as removePerson,
   } from "../lib/controllers/people";
+  import routes from "./routes";
 
   /** @type {{id: string}}*/
   let { id } = $props();
@@ -70,6 +71,7 @@
         remove={async (tagId) => removeTag(id, tagId)}
         add={async (tagId) => addTag(id, tagId)}
         create={createTagHandler}
+        urlFn={routes.tagFunc}
       />
     </div>
     <div class="container">
@@ -80,6 +82,7 @@
         remove={async (personId) => removePerson(id, personId)}
         add={async (personId) => addPerson(id, personId)}
         create={createPersonHandler}
+        urlFn={routes.personFunc}
       />
     </div>
     <div class="section"></div>
