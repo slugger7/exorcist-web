@@ -37,6 +37,9 @@
                 <Link class="navbar-item" to={routes.libraries} {onclick}
                     >Libraries</Link
                 >
+                <Link class="navbar-item" to={routes.people} {onclick}
+                    >People</Link
+                >
                 <Link class="navbar-item" to={routes.jobs} {onclick}>Jobs</Link>
                 <div class="navbar-end">
                     <div

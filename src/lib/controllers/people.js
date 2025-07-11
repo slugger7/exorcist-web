@@ -4,9 +4,25 @@
 import { server } from "../env";
 import { fetch } from "./fetch";
 
-/** @returns {Promise<PersonDTO[]>} */
-export const getAll = async () => {
-  const res = await fetch(`${server()}/people`)
+
+/**
+ * @param {string} [search]
+ * @returns {Promise<PersonDTO[]>} */
+export const getAll = async (search = "") => {
+  const params = new URLSearchParams()
+
+  if (search.length > 0) {
+    params.set("search", search)
+  }
+
+  return await getAllWithParams(params)
+}
+
+/** 
+  * @param {URLSearchParams} [params]
+  * @returns {Promise<PersonDTO[]>} */
+export const getAllWithParams = async (params = new URLSearchParams()) => {
+  const res = await fetch(`${server()}/people?${params.toString()}`)
 
   return await res.json()
 }
@@ -32,9 +48,8 @@ export const create = async (peopleNames) => {
 
 /**
  * @param {string} id 
- * @param {URLSearchParams} params 
- * @returns {Promise<PageDTO<MediaOverviewDTO>>}
- */
+ * @param {URLSearchParams} [params]
+ * @returns {Promise<PageDTO<MediaOverviewDTO>>} */
 export const getMediaWithParams = async (id, params = new URLSearchParams()) => {
   const res = await fetch(`${server()}/people/${id}/media?${params.toString()}`)
 

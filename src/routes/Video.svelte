@@ -63,7 +63,7 @@
       <h1 class="title is-1">{title}</h1>
     </div>
     <br />
-    <div class="container">
+    <div class="section">
       <Items
         title="Tags"
         items={tags}
@@ -74,7 +74,7 @@
         urlFn={routes.tagFunc}
       />
     </div>
-    <div class="container">
+    <div class="section">
       <Items
         title="People"
         items={people}
