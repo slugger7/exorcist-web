@@ -4,12 +4,12 @@
   import { ordinals } from "../lib/controllers/media";
   import { getMediaWithParams } from "../lib/controllers/people";
 
-  let { id } = $props();
+  let { id, name } = $props();
 </script>
 
 <MediaView
-  title={id}
-  route={routes.personFunc(id)}
+  title={name}
+  route={routes.personFunc(id, name)}
   {ordinals}
   fetchFn={async (params) => await getMediaWithParams(id, params)}
 />

@@ -21,7 +21,7 @@ export type WSMessage<T> = {
   data: T
 }
 
-export type UrlFn = (id: string) => string
+export type ItemUrlFn = (id: string, name: string) => string
 
 export type Ordinal = {
   text: string
