@@ -5,8 +5,9 @@ const routes = {
     /** @type {ItemUrlFn} */
     personFunc: (id, name) => `/people/${id}/${name}`,
     tags: "/tags",
+    tag: "/tags/:id/:name",
     /** @type {ItemUrlFn} */
-    tagFunc: (id) => `/tags/${id}`,
+    tagFunc: (id, name) => `/tags/${id}/${name}`,
     libraries: "/libraries",
     /** @type {ItemUrlFn} */
     libraryFunc: (id) => (`/libraries/${id}`),

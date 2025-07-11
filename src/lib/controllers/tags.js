@@ -1,5 +1,5 @@
 /**
- * @import { TagDTO } from "../../dto"
+ * @import { TagDTO, PageDTO, MediaOverviewDTO } from "../../dto"
  */
 import { server } from "../env";
 import { fetch } from "./fetch";
@@ -26,6 +26,17 @@ export const add = async (mediaId, tagId) => {
 /** @param {string[]} tagNames */
 export const create = async (tagNames) => {
   const res = await fetch(`${server()}/tags`, { method: "POST", body: JSON.stringify(tagNames) })
+
+  return await res.json()
+}
+
+/**
+ * @param {string} id 
+ * @param {URLSearchParams} params 
+ * @returns {Promise<PageDTO<MediaOverviewDTO>>}
+ */
+export const getMediaWithParams = async (id, params = new URLSearchParams) => {
+  const res = await fetch(`${server()}/tags/${id}/media?${params.toString()}`)
 
   return await res.json()
 }

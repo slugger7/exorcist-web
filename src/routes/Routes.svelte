@@ -13,6 +13,7 @@
     import Video from "./Video.svelte";
     import Jobs from "./Jobs.svelte";
     import Person from "./Person.svelte";
+    import Tag from "./Tag.svelte";
 </script>
 
 <main>
@@ -21,6 +22,9 @@
     <Route path={routes.people}><People /></Route>
     <Route path={routes.person} let:params
         ><Person id={params.id} name={params.name} /></Route
+    >
+    <Route path={routes.tag} let:params
+        ><Tag id={params.id} name={params.name} /></Route
     >
     <Route path={routes.libraries}><Libraries /></Route>
     <Route path={routes.create.library}><CreateLibrary /></Route>
