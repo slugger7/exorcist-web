@@ -22,7 +22,7 @@ export const getAll = async (search = "") => {
  * @returns {Promise<TagDTO[]>}
  */
 export const getAllWithParams = async (params = new URLSearchParams()) => {
-  const res = await fetch(`${server()}/tags`)
+  const res = await fetch(`${server()}/tags?${params.toString()}`)
 
   return await res.json()
 }
