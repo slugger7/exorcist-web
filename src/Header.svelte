@@ -40,6 +40,7 @@
                 <Link class="navbar-item" to={routes.people} {onclick}
                     >People</Link
                 >
+                <Link class="navbar-item" to={routes.tags} {onclick}>Tags</Link>
                 <Link class="navbar-item" to={routes.jobs} {onclick}>Jobs</Link>
                 <div class="navbar-end">
                     <div

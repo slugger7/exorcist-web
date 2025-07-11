@@ -14,6 +14,7 @@
     import Jobs from "./Jobs.svelte";
     import Person from "./Person.svelte";
     import Tag from "./Tag.svelte";
+    import Tags from "./Tags.svelte";
 </script>
 
 <main>
@@ -23,6 +24,7 @@
     <Route path={routes.person} let:params
         ><Person id={params.id} name={params.name} /></Route
     >
+    <Route path={routes.tags}><Tags /></Route>
     <Route path={routes.tag} let:params
         ><Tag id={params.id} name={params.name} /></Route
     >
