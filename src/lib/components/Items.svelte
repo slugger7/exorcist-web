@@ -1,6 +1,7 @@
 <script>
   import ModifyItems from "./ModifyItems.svelte";
   import HeaderIconButton from "./HeaderIconButton.svelte";
+  import { Link } from "svelte-routing";
   /**
    * @import { Item, FetchItems, RemoveItem, AddItem, CreateItem, ItemUrlFn } from '../types'
    *
@@ -135,7 +136,8 @@
     {#each selectedItems as item}
       <div class="control">
         <div class="tags has-addons is-medium">
-          <a class="tag is-link" href={urlFn(item.id, item.name)}>{item.name}</a
+          <Link class="tag is-link" to={urlFn(item.id, item.name)}
+            >{item.name}</Link
           >
           {#if editing}
             <button
