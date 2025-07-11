@@ -1,5 +1,5 @@
 /**
- * @import { PersonDTO } from "../../dto"
+ * @import { MediaOverviewDTO, PageDTO, PersonDTO } from "../../dto"
  */
 import { server } from "../env";
 import { fetch } from "./fetch";
@@ -30,4 +30,14 @@ export const create = async (peopleNames) => {
   return await res.json()
 }
 
+/**
+ * @param {string} id 
+ * @param {URLSearchParams} params 
+ * @returns {Promise<PageDTO<MediaOverviewDTO>>}
+ */
+export const getMediaWithParams = async (id, params = new URLSearchParams()) => {
+  const res = await fetch(`${server()}/people/${id}/media?${params.toString()}`)
+
+  return await res.json()
+}
 

@@ -3,13 +3,14 @@
 
   /**
    * @import { ChangeEventHandler } from "svelte/elements";
+   * @import { Ordinal } from "../types"
    *
    * @typedef props
    * @type {object}
    * @property {string} [value]
    * @property {ChangeEventHandler<HTMLInputElement>} onkeyup
    * @property {Function} [onclear]
-   * @property {any} ordinals
+   * @property {Ordinal[]} ordinals
    * @property {string} orderBy
    * @property {boolean} [ascending]
    */

@@ -2,7 +2,7 @@
   import ModifyItems from "./ModifyItems.svelte";
   import HeaderIconButton from "./HeaderIconButton.svelte";
   /**
-   * @import { Item, FetchItems, RemoveItem, AddItem, CreateItem } from '../types'
+   * @import { Item, FetchItems, RemoveItem, AddItem, CreateItem, ItemUrlFn } from '../types'
    *
    * @typedef props
    * @type {object}
@@ -12,11 +12,13 @@
    * @property {RemoveItem} remove
    * @property {AddItem} add
    * @property {CreateItem} create
+   * @property {ItemUrlFn} urlFn
    */
   /** @type {props}*/
-  let { title, items, fetch, remove, add, create } = $props();
+  let { title, items, fetch, remove, add, create, urlFn } = $props();
 
   let editing = $state(false);
+  /** @type {Item[]} */
   let selectedItems = $state([]);
   let allItems = $state([]);
   let loadingItems = $state(false);
@@ -130,15 +132,16 @@
     />
   {/if}
   <div class="field is-grouped is-grouped-multiline">
-    {#each selectedItems as tag}
+    {#each selectedItems as item}
       <div class="control">
         <div class="tags has-addons is-medium">
-          <span class="tag is-link">{tag.name}</span>
+          <a class="tag is-link" href={urlFn(item.id, item.name)}>{item.name}</a
+          >
           {#if editing}
             <button
               class="tag is-delete"
-              aria-label="delete {tag.name} tag"
-              onclick={handleRemoveItem(tag)}
+              aria-label="delete {item.name} tag"
+              onclick={handleRemoveItem(item)}
             ></button>
           {/if}
         </div>
