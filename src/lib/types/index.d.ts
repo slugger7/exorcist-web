@@ -1,5 +1,6 @@
 import type { Job } from "./job";
 import type { WSTopicAllValues } from "../../dto"
+import type { PageDTO } from "../../dto";
 
 // https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
 export * from "./job"
@@ -25,4 +26,8 @@ export type UrlFn = (id: string) => string
 export type Ordinal = {
   text: string
   value: string
+}
+
+export type WSTopicMapView<T> = {
+  [key in WSTopicAllValues]?: (mediaPage: PageDTO<T>, newItems: T[], data: T) => [PageDTO<T>, T[]]
 }

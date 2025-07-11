@@ -1,7 +1,7 @@
 <script>
   import { Link } from "svelte-routing";
   /**
-   * @import { FetchMedia, Ordinal } from "../types"
+   * @import { FetchMedia, Ordinal, WSTopicMapView, WSMessage } from "../types"
    * @import { PageDTO, MediaOverviewDTO } from "../../dto"
    */
   import {
@@ -14,6 +14,9 @@
   import routes from "../../routes/routes";
   import VideoCard from "./VideoCard.svelte";
   import Pagination from "./Pagination.svelte";
+  import { onDestroy, onMount } from "svelte";
+  import { PONG } from "../constants/websocket";
+  import { wsState } from "../state/wsState.svelte";
 
   /**
    * @typedef props
@@ -22,9 +25,10 @@
    * @property {FetchMedia} fetchFn
    * @property {string} route
    * @property {Ordinal[]} ordinals
+   * @property {WSTopicMapView<MediaOverviewDTO>} [topicMap]
    */
   /** @type {props}*/
-  let { title, route, ordinals, fetchFn } = $props();
+  let { title, route, ordinals, topicMap = {}, fetchFn } = $props();
 
   let page = $state(getIntSearchParamOrDefault("page", 1));
   let limit = $state(getIntSearchParamOrDefault("limit", 50));
@@ -35,6 +39,28 @@
   let error = $state();
   /** @type {PageDTO<MediaOverviewDTO>}*/
   let mediaPage = $state();
+  /** @type {MediaOverviewDTO[]}*/
+  let newMedia = $state([]);
+
+  onMount(async () => {
+    window.addEventListener("popstate", onPopState);
+  });
+
+  onDestroy(() => {
+    window.removeEventListener("popstate", onPopState);
+
+    if (wsState.active) {
+      wsState.connection.removeEventListener("message", onWsMessage);
+    }
+  });
+
+  const onPopState = () => {
+    page = getIntSearchParamOrDefault("page", 1);
+    limit = getIntSearchParamOrDefault("limit", 48);
+    search = getStringSearchParamOrDefault("search", "");
+    orderBy = getStringSearchParamOrDefault("orderBy", "added");
+    ascending = getBoolParamOrDefault("ascending", true);
+  };
 
   const fetchPage = async () => {
     const params = new URLSearchParams();
@@ -60,6 +86,32 @@
   $effect(() => {
     fetchPage();
   });
+
+  $effect(() => {
+    if (wsState.active) {
+      wsState.connection.addEventListener("message", onWsMessage);
+    }
+  });
+
+  /** @param {MessageEvent<string>} e */
+  const onWsMessage = (e) => {
+    if (e.data === PONG) return;
+
+    /** @type {WSMessage<MediaOverviewDTO>}*/
+    const data = JSON.parse(e.data);
+
+    const topic = topicMap[data.topic];
+    if (topic) {
+      const [updatedMediaPage, updatedNewMedia] = topic(
+        mediaPage,
+        newMedia,
+        data.data,
+      );
+      mediaPage = updatedMediaPage;
+      newMedia = updatedNewMedia;
+      3;
+    }
+  };
 
   /** @param {string} s */
   const setSearchAndNavigate = (s) => {
