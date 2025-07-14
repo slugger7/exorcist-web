@@ -12,6 +12,8 @@
     video_create: (mediaPage, newItems, media) => {
       newItems.push(media);
 
+      mediaPage.total++;
+
       return [mediaPage, newItems];
     },
     video_update: (mediaPage, newItems, updatedMedia) => {
