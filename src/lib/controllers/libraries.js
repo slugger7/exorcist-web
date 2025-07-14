@@ -1,4 +1,4 @@
-/** @import { LibraryDTO, LibraryPathDTO } from "../../dto" */
+/** @import { LibraryDTO, LibraryPathDTO, PageDTO, MediaOverviewDTO } from "../../dto" */
 import { server } from "../env.js";
 import { fetch } from "./fetch.js";
 
@@ -36,6 +36,17 @@ export const getPaths = async (id) => {
   const res = await fetch(
     `${server()}/libraries/${id}/libraryPaths`
   )
+
+  return await res.json()
+}
+
+/**
+ * @param {string} id 
+ * @param {URLSearchParams} [params]
+ * @returns {Promise<PageDTO<MediaOverviewDTO>>}
+ */
+export const getMediaWithParams = async (id, params = new URLSearchParams) => {
+  const res = await fetch(`${server()}/libraries/${id}/media?${params.toString()}`)
 
   return await res.json()
 }

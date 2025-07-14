@@ -10,13 +10,13 @@
   <header class="card-header">
     <Link
       class="card-header-title"
-      to={routes.libraryFunc(id)}
+      to={routes.libraryFunc(id, name)}
       state={{ libraryName: name }}>{name}</Link
     >
     <Link
       class="card-header-icon"
       aria-label="more-options"
-      to={routes.create.libraryPathFunc(id)}
+      to={routes.create.libraryPathFunc(id, name)}
       state={{ libraryName: name }}
     >
       <span class="icon">
