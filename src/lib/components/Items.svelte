@@ -117,7 +117,7 @@
 <div>
   <h2 class="title is-2 inline">{title}</h2>
   <HeaderIconButton
-    icon="fas fa-pen-to-square"
+    icon="fas fa-pen"
     ariaLabel="edit tags"
     iconClass={editing ? "has-text-info" : ""}
     buttonClass="mb-2"

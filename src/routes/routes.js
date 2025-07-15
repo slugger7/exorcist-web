@@ -15,7 +15,7 @@ const routes = {
     libraryPaths: "/library-paths",
     libraryPath: "/library-paths/:id",
     /** @type {ItemUrlFn} */
-    libraryPathFunc: (id, name) => (`/library-paths/${id}/${name}`),
+    libraryPathFunc: (id, name) => (`/library-paths/${id}`),
     home: "/",
     video: "/videos/:id",
     /** @type {ItemUrlFn} */
