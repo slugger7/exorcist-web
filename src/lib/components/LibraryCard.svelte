@@ -16,11 +16,11 @@
     <Link
       class="card-header-icon"
       aria-label="more-options"
-      to={routes.create.libraryPathFunc(id, name)}
+      to={routes.edit.libraryFunc(id, name)}
       state={{ libraryName: name }}
     >
       <span class="icon">
-        <i class="fa-solid fa-plus" aria-hidden="true"></i>
+        <i class="fa-solid fa-pen" aria-hidden="true"></i>
       </span>
     </Link>
   </header>
