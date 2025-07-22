@@ -23,6 +23,9 @@ const routes = {
     login: "/login",
     logout: "/logout",
     jobs: "/jobs",
+    /** @type {ItemUrlFn} */
+    userFunc: (id, name) => (`/users/${id}/${name}`),
+    user: "/users/:id/:name",
     create: {
         library: "/create/libraries",
         /** @type {ItemUrlFn} */

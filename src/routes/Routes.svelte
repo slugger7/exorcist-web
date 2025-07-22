@@ -16,6 +16,7 @@
     import Person from "./Person.svelte";
     import Tag from "./Tag.svelte";
     import Tags from "./Tags.svelte";
+    import User from "./User.svelte";
 </script>
 
 <main>
@@ -42,6 +43,9 @@
     >
     <Route path={routes.libraryPath} let:params
         ><LibraryPath id={params.id} /></Route
+    >
+    <Route path={routes.user} let:params
+        ><User id={params.id} name={params.name} /></Route
     >
     <Route path={routes.jobs}><Jobs /></Route>
     <Route path={routes.home}><Home /></Route>
