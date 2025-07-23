@@ -1,5 +1,5 @@
 <script>
-  import { getAllWithParams } from "../lib/controllers/people";
+  import { getAllWithParams, ordinals } from "../lib/controllers/people";
   import routes from "./routes";
   import ItemsOverview from "../lib/components/ItemsOverview.svelte";
 </script>
@@ -9,4 +9,5 @@
   route={routes.people}
   urlFn={routes.personFunc}
   fetch={getAllWithParams}
+  {ordinals}
 />
