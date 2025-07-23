@@ -15,3 +15,5 @@ export type CreateItem = (name: string) => Promise<Item>
 
 export type SearchItems = (name: string) => Promse<Item[]>
 
+export type SearchItemsWithParams = (params: URLSearchParams) => Promise<Item[]>
+
