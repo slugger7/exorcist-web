@@ -137,18 +137,16 @@
 
 <div class="container is-fluid">
   <h1 class="title is-1">{title}</h1>
-  {#if mediaPage && mediaPage.data.length !== 0}
-    <div class="block">
-      <Search
-        onkeyup={onSearchChange}
-        value={search}
-        onclear={onSearchClear}
-        bind:orderBy
-        bind:ascending
-        {ordinals}
-      />
-    </div>
-  {/if}
+  <div class="block">
+    <Search
+      onkeyup={onSearchChange}
+      value={search}
+      onclear={onSearchClear}
+      bind:orderBy
+      bind:ascending
+      {ordinals}
+    />
+  </div>
 
   {#if loading}
     <div class="grid is-col-min-13 is-gap-1">
