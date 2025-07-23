@@ -41,8 +41,9 @@
         </tr>
         <tr>
           <th>Library ID</th>
+          <!-- TODO: modify libraryFunc to have library name -->
           <td
-            ><Link to={routes.libraryFunc(libraryPath.libraryId)}
+            ><Link to={routes.libraryFunc(libraryPath.libraryId, "")}
               >{libraryPath.libraryId}</Link
             ></td
           >

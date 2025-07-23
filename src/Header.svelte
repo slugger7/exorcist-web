@@ -8,6 +8,7 @@
 
     const onclick = () => {
         isMenuActive = false;
+        userDropdownActive = false;
     };
 </script>
 
@@ -55,6 +56,14 @@
                             >{userState.username}</button
                         >
                         <div class="navbar-dropdown">
+                            <Link
+                                class="navbar-item"
+                                to={routes.userFunc(
+                                    userState.id,
+                                    userState.username,
+                                )}
+                                {onclick}>Profile</Link
+                            >
                             <hr class="navbar-divider" />
                             <Link class="navbar-item" to={routes.logout}
                                 >Logout</Link
