@@ -42,7 +42,7 @@
     loadingItems = true;
     try {
       const items = await fetch();
-      allItems = sortItems(items);
+      allItems = items;
     } catch {
       itemsError = "could not fetch tags";
     } finally {
