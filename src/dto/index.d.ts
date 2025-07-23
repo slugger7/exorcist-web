@@ -198,11 +198,19 @@ export interface ResetPasswordDTO {
 //////////
 // source: tag.go
 
+export type TagOrdinal = string;
+export const TagOrdinal_MediaCount: TagOrdinal = "count";
+export const TagOrdinal_Name: TagOrdinal = "name";
 export interface TagDTO {
   id: string /* UUID */;
   name: string;
   created: Date;
   modified: Date;
+}
+export interface TagSearchDTO {
+  search: string;
+  orderBy: TagOrdinal;
+  asc: boolean;
 }
 
 //////////

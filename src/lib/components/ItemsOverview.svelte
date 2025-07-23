@@ -6,9 +6,8 @@
     setValueAndNavigate,
   } from "../searchParams";
   import Search from "./Search.svelte";
-  import { ordinals } from "../controllers/people";
   /**
-   * @import { SearchItemsWithParams, ItemUrlFn, Item } from "../types"
+   * @import { SearchItemsWithParams, ItemUrlFn, Item, Ordinal } from "../types"
    *
    * @typedef props
    * @type {object}
@@ -16,9 +15,10 @@
    * @property {string} route
    * @property {ItemUrlFn} urlFn
    * @property {SearchItemsWithParams} fetch
+   * @property {Ordinal[]} ordinals
    */
   /** @type {props} */
-  let { title, route, fetch, urlFn } = $props();
+  let { title, route, ordinals, fetch, urlFn } = $props();
 
   /** @type {Item[]}*/
   let items = $state([]);
