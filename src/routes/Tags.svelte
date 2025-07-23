@@ -1,5 +1,5 @@
 <script>
-  import { getAll } from "../lib/controllers/tags";
+  import { getAllWithParams, ordinals } from "../lib/controllers/tags";
   import routes from "./routes";
   import ItemsOverview from "../lib/components/ItemsOverview.svelte";
 </script>
@@ -8,5 +8,6 @@
   title="Tags"
   route={routes.tags}
   urlFn={routes.tagFunc}
-  fetch={getAll}
+  fetch={getAllWithParams}
+  {ordinals}
 />

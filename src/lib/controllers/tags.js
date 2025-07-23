@@ -1,5 +1,6 @@
 /**
  * @import { TagDTO, PageDTO, MediaOverviewDTO } from "../../dto"
+ * @import { Ordinal } from "../types"
  */
 import { server } from "../env";
 import { fetch } from "./fetch";
@@ -55,3 +56,15 @@ export const getMediaWithParams = async (id, params = new URLSearchParams) => {
 
   return await res.json()
 }
+
+/** @type {Ordinal[]} */
+export const ordinals = [
+  {
+    text: "Count",
+    value: "count"
+  },
+  {
+    text: "Name",
+    value: "name"
+  }
+]
