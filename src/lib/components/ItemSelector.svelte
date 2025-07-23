@@ -14,10 +14,20 @@
    * @property {Item[]} items
    * @property {Item[]} selectedItems
    * @property {ToggleItem} toggle
-   * @property {CreateItemNoReturn} create
+   * @property {CreateItemNoReturn} [create]
+   * @property {boolean} [disableCreate]
+   * @property {string} [placeholder]
    */
   /** @type {props}*/
-  let { loading, items, selectedItems, toggle, create } = $props();
+  let {
+    loading,
+    items,
+    selectedItems,
+    toggle,
+    create,
+    disableCreate = false,
+    placeholder = "",
+  } = $props();
 
   const itemsInViewCount = 5;
 
@@ -26,7 +36,9 @@
   let itemsInView = $state([]);
   let selectedIndex = $state(null);
   let showCreateItem = $derived(
-    query.length >= 1 && !items.find((item) => item.name === query),
+    !disableCreate &&
+      query.length >= 1 &&
+      !items.find((item) => item.name === query),
   );
   let selectionBoundary = $derived(
     showCreateItem ? itemsInView.length : itemsInView.length - 1,
@@ -159,7 +171,7 @@
         <input
           class="input"
           type="text"
-          placeholder="new tag"
+          {placeholder}
           value={query}
           onfocus={onDropdownFocus}
           onblur={onDropdownBlur}

@@ -1,5 +1,5 @@
 <script>
-  import ModifyItems from "./ModifyItems.svelte";
+  import ItemSelector from "./ItemSelector.svelte";
   import HeaderIconButton from "./HeaderIconButton.svelte";
   import { Link } from "svelte-routing";
   /**
@@ -23,7 +23,6 @@
   let selectedItems = $state([]);
   let allItems = $state([]);
   let loadingItems = $state(false);
-  let itemsError = $state();
 
   /**
    * @param {Item[]} items
@@ -43,8 +42,6 @@
     try {
       const items = await fetch();
       allItems = items;
-    } catch {
-      itemsError = "could not fetch tags";
     } finally {
       loadingItems = false;
     }
@@ -124,7 +121,7 @@
     onclick={() => (editing = !editing)}
   />
   {#if editing}
-    <ModifyItems
+    <ItemSelector
       items={allItems}
       {selectedItems}
       loading={loadingItems}
