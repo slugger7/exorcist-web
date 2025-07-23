@@ -1,24 +1,62 @@
 <script>
   import { Link } from "svelte-routing";
   import {
+    getBoolParamOrDefault,
     getStringSearchParamOrDefault,
     setValueAndNavigate,
   } from "../searchParams";
+  import Search from "./Search.svelte";
+  import { ordinals } from "../controllers/people";
   /**
-   * @import { SearchItems, ItemUrlFn } from "../types"
+   * @import { SearchItemsWithParams, ItemUrlFn, Item } from "../types"
    *
    * @typedef props
    * @type {object}
    * @property {string} title
    * @property {string} route
    * @property {ItemUrlFn} urlFn
-   * @property {SearchItems} fetch
+   * @property {SearchItemsWithParams} fetch
    */
   /** @type {props} */
   let { title, route, fetch, urlFn } = $props();
 
+  /** @type {Item[]}*/
+  let items = $state([]);
   let value = $state("");
   let search = $state(getStringSearchParamOrDefault("search", ""));
+  let orderBy = $state(getStringSearchParamOrDefault("orderBy", "count"));
+  let ascending = $state(getBoolParamOrDefault("ascending", false));
+  let loading = $state(false);
+
+  const fetchItems = async () => {
+    const params = new URLSearchParams();
+
+    params.set("asc", ascending.toString());
+    params.set("orderBy", orderBy);
+
+    if (search !== "") {
+      params.set("search", search);
+    }
+
+    loading = true;
+    try {
+      items = await fetch(params);
+    } finally {
+      loading = false;
+    }
+  };
+
+  $effect(() => {
+    fetchItems();
+  });
+
+  $effect(() => {
+    setValueAndNavigate("asc", ascending, route, { replace: true });
+  });
+
+  $effect(() => {
+    setValueAndNavigate("orderBy", orderBy, route, { replace: true });
+  });
 
   let searchTimeout;
   const onkeyup = (event) => {
@@ -42,39 +80,17 @@
 
 <div class="container is-fluid">
   <h1 class="title is-1">{title}</h1>
-  <div class="field has-addons">
-    <p class="control has-icons-left is-expanded">
-      <input
-        class="input"
-        type="text"
-        placeholder="Search"
-        bind:value
-        {onkeyup}
-      />
-      <span class="icon is-left">
-        <i class="fas fa-search"></i>
-      </span>
-    </p>
-    {#if value !== ""}
-      <p class="control">
-        <button
-          class="button"
-          aria-label="clear search"
-          onclick={() => {
-            value = "";
-            onclear();
-          }}
-        >
-          <span class="icon">
-            <i class="fas fa-close"></i>
-          </span>
-        </button>
-      </p>
-    {/if}
-  </div>
-  {#await fetch(search)}
+  <Search
+    {onkeyup}
+    value={search}
+    {onclear}
+    bind:orderBy
+    bind:ascending
+    {ordinals}
+  />
+  {#if loading}
     <p>Loading items</p>
-  {:then items}
+  {:else if items}
     <div class="field is-grouped is-grouped-multiline">
       {#each items as item (item.id)}
         <div class="control">
@@ -86,5 +102,5 @@
         </div>
       {/each}
     </div>
-  {/await}
+  {/if}
 </div>

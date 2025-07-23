@@ -1,5 +1,5 @@
 <script>
-  import { getAll } from "../lib/controllers/people";
+  import { getAllWithParams } from "../lib/controllers/people";
   import routes from "./routes";
   import ItemsOverview from "../lib/components/ItemsOverview.svelte";
 </script>
@@ -8,5 +8,5 @@
   title="People"
   route={routes.people}
   urlFn={routes.personFunc}
-  fetch={getAll}
+  fetch={getAllWithParams}
 />
