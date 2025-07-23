@@ -171,11 +171,19 @@ export interface PageRequestDTO {
 //////////
 // source: person.go
 
+export type PersonOrdinal = string;
+export const PersonOrdinal_MediaCount: PersonOrdinal = "count";
+export const PersonOrdinal_Name: PersonOrdinal = "name";
 export interface PersonDTO {
   id: string /* UUID */;
   name: string;
   created: Date;
   modified: Date;
+}
+export interface PersonSearchDTO {
+  search: string;
+  orderBy: PersonOrdinal;
+  asc: boolean;
 }
 
 //////////
