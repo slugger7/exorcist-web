@@ -1,6 +1,5 @@
 <script>
   import { getAll } from "../controllers/tags";
-  import Items from "./Items.svelte";
   import ItemSelector from "./ItemSelector.svelte";
   import Select from "./Select.svelte";
 
@@ -16,6 +15,7 @@
    * @property {Ordinal[]} ordinals
    * @property {string} orderBy
    * @property {boolean} [ascending]
+   * @property {Item[]} [selectedTags]
    */
 
   /** @type {props} */
@@ -26,14 +26,13 @@
     ordinals,
     orderBy = $bindable(),
     ascending = $bindable(),
+    selectedTags = $bindable(),
   } = $props();
 
   let extraOptions = $state(false);
   /** @type {Item[]}*/
   let tags = $state([]);
   let loadingTags = $state(false);
-  /** @type {Item[]}*/
-  let selectedTags = $state([]);
   let people = $state([]);
   let loadingPeople = $state(false);
 
