@@ -35,6 +35,7 @@
   let search = $state(getStringSearchParamOrDefault("search", ""));
   let orderBy = $state(getStringSearchParamOrDefault("orderBy", "added"));
   let ascending = $state(getBoolParamOrDefault("ascending", false));
+  let selectedTags = $state([]);
   let loading = $state(false);
   let error = $state();
   /** @type {PageDTO<MediaOverviewDTO>}*/
@@ -68,6 +69,12 @@
     params.set("limit", limit.toString());
     params.set("asc", ascending.toString());
     params.set("orderBy", orderBy);
+
+    if (selectedTags.length > 0) {
+      selectedTags.forEach((tag) => {
+        params.append("tags", tag.name);
+      });
+    }
 
     if (search !== "") {
       params.set("search", search);
@@ -137,18 +144,17 @@
 
 <div class="container is-fluid">
   <h1 class="title is-1">{title}</h1>
-  {#if mediaPage && mediaPage.data.length !== 0}
-    <div class="block">
-      <Search
-        onkeyup={onSearchChange}
-        value={search}
-        onclear={onSearchClear}
-        bind:orderBy
-        bind:ascending
-        {ordinals}
-      />
-    </div>
-  {/if}
+  <div class="block">
+    <Search
+      onkeyup={onSearchChange}
+      value={search}
+      onclear={onSearchClear}
+      bind:orderBy
+      bind:ascending
+      {ordinals}
+      {selectedTags}
+    />
+  </div>
 
   {#if loading}
     <div class="grid is-col-min-13 is-gap-1">
