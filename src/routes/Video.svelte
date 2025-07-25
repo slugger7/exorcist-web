@@ -53,7 +53,7 @@
 
 {#await get(id)}
   <p>loading</p>
-{:then { thumbnailId, title, tags, people }}
+{:then { thumbnailId, title, tags, people, path, size, added, created, modified, checksum, video }}
   <div class="container is-fluid">
     <!-- svelte-ignore a11y_media_has_caption -->
     <video src={videoUrlById(id)} controls poster={imageUrlById(thumbnailId)}
@@ -85,7 +85,50 @@
         urlFn={routes.personFunc}
       />
     </div>
-    <div class="section"></div>
+    <div class="section">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dimensions</td>
+            <td>{video.width}x{video.height}</td>
+          </tr>
+          <tr>
+            <td>Runtime</td>
+            <td>{video.runtime}</td>
+          </tr>
+          <tr>
+            <td>Size</td>
+            <td>{size}</td>
+          </tr>
+          <tr>
+            <td>Path</td>
+            <td>{path}</td>
+          </tr>
+          <tr>
+            <td>Added</td>
+            <td>{added}</td>
+          </tr>
+          <tr>
+            <td>Created</td>
+            <td>{created}</td>
+          </tr>
+          <tr>
+            <td>Modified</td>
+            <td>{modified}</td>
+          </tr>
+          <tr>
+            <td>Checksum</td>
+            <td>{checksum}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 {:catch}
   <p>something went wrong</p>
