@@ -16,8 +16,8 @@
    * @property {Ordinal[]} ordinals
    * @property {string} orderBy
    * @property {boolean} [ascending]
-   * @property {Item[]} [selectedTags]
-   * @property {Item[]} [selectedPeople]
+   * @property {string[]} [selectedTags]
+   * @property {string[]} [selectedPeople]
    */
 
   /** @type {props} */
@@ -73,41 +73,50 @@
    * @param {Item} item
    */
   const handleTagToggle = (item) => {
-    const existing = !!selectedTags.find((t) => t.id === item.id);
+    const existing = !!selectedTags.find((t) => t === item.name);
     if (existing) {
       removeSelectedTag(item);
       return;
     }
 
-    selectedTags.push(item);
+    selectedTags.push(item.name);
   };
 
   /**
    * @param {Item} item
    */
   const handlePersonToggle = (item) => {
-    const existing = !!selectedPeople.find((t) => t.id === item.id);
+    const existing = !!selectedPeople.find((t) => t === item.name);
     if (existing) {
       removeSelectedPerson(item);
       return;
     }
 
-    selectedPeople.push(item);
+    selectedPeople.push(item.name);
   };
 
   /**
-   * @param {Item} item
+   * @param {{name: string}} item
    */
   const removeSelectedTag = (item) => {
-    selectedTags = selectedTags.filter((t) => t.id !== item.id);
+    selectedTags = selectedTags.filter((t) => t !== item.name);
   };
 
   /**
-   * @param {Item} item
+   * @param {{name: string}} item
    */
   const removeSelectedPerson = (item) => {
-    selectedPeople = selectedPeople.filter((t) => t.id !== item.id);
+    selectedPeople = selectedPeople.filter((t) => t !== item.name);
   };
+
+  /**
+   *
+   * @param {string[]} selectedItems
+   * @param {Item[]} items
+   * @returns {Item[]}
+   */
+  const hydrateItems = (selectedItems, items) =>
+    selectedItems.map((s) => items.find((i) => i.name === s)).filter((s) => s);
 </script>
 
 <div class="block">
@@ -185,7 +194,7 @@
     <ItemSelector
       placeholder="tag"
       items={tags}
-      selectedItems={selectedTags}
+      selectedItems={hydrateItems(selectedTags, tags)}
       loading={loadingTags}
       toggle={handleTagToggle}
       disableCreate={true}
@@ -194,12 +203,12 @@
       {#each selectedTags as tag}
         <div class="control">
           <div class="tags has-addons is-medium">
-            <span class="tag">{tag.name}</span>
+            <span class="tag">{tag}</span>
 
             <button
               class="tag is-delete"
-              aria-label="remove {tag.name} from filter"
-              onclick={() => removeSelectedTag(tag)}
+              aria-label="remove {tag} from filter"
+              onclick={() => removeSelectedTag({ name: tag })}
             ></button>
           </div>
         </div>
@@ -208,7 +217,7 @@
     <ItemSelector
       placeholder="people"
       items={people}
-      selectedItems={selectedPeople}
+      selectedItems={hydrateItems(selectedPeople, people)}
       loading={loadingPeople}
       toggle={handlePersonToggle}
       disableCreate={true}
@@ -217,12 +226,12 @@
       {#each selectedPeople as person}
         <div class="control">
           <div class="tags has-addons is-medium">
-            <span class="tag">{person.name}</span>
+            <span class="tag">{person}</span>
 
             <button
               class="tag is-delete"
-              aria-label="remove {person.name} from filter"
-              onclick={() => removeSelectedPerson(person)}
+              aria-label="remove {person} from filter"
+              onclick={() => removeSelectedPerson({ name: person })}
             ></button>
           </div>
         </div>
