@@ -57,6 +57,7 @@
   const handleUpdatePasswordSubmit = async (event) => {
     event.preventDefault();
 
+    error = {};
     const e = validatePasswordUpdateFields(
       currentPassword,
       newPassword,
@@ -74,6 +75,10 @@
         newPassword,
         repeatPassword,
       });
+
+      currentPassword = "";
+      newPassword = "";
+      repeatPassword = "";
     } catch (e) {
       console.error(e);
     } finally {
