@@ -116,6 +116,8 @@ export interface MediaSearchDTO {
   PageRequestDTO: PageRequestDTO;
   orderBy: MediaOrdinal;
   search: string;
+  tags: string[];
+  people: string[];
 }
 export interface MediaOverviewDTO {
   id: string /* UUID */;

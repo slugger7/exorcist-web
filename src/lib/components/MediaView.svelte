@@ -5,10 +5,12 @@
    * @import { PageDTO, MediaOverviewDTO } from "../../dto"
    */
   import {
+    getArrayOfStringsSearchParamOrDefault,
     getBoolParamOrDefault,
     getIntSearchParamOrDefault,
     getStringSearchParamOrDefault,
     setValueAndNavigate,
+    setValuesAndNavigate,
   } from "../searchParams";
   import Search from "./Search.svelte";
   import routes from "../../routes/routes";
@@ -26,17 +28,29 @@
    * @property {string} route
    * @property {Ordinal[]} ordinals
    * @property {WSTopicMapView<MediaOverviewDTO>} [topicMap]
+   * @property {boolean} [disablePeople]
+   * @property {boolean} [disableTags]
    */
   /** @type {props}*/
-  let { title, route, ordinals, topicMap = {}, fetchFn } = $props();
+  let {
+    title,
+    route,
+    ordinals,
+    topicMap = {},
+    fetchFn,
+    disablePeople = false,
+    disableTags = false,
+  } = $props();
 
   let page = $state(getIntSearchParamOrDefault("page", 1));
   let limit = $state(getIntSearchParamOrDefault("limit", 50));
   let search = $state(getStringSearchParamOrDefault("search", ""));
   let orderBy = $state(getStringSearchParamOrDefault("orderBy", "added"));
   let ascending = $state(getBoolParamOrDefault("ascending", false));
-  let selectedTags = $state([]);
-  let selectedPeople = $state([]);
+  let selectedTags = $state(getArrayOfStringsSearchParamOrDefault("tags", []));
+  let selectedPeople = $state(
+    getArrayOfStringsSearchParamOrDefault("people", []),
+  );
   let loading = $state(false);
   let error = $state();
   /** @type {PageDTO<MediaOverviewDTO>}*/
@@ -62,6 +76,8 @@
     search = getStringSearchParamOrDefault("search", "");
     orderBy = getStringSearchParamOrDefault("orderBy", "added");
     ascending = getBoolParamOrDefault("ascending", true);
+    selectedPeople = getArrayOfStringsSearchParamOrDefault("people", []);
+    selectedTags = getArrayOfStringsSearchParamOrDefault("tags", []);
   };
 
   const fetchPage = async () => {
@@ -73,13 +89,13 @@
 
     if (selectedTags.length > 0) {
       selectedTags.forEach((tag) => {
-        params.append("tags", tag.name);
+        params.append("tags", tag);
       });
     }
 
     if (selectedPeople.length > 0) {
       selectedPeople.forEach((person) => {
-        params.append("people", person.name);
+        params.append("people", person);
       });
     }
 
@@ -99,6 +115,28 @@
 
   $effect(() => {
     fetchPage();
+  });
+
+  $effect(() => {
+    if (disableTags) return;
+    setValuesAndNavigate("tags", selectedTags, route, { replace: true });
+  });
+
+  $effect(() => {
+    if (disablePeople) return;
+    setValuesAndNavigate("people", selectedPeople, route, { replace: true });
+  });
+
+  $effect(() => {
+    setValueAndNavigate("orderBy", orderBy, route, { replace: true });
+  });
+
+  $effect(() => {
+    setValueAndNavigate("ascending", ascending, route, { replace: true });
+  });
+
+  $effect(() => {
+    setValueAndNavigate("limit", limit.toString(), route, { replace: true });
   });
 
   $effect(() => {
@@ -161,6 +199,8 @@
       bind:selectedTags
       bind:selectedPeople
       {ordinals}
+      {disablePeople}
+      {disableTags}
     />
   </div>
 

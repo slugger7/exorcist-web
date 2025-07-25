@@ -79,3 +79,20 @@ export const setValueAndNavigate = (key, val, route, options) => {
   }
   navigate(`${route}?${params.toString()}`, options);
 };
+
+/**
+ * @param {string} key
+ * @param {string[]} values
+ * @param {string} route
+ * @param {{replace: boolean}} [options]
+ */
+export const setValuesAndNavigate = (key, values, route, options) => {
+  const params = new URLSearchParams(window.location.search)
+  params.delete(key)
+
+  values.forEach(v => {
+    params.append(key, v)
+  })
+
+  navigate(`${route}?${params.toString()}`, options)
+}
