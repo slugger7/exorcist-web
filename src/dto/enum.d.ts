@@ -1,5 +1,7 @@
 export type JobOrdinalAllValues = "created" | "modified" | "priority"
 export type MediaOrdinalAllValues = "created" | "modified" | "added" | "path" | "size" | "title"
+export type PersonOrdinalAllValues = "count" | "name"
+export type TagOrdinalAllValues = "count" | "name"
 export type JobStatusAllValues = "not_started" | "in_progress" | "failed" | "completed" | "cancelled"
 export type JobTypeAllValues = "update_existing_videos" | "scan_path" | "generate_checksum" | "generate_thumbnail"
 export type MediaTypeAllValues = "primary" | "asset"
