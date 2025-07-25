@@ -36,6 +36,7 @@
   let orderBy = $state(getStringSearchParamOrDefault("orderBy", "added"));
   let ascending = $state(getBoolParamOrDefault("ascending", false));
   let selectedTags = $state([]);
+  let selectedPeople = $state([]);
   let loading = $state(false);
   let error = $state();
   /** @type {PageDTO<MediaOverviewDTO>}*/
@@ -73,6 +74,12 @@
     if (selectedTags.length > 0) {
       selectedTags.forEach((tag) => {
         params.append("tags", tag.name);
+      });
+    }
+
+    if (selectedPeople.length > 0) {
+      selectedPeople.forEach((person) => {
+        params.append("people", person.name);
       });
     }
 
@@ -151,8 +158,9 @@
       onclear={onSearchClear}
       bind:orderBy
       bind:ascending
+      bind:selectedTags
+      bind:selectedPeople
       {ordinals}
-      {selectedTags}
     />
   </div>
 

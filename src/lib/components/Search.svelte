@@ -1,5 +1,6 @@
 <script>
-  import { getAll } from "../controllers/tags";
+  import { getAll as getAllTags } from "../controllers/tags";
+  import { getAll as getAllPeople } from "../controllers/people";
   import ItemSelector from "./ItemSelector.svelte";
   import Select from "./Select.svelte";
 
@@ -16,6 +17,7 @@
    * @property {string} orderBy
    * @property {boolean} [ascending]
    * @property {Item[]} [selectedTags]
+   * @property {Item[]} [selectedPeople]
    */
 
   /** @type {props} */
@@ -26,7 +28,8 @@
     ordinals,
     orderBy = $bindable(),
     ascending = $bindable(),
-    selectedTags = $bindable(),
+    selectedTags = $bindable([]),
+    selectedPeople = $bindable([]),
   } = $props();
 
   let extraOptions = $state(false);
@@ -39,15 +42,30 @@
   const fetchTags = async () => {
     loadingTags = true;
     try {
-      tags = await getAll();
+      tags = await getAllTags();
     } finally {
       loadingTags = false;
     }
   };
 
+  const fetchPeople = async () => {
+    loadingPeople = true;
+    try {
+      people = await getAllPeople();
+    } finally {
+      loadingPeople = false;
+    }
+  };
+
   $effect(() => {
-    if (extraOptions && tags.length == 0) {
+    if (extraOptions && tags.length === 0) {
       fetchTags();
+    }
+  });
+
+  $effect(() => {
+    if (extraOptions && people.length === 0) {
+      fetchPeople();
     }
   });
 
@@ -67,8 +85,28 @@
   /**
    * @param {Item} item
    */
+  const handlePersonToggle = (item) => {
+    const existing = !!selectedPeople.find((t) => t.id === item.id);
+    if (existing) {
+      removeSelectedPerson(item);
+      return;
+    }
+
+    selectedPeople.push(item);
+  };
+
+  /**
+   * @param {Item} item
+   */
   const removeSelectedTag = (item) => {
     selectedTags = selectedTags.filter((t) => t.id !== item.id);
+  };
+
+  /**
+   * @param {Item} item
+   */
+  const removeSelectedPerson = (item) => {
+    selectedPeople = selectedPeople.filter((t) => t.id !== item.id);
   };
 </script>
 
@@ -162,6 +200,29 @@
               class="tag is-delete"
               aria-label="remove {tag.name} from filter"
               onclick={() => removeSelectedTag(tag)}
+            ></button>
+          </div>
+        </div>
+      {/each}
+    </div>
+    <ItemSelector
+      placeholder="people"
+      items={people}
+      selectedItems={selectedPeople}
+      loading={loadingPeople}
+      toggle={handlePersonToggle}
+      disableCreate={true}
+    />
+    <div class="field is-grouped is-grouped-multiline">
+      {#each selectedPeople as person}
+        <div class="control">
+          <div class="tags has-addons is-medium">
+            <span class="tag">{person.name}</span>
+
+            <button
+              class="tag is-delete"
+              aria-label="remove {person.name} from filter"
+              onclick={() => removeSelectedPerson(person)}
             ></button>
           </div>
         </div>
