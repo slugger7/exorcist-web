@@ -124,6 +124,10 @@
   });
 
   $effect(() => {
+    setValueAndNavigate("limit", limit.toString(), route, { replace: true });
+  });
+
+  $effect(() => {
     if (wsState.active) {
       wsState.connection.addEventListener("message", onWsMessage);
     }
