@@ -28,9 +28,19 @@
    * @property {string} route
    * @property {Ordinal[]} ordinals
    * @property {WSTopicMapView<MediaOverviewDTO>} [topicMap]
+   * @property {boolean} [disablePeople]
+   * @property {boolean} [disableTags]
    */
   /** @type {props}*/
-  let { title, route, ordinals, topicMap = {}, fetchFn } = $props();
+  let {
+    title,
+    route,
+    ordinals,
+    topicMap = {},
+    fetchFn,
+    disablePeople = false,
+    disableTags = false,
+  } = $props();
 
   let page = $state(getIntSearchParamOrDefault("page", 1));
   let limit = $state(getIntSearchParamOrDefault("limit", 50));
@@ -108,10 +118,12 @@
   });
 
   $effect(() => {
+    if (disableTags) return;
     setValuesAndNavigate("tags", selectedTags, route, { replace: true });
   });
 
   $effect(() => {
+    if (disablePeople) return;
     setValuesAndNavigate("people", selectedPeople, route, { replace: true });
   });
 
@@ -187,6 +199,8 @@
       bind:selectedTags
       bind:selectedPeople
       {ordinals}
+      {disablePeople}
+      {disableTags}
     />
   </div>
 

@@ -15,6 +15,8 @@
    * @property {Function} [onclear]
    * @property {Ordinal[]} ordinals
    * @property {string} orderBy
+   * @property {boolean} [disableTags]
+   * @property {boolean} [disablePeople]
    * @property {boolean} [ascending]
    * @property {string[]} [selectedTags]
    * @property {string[]} [selectedPeople]
@@ -30,6 +32,8 @@
     ascending = $bindable(),
     selectedTags = $bindable([]),
     selectedPeople = $bindable([]),
+    disablePeople = false,
+    disableTags = false,
   } = $props();
 
   let extraOptions = $state(false);
@@ -191,51 +195,55 @@
 
 {#if extraOptions}
   <div class="block">
-    <ItemSelector
-      placeholder="tag"
-      items={tags}
-      selectedItems={hydrateItems(selectedTags, tags)}
-      loading={loadingTags}
-      toggle={handleTagToggle}
-      disableCreate={true}
-    />
-    <div class="field is-grouped is-grouped-multiline">
-      {#each selectedTags as tag}
-        <div class="control">
-          <div class="tags has-addons is-medium">
-            <span class="tag">{tag}</span>
+    {#if !disableTags}
+      <ItemSelector
+        placeholder="tag"
+        items={tags}
+        selectedItems={hydrateItems(selectedTags, tags)}
+        loading={loadingTags}
+        toggle={handleTagToggle}
+        disableCreate={true}
+      />
+      <div class="field is-grouped is-grouped-multiline">
+        {#each selectedTags as tag}
+          <div class="control">
+            <div class="tags has-addons is-medium">
+              <span class="tag">{tag}</span>
 
-            <button
-              class="tag is-delete"
-              aria-label="remove {tag} from filter"
-              onclick={() => removeSelectedTag({ name: tag })}
-            ></button>
+              <button
+                class="tag is-delete"
+                aria-label="remove {tag} from filter"
+                onclick={() => removeSelectedTag({ name: tag })}
+              ></button>
+            </div>
           </div>
-        </div>
-      {/each}
-    </div>
-    <ItemSelector
-      placeholder="people"
-      items={people}
-      selectedItems={hydrateItems(selectedPeople, people)}
-      loading={loadingPeople}
-      toggle={handlePersonToggle}
-      disableCreate={true}
-    />
-    <div class="field is-grouped is-grouped-multiline">
-      {#each selectedPeople as person}
-        <div class="control">
-          <div class="tags has-addons is-medium">
-            <span class="tag">{person}</span>
+        {/each}
+      </div>
+    {/if}
+    {#if !disablePeople}
+      <ItemSelector
+        placeholder="people"
+        items={people}
+        selectedItems={hydrateItems(selectedPeople, people)}
+        loading={loadingPeople}
+        toggle={handlePersonToggle}
+        disableCreate={true}
+      />
+      <div class="field is-grouped is-grouped-multiline">
+        {#each selectedPeople as person}
+          <div class="control">
+            <div class="tags has-addons is-medium">
+              <span class="tag">{person}</span>
 
-            <button
-              class="tag is-delete"
-              aria-label="remove {person} from filter"
-              onclick={() => removeSelectedPerson({ name: person })}
-            ></button>
+              <button
+                class="tag is-delete"
+                aria-label="remove {person} from filter"
+                onclick={() => removeSelectedPerson({ name: person })}
+              ></button>
+            </div>
           </div>
-        </div>
-      {/each}
-    </div>
+        {/each}
+      </div>
+    {/if}
   </div>
 {/if}
