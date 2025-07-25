@@ -12,4 +12,5 @@
   route={routes.tagFunc(id, name)}
   {ordinals}
   fetchFn={async (params) => await getMediaWithParams(id, params)}
+  disableTags={true}
 />
