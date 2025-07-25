@@ -1,5 +1,5 @@
 /**
- * @import { TagDTO, PageDTO, MediaOverviewDTO } from "../../dto"
+ * @import { TagDTO, PageDTO, MediaOverviewDTO, TagOrdinalAllValues } from "../../dto"
  * @import { Ordinal } from "../types"
  */
 import { server } from "../env";
@@ -7,12 +7,17 @@ import { fetch } from "./fetch";
 
 /**
  * @param {string} [search]
+ * @param {TagOrdinalAllValues} [ordinal]
  * @returns {Promise<TagDTO[]>} */
-export const getAll = async (search = "") => {
+export const getAll = async (search = "", ordinal = "count") => {
   const params = new URLSearchParams()
 
   if (search.length > 0) {
     params.set("search", search)
+  }
+
+  if (ordinal) {
+    params.set("orderBy", ordinal)
   }
 
   return await getAllWithParams(params)
