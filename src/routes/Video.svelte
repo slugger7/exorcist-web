@@ -81,7 +81,7 @@
 
 {#await get(id)}
   <p>loading</p>
-{:then { thumbnailId, title, tags, people, path, size, added, created, modified, checksum, video }}
+{:then { thumbnailId, title, tags, people, path, size, added, created, modified, checksum, video, deleted, exists }}
   <div class="container is-fluid">
     <!-- svelte-ignore a11y_media_has_caption -->
     <video
@@ -96,11 +96,13 @@
     <div class="container">
       <h1 class="title is-1">
         {title}
-        <HeaderIconLink
-          icon="fas fa-trash"
-          ariaLabel="delete-media"
-          to={routes.delete.mediaFunc(id, title)}
-        />
+        {#if !deleted || exists}
+          <HeaderIconLink
+            icon="fas fa-trash"
+            ariaLabel="delete-media"
+            to={routes.delete.mediaFunc(id, title)}
+          />
+        {/if}
       </h1>
     </div>
     <br />
@@ -113,6 +115,7 @@
         add={async (tagId) => addTag(id, tagId)}
         create={createTagHandler}
         urlFn={routes.tagFunc}
+        disableEdit={deleted}
       />
     </div>
     <br />
@@ -125,6 +128,7 @@
         add={async (personId) => addPerson(id, personId)}
         create={createPersonHandler}
         urlFn={routes.personFunc}
+        disableEdit={deleted}
       />
     </div>
     <div class="section">
@@ -167,6 +171,14 @@
           <tr>
             <td>Checksum</td>
             <td>{checksum}</td>
+          </tr>
+          <tr>
+            <td>Deleted</td>
+            <td>{deleted}</td>
+          </tr>
+          <tr>
+            <td>Exists</td>
+            <td>{exists}</td>
           </tr>
         </tbody>
       </table>
