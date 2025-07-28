@@ -1,6 +1,8 @@
 <script>
+  import { nextFocusState } from "../state/nextFocus.svelte";
+
   /**
-   * @import { Item } from "../types"
+   * @import { Item, KeyboardEventFn } from "../types"
    *
    * @callback ToggleItem
    * @param {Item} item
@@ -17,6 +19,7 @@
    * @property {CreateItemNoReturn} [create]
    * @property {boolean} [disableCreate]
    * @property {string} [placeholder]
+   * @property {KeyboardEventFn} [onkeyup]
    */
   /** @type {props}*/
   let {
@@ -43,9 +46,15 @@
   let selectionBoundary = $derived(
     showCreateItem ? itemsInView.length : itemsInView.length - 1,
   );
+  /** @type {HTMLInputElement}*/
+  let inputNode = $state();
 
   const onDropdownFocus = () => {
     active = query.length > 0;
+
+    if (!nextFocusState.node) {
+      nextFocusState.node = inputNode;
+    }
   };
 
   const onDropdownBlur = () => {
@@ -162,6 +171,18 @@
     create(query);
     reset();
   };
+
+  /** @param {KeyboardEvent} e*/
+  const handleOnKeyUp = (e) => {
+    switch (e.code) {
+      case "Escape":
+        if (nextFocusState.node) {
+          nextFocusState.node.focus();
+          nextFocusState.node = inputNode;
+        }
+        break;
+    }
+  };
 </script>
 
 <div class="field is-grouped">
@@ -176,7 +197,9 @@
           onfocus={onDropdownFocus}
           onblur={onDropdownBlur}
           onkeydown={onKeyDown}
+          onkeyup={handleOnKeyUp}
           oninput={onQueryChange}
+          bind:this={inputNode}
         />
       </div>
       <div class="dropdown-menu" role="menu">
