@@ -1,8 +1,9 @@
 <script>
+  import { onMount, tick } from "svelte";
   import { nextFocusState } from "../state/nextFocus.svelte";
 
   /**
-   * @import { Item, KeyboardEventFn } from "../types"
+   * @import { Item } from "../types"
    *
    * @callback ToggleItem
    * @param {Item} item
@@ -19,7 +20,6 @@
    * @property {CreateItemNoReturn} [create]
    * @property {boolean} [disableCreate]
    * @property {string} [placeholder]
-   * @property {KeyboardEventFn} [onkeyup]
    */
   /** @type {props}*/
   let {
@@ -48,6 +48,14 @@
   );
   /** @type {HTMLInputElement}*/
   let inputNode = $state();
+
+  onMount(async () => {
+    await tick();
+
+    if (inputNode) {
+      inputNode.focus();
+    }
+  });
 
   const onDropdownFocus = () => {
     active = query.length > 0;
