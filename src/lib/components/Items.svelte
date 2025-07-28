@@ -109,6 +109,10 @@
       console.error(e);
     }
   };
+
+  const onEditClick = () => {
+    editing = !editing;
+  };
 </script>
 
 <div>
@@ -118,7 +122,7 @@
     ariaLabel="edit tags"
     iconClass={editing ? "has-text-info" : ""}
     buttonClass="mb-2"
-    onclick={() => (editing = !editing)}
+    onclick={onEditClick}
   />
   {#if editing}
     <ItemSelector
