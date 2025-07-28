@@ -112,6 +112,7 @@ export const MediaOrdinal_Path: MediaOrdinal = "path";
 export const MediaOrdinal_Title: MediaOrdinal = "title";
 export const MediaOrdinal_Size: MediaOrdinal = "size";
 export const MediaOrdinal_Added: MediaOrdinal = "added";
+export const MediaOrdinal_Runtime: MediaOrdinal = "runtime";
 export interface MediaSearchDTO {
   PageRequestDTO: PageRequestDTO;
   orderBy: MediaOrdinal;
@@ -132,6 +133,8 @@ export interface MediaDTO {
   title: string;
   size: number /* int64 */;
   checksum?: string;
+  exists: boolean;
+  deleted: boolean;
   added: Date;
   created: Date;
   modified: Date;
@@ -153,6 +156,9 @@ export interface VideoDTO {
   height: number /* int32 */;
   width: number /* int32 */;
   runtime: number /* float64 */;
+}
+export interface DeleteMediaDTO {
+  physical?: boolean;
 }
 
 //////////

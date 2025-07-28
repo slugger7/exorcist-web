@@ -140,6 +140,10 @@
   });
 
   $effect(() => {
+    setValueAndNavigate("page", page.toString(), route);
+  });
+
+  $effect(() => {
     if (wsState.active) {
       wsState.connection.addEventListener("message", onWsMessage);
     }
@@ -237,7 +241,7 @@
       {/each}
     </div>
     {#if mediaPage.total > 0}
-      <Pagination bind:page bind:limit total={mediaPage.total} />
+      <Pagination bind:page bind:limit total={mediaPage.total} url={route} />
       <div class="section"></div>
     {/if}
   {:else if error}

@@ -17,6 +17,7 @@
     remove as removePerson,
   } from "../lib/controllers/people";
   import routes from "./routes";
+  import HeaderIconLink from "../lib/components/HeaderIconLink.svelte";
 
   /** @type {{id: string}}*/
   let { id } = $props();
@@ -60,10 +61,17 @@
     ></video>
 
     <div class="container">
-      <h1 class="title is-1">{title}</h1>
+      <h1 class="title is-1">
+        {title}
+        <HeaderIconLink
+          icon="fas fa-trash"
+          ariaLabel="delete-media"
+          to={routes.delete.mediaFunc(id, title)}
+        />
+      </h1>
     </div>
     <br />
-    <div class="section">
+    <div class="container">
       <Items
         title="Tags"
         items={tags}
@@ -74,7 +82,8 @@
         urlFn={routes.tagFunc}
       />
     </div>
-    <div class="section">
+    <br />
+    <div class="container">
       <Items
         title="People"
         items={people}

@@ -56,6 +56,23 @@ export const get = async (id) => {
   return await res.json()
 }
 
+/**
+ * @param {string} id
+ * @param {boolean} [physical]
+ * @returns {Promise}
+ */
+export const deleteMedia = async (id, physical = false) => {
+  const params = new URLSearchParams()
+  params.set("physical", physical.toString())
+
+  const res = await fetch(`${server()}/media/${id}?${params.toString()}`, { method: "DELETE" })
+
+  if (!res.ok) {
+    throw new Error("non ok response from server when deleting media")
+  }
+}
+
+
 /** @type {Ordinal[]} */
 export const ordinals = [
   {

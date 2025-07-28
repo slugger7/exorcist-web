@@ -25,6 +25,12 @@
       submitting = false;
     }
   }
+
+  const handelCancelClick = (e) => {
+    e.preventDefault();
+
+    history.back();
+  };
 </script>
 
 <div class="container">
@@ -53,7 +59,7 @@
         <button
           class="button {submitting ? 'is-loading' : ''}"
           disabled={submitting}
-          onclick={() => navigate(routes.libraries)}>Cancel</button
+          onclick={handelCancelClick}>Cancel</button
         >
       </div>
     </div>

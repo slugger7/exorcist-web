@@ -36,6 +36,11 @@ const routes = {
         library: "/edit/libraries/:libraryId/:name",
         /** @type {ItemUrlFn} */
         libraryFunc: (id, name) => (`/edit/libraries/${id}/${name}`)
+    },
+    delete: {
+        media: "/delete/media/:mediaId/:name",
+        /** @type {ItemUrlFn} */
+        mediaFunc: (id, name) => (`/delete/media/${id}/${name}`)
     }
 }
 export default routes;
