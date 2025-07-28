@@ -19,6 +19,8 @@
   import routes from "./routes";
   import HeaderIconLink from "../lib/components/HeaderIconLink.svelte";
   import { nextFocusState } from "../lib/state/nextFocus.svelte";
+  import { formatFileSize } from "../lib/formatting/filesize";
+  import { formatRuntime } from "../lib/formatting/runtime";
 
   /** @type {{id: string}}*/
   let { id } = $props();
@@ -174,11 +176,11 @@
           </tr>
           <tr>
             <td>Runtime</td>
-            <td>{video.runtime}</td>
+            <td>{formatRuntime(video.runtime)}</td>
           </tr>
           <tr>
             <td>Size</td>
-            <td>{size}</td>
+            <td>{formatFileSize(size)}</td>
           </tr>
           <tr>
             <td>Path</td>
