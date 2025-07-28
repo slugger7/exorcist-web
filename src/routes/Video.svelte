@@ -83,15 +83,43 @@
   <p>loading</p>
 {:then { thumbnailId, title, tags, people, path, size, added, created, modified, checksum, video, deleted, exists }}
   <div class="container is-fluid">
+    {#if !exists || deleted}
+      <section class={`hero ${exists ? "is-warning" : "is-danger"}`}>
+        <div class="hero-body">
+          {#if !exists && !deleted}
+            <p class="title">File deleted from disk</p>
+            <p class="subtitle">
+              The file has been deleted from disk outside of Exorcist
+            </p>
+          {:else if !exists}
+            <p class="title">File does not exist</p>
+            <p class="subtitle">
+              Not much we can do here but show you the information that remains
+            </p>
+          {:else}
+            <p class="title">File exists but has been deleted</p>
+            <p class="subtitle">
+              Soon you will be able to restore deleted files that still exist.
+              <br />
+              You can permanently delete the files on disk by going through the delete
+              flow again.
+            </p>
+          {/if}
+        </div>
+      </section>
+      <br />
+    {/if}
     <!-- svelte-ignore a11y_media_has_caption -->
-    <video
-      src={videoUrlById(id)}
-      controls
-      poster={imageUrlById(thumbnailId)}
-      bind:this={videoNode}
-      onkeyup={handleOnKeyUp}
-      onfocus={handleOnFocus}
-    ></video>
+    {#if exists}
+      <video
+        src={videoUrlById(id)}
+        controls
+        poster={imageUrlById(thumbnailId)}
+        bind:this={videoNode}
+        onkeyup={handleOnKeyUp}
+        onfocus={handleOnFocus}
+      ></video>
+    {/if}
 
     <div class="container">
       <h1 class="title is-1">
