@@ -140,7 +140,11 @@
   });
 
   $effect(() => {
-    setValueAndNavigate("page", page.toString(), route);
+    const params = new URLSearchParams(location.search);
+
+    setValueAndNavigate("page", page.toString(), route, {
+      replace: params.get("page") !== "",
+    });
   });
 
   $effect(() => {

@@ -3,7 +3,7 @@
    * @import { WSMessage, WSTopicMap } from "../lib/types"
    * @import { JobDTO, PageDTO } from '../dto'
    */
-  import { onDestroy } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import Pagination from "../lib/components/Pagination.svelte";
   import { getAll } from "../lib/controllers/job";
   import {
@@ -27,10 +27,26 @@
   /** @type {PageDTO<JobDTO>}*/
   let jobPage = $state();
 
-  $inspect(jobPage);
+  const onPopState = () => {
+    parent = getStringSearchParamOrDefault("parent", "");
+    statuses = getArrayOfStringsSearchParamOrDefault("status", []);
+    types = getArrayOfStringsSearchParamOrDefault("type", []);
+    page = getIntSearchParamOrDefault("page", 1);
+    limit = getIntSearchParamOrDefault("limit", 100);
+  };
+
+  onMount(() => {
+    window.addEventListener("popstate", onPopState);
+  });
+
+  onDestroy(() => {
+    window.removeEventListener("popstate", onPopState);
+
+    if (!wsState.active || !wsState.connection) return;
+    wsState.connection.removeEventListener("message", onmessage);
+  });
 
   const syncJobs = async () => {
-    console.log("syncing jobs");
     loading = true;
     try {
       jobPage = await getAll(page, limit, parent, statuses, types);
@@ -42,13 +58,11 @@
   };
 
   $effect(() => {
-    console.log("effecting jobs");
     syncJobs();
   });
 
-  onDestroy(() => {
-    if (!wsState.active || !wsState.connection) return;
-    wsState.connection.removeEventListener("message", onmessage);
+  $effect(() => {
+    setValueAndNavigate("parent", parent, routes.jobs);
   });
 
   $effect(() => {
@@ -57,12 +71,16 @@
   });
 
   $effect(() => {
-    setValueAndNavigate("page", page.toString(), routes.jobs);
+    const params = new URLSearchParams(location.search);
+
+    setValueAndNavigate("page", page.toString(), routes.jobs, {
+      replace: params.get("page") !== "",
+    });
   });
 
   $effect(() => {
     setValueAndNavigate("limit", limit.toString(), routes.jobs, {
-      replace: false,
+      replace: true,
     });
   });
 

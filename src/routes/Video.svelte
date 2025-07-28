@@ -19,6 +19,8 @@
   import routes from "./routes";
   import HeaderIconLink from "../lib/components/HeaderIconLink.svelte";
   import { nextFocusState } from "../lib/state/nextFocus.svelte";
+  import { formatFileSize } from "../lib/formatting/filesize";
+  import { formatRuntime } from "../lib/formatting/runtime";
 
   /** @type {{id: string}}*/
   let { id } = $props();
@@ -81,26 +83,56 @@
 
 {#await get(id)}
   <p>loading</p>
-{:then { thumbnailId, title, tags, people, path, size, added, created, modified, checksum, video }}
+{:then { thumbnailId, title, tags, people, path, size, added, created, modified, checksum, video, deleted, exists }}
   <div class="container is-fluid">
+    {#if !exists || deleted}
+      <section class={`hero ${exists ? "is-warning" : "is-danger"}`}>
+        <div class="hero-body">
+          {#if !exists && !deleted}
+            <p class="title">File deleted from disk</p>
+            <p class="subtitle">
+              The file has been deleted from disk outside of Exorcist
+            </p>
+          {:else if !exists}
+            <p class="title">File does not exist</p>
+            <p class="subtitle">
+              Not much we can do here but show you the information that remains
+            </p>
+          {:else}
+            <p class="title">File exists but has been deleted</p>
+            <p class="subtitle">
+              Soon you will be able to restore deleted files that still exist.
+              <br />
+              You can permanently delete the files on disk by going through the delete
+              flow again.
+            </p>
+          {/if}
+        </div>
+      </section>
+      <br />
+    {/if}
     <!-- svelte-ignore a11y_media_has_caption -->
-    <video
-      src={videoUrlById(id)}
-      controls
-      poster={imageUrlById(thumbnailId)}
-      bind:this={videoNode}
-      onkeyup={handleOnKeyUp}
-      onfocus={handleOnFocus}
-    ></video>
+    {#if exists}
+      <video
+        src={videoUrlById(id)}
+        controls
+        poster={imageUrlById(thumbnailId)}
+        bind:this={videoNode}
+        onkeyup={handleOnKeyUp}
+        onfocus={handleOnFocus}
+      ></video>
+    {/if}
 
     <div class="container">
       <h1 class="title is-1">
         {title}
-        <HeaderIconLink
-          icon="fas fa-trash"
-          ariaLabel="delete-media"
-          to={routes.delete.mediaFunc(id, title)}
-        />
+        {#if !deleted || exists}
+          <HeaderIconLink
+            icon="fas fa-trash"
+            ariaLabel="delete-media"
+            to={routes.delete.mediaFunc(id, title)}
+          />
+        {/if}
       </h1>
     </div>
     <br />
@@ -113,6 +145,7 @@
         add={async (tagId) => addTag(id, tagId)}
         create={createTagHandler}
         urlFn={routes.tagFunc}
+        disableEdit={deleted}
       />
     </div>
     <br />
@@ -125,6 +158,7 @@
         add={async (personId) => addPerson(id, personId)}
         create={createPersonHandler}
         urlFn={routes.personFunc}
+        disableEdit={deleted}
       />
     </div>
     <div class="section">
@@ -142,11 +176,11 @@
           </tr>
           <tr>
             <td>Runtime</td>
-            <td>{video.runtime}</td>
+            <td>{formatRuntime(video.runtime)}</td>
           </tr>
           <tr>
             <td>Size</td>
-            <td>{size}</td>
+            <td>{formatFileSize(size)}</td>
           </tr>
           <tr>
             <td>Path</td>
@@ -167,6 +201,14 @@
           <tr>
             <td>Checksum</td>
             <td>{checksum}</td>
+          </tr>
+          <tr>
+            <td>Deleted</td>
+            <td>{deleted}</td>
+          </tr>
+          <tr>
+            <td>Exists</td>
+            <td>{exists}</td>
           </tr>
         </tbody>
       </table>

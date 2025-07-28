@@ -1,6 +1,7 @@
 <script>
   import { navigate } from "svelte-routing";
   import { deleteMedia, get } from "../../lib/controllers/media";
+  import routes from "../routes";
 
   /** @type {{id: string}}*/
   let { id } = $props();
@@ -14,7 +15,11 @@
     try {
       await deleteMedia(id, deletePhysical);
 
-      history.go(-2);
+      if (history.length > 2) {
+        history.go(-2);
+      } else {
+        navigate(routes.home);
+      }
     } catch (e) {
       console.error(e);
     } finally {
@@ -54,6 +59,7 @@
           </label>
         </div>
       </div>
+      <br />
       <div class="field is-grouped">
         <div class="control">
           <button
