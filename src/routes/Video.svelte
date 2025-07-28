@@ -18,9 +18,12 @@
   } from "../lib/controllers/people";
   import routes from "./routes";
   import HeaderIconLink from "../lib/components/HeaderIconLink.svelte";
+  import { nextFocusState } from "../lib/state/nextFocus.svelte";
 
   /** @type {{id: string}}*/
   let { id } = $props();
+  /** @type {HTMLVideoElement}*/
+  let videoNode = $state();
 
   onDestroy(() => {
     localStorage.setItem("item", id);
@@ -50,6 +53,30 @@
 
     throw Error("No people returned after create");
   };
+
+  /** @param {KeyboardEvent} e*/
+  const handleOnKeyUp = (e) => {
+    switch (e.code) {
+      case "Escape":
+        if (nextFocusState.node) {
+          nextFocusState.node.focus();
+          nextFocusState.node = videoNode;
+        }
+        break;
+      case "KeyL":
+        console.log;
+        videoNode.currentTime = videoNode.currentTime + 10;
+        break;
+      case "KeyJ":
+        videoNode.currentTime = videoNode.currentTime - 10;
+    }
+  };
+
+  const handleOnFocus = () => {
+    if (!nextFocusState.node) {
+      nextFocusState.node = videoNode;
+    }
+  };
 </script>
 
 {#await get(id)}
@@ -57,7 +84,13 @@
 {:then { thumbnailId, title, tags, people, path, size, added, created, modified, checksum, video }}
   <div class="container is-fluid">
     <!-- svelte-ignore a11y_media_has_caption -->
-    <video src={videoUrlById(id)} controls poster={imageUrlById(thumbnailId)}
+    <video
+      src={videoUrlById(id)}
+      controls
+      poster={imageUrlById(thumbnailId)}
+      bind:this={videoNode}
+      onkeyup={handleOnKeyUp}
+      onfocus={handleOnFocus}
     ></video>
 
     <div class="container">
