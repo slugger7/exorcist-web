@@ -147,7 +147,7 @@ export interface MediaDTO {
   image?: ImageDTO;
   video?: VideoDTO;
   thumbnailId?: string /* UUID */;
-  progress?: number /* float64 */;
+  progress: number /* float64 */;
   people: PersonDTO[];
   tags: TagDTO[];
 }
@@ -210,6 +210,22 @@ export interface PersonSearchDTO {
   search: string;
   orderBy: PersonOrdinal;
   asc: boolean;
+}
+
+//////////
+// source: playlist.go
+
+export interface CreatePlaylistDTO {
+  string: string;
+}
+export interface PlaylistDTO {
+  id: string /* UUID */;
+  name: string;
+  created: Date;
+  modified: Date;
+}
+export interface CreatePlaylistMediaDTO {
+  mediaId: string /* UUID */;
 }
 
 //////////
