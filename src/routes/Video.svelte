@@ -2,7 +2,7 @@
   /** @import { Item } from "../lib/types";*/
   import { onDestroy } from "svelte";
   import { imageUrlById } from "../lib/controllers/image";
-  import { videoUrlById, get } from "../lib/controllers/media";
+  import { videoUrlById, get, updateProgress } from "../lib/controllers/media";
   import Items from "../lib/components/Items.svelte";
   import {
     add as addTag,
@@ -79,6 +79,15 @@
       nextFocusState.node = videoNode;
     }
   };
+
+  let progressTimeout;
+  /** @param {Event} e*/
+  const handleTimeUpdate = (e) => {
+    clearTimeout(progressTimeout);
+    progressTimeout = setTimeout(() => {
+      updateProgress(id, e.timeStamp / (1000 * 1000));
+    }, 1000);
+  };
 </script>
 
 {#await get(id)}
@@ -120,6 +129,7 @@
         bind:this={videoNode}
         onkeyup={handleOnKeyUp}
         onfocus={handleOnFocus}
+        ontimeupdate={handleTimeUpdate}
       ></video>
     {/if}
 
