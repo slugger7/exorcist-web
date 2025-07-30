@@ -164,6 +164,17 @@ export interface DeleteMediaDTO {
 }
 
 //////////
+// source: media_progress.go
+
+export interface ProgressDTO {
+  progress: number /* float64 */;
+}
+export interface ProgressUpdateDTO {
+  overwrite: boolean;
+  progress: number /* float64 */;
+}
+
+//////////
 // source: page.go
 
 export interface PageDTO<T extends any> {
