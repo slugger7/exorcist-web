@@ -72,6 +72,21 @@ export const deleteMedia = async (id, physical = false) => {
   }
 }
 
+/**
+ * @param {string} id
+ * @param {number} timestamp
+ * @returns {Promise}
+ */
+export const updateProgress = async (id, timestamp) => {
+  const params = new URLSearchParams()
+
+  params.set("progress", timestamp.toString())
+
+  const res = await fetch(`${server()}/videos/${id}?${params.toString()}`, { method: "PUT" })
+
+  return await res.json()
+}
+
 
 /** @type {Ordinal[]} */
 export const ordinals = [
