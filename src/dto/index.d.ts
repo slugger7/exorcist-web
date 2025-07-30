@@ -124,6 +124,7 @@ export interface MediaOverviewDTO {
   id: string /* UUID */;
   title?: string;
   thumbnailId?: string /* UUID */;
+  progress?: number /* float64 */;
   deleted: boolean;
 }
 export interface MediaDTO {
@@ -141,6 +142,7 @@ export interface MediaDTO {
   image?: ImageDTO;
   video?: VideoDTO;
   thumbnailId?: string /* UUID */;
+  progress?: number /* float64 */;
   people: PersonDTO[];
   tags: TagDTO[];
 }
