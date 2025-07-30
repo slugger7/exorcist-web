@@ -20,12 +20,7 @@
       <div class="grid">
         {#each playlists as { id, name } (id)}
           <div class="cell">
-            <Card
-              {name}
-              {id}
-              toFunc={routes.playlistFn}
-              toEditFunc={routes.edit.playlistFn}
-            />
+            <Card {name} {id} toFunc={routes.playlistFn} />
           </div>
         {:else}
           <p>No playlists. Create one</p>
