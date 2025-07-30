@@ -20,6 +20,7 @@
     import DeleteMedia from "./delete/Media.svelte";
     import Playlists from "./Playlists.svelte";
     import Playlist from "./Playlist.svelte";
+    import CreatePlaylist from "./create/Playlist.svelte";
 </script>
 
 <main>
@@ -60,4 +61,5 @@
     <Route path={routes.playlist} let:params
         ><Playlist id={params.id} name={params.name} /></Route
     >
+    <Route path={routes.create.playlist}><CreatePlaylist /></Route>
 </main>

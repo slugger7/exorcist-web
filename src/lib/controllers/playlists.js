@@ -19,3 +19,13 @@ export const getMediaWithParams = async (id, params = new URLSearchParams) => {
 
   return await res.json()
 }
+
+/** @param {string} name 
+ * @returns {Promise}
+*/
+export const create = async (name) => {
+
+  const res = await fetch(`${server()}/playlists`, { method: "POST", body: JSON.stringify([{ name }]) })
+
+  return await res.json()
+}
