@@ -48,6 +48,9 @@
   let orderBy = $state(getStringSearchParamOrDefault("orderBy", "added"));
   let ascending = $state(getBoolParamOrDefault("ascending", false));
   let selectedTags = $state(getArrayOfStringsSearchParamOrDefault("tags", []));
+  let selectedWatchStatuses = $state(
+    getArrayOfStringsSearchParamOrDefault("watchStatuses", []),
+  );
   let selectedPeople = $state(
     getArrayOfStringsSearchParamOrDefault("people", []),
   );
@@ -99,6 +102,12 @@
       });
     }
 
+    if (selectedWatchStatuses.length > 0) {
+      selectedWatchStatuses.forEach((ws) => {
+        params.append("watchStatuses", ws);
+      });
+    }
+
     if (search !== "") {
       params.set("search", search);
     }
@@ -137,6 +146,12 @@
 
   $effect(() => {
     setValueAndNavigate("limit", limit.toString(), route, { replace: true });
+  });
+
+  $effect(() => {
+    setValuesAndNavigate("watchStatuses", selectedWatchStatuses, route, {
+      replace: true,
+    });
   });
 
   $effect(() => {
@@ -206,6 +221,7 @@
       bind:ascending
       bind:selectedTags
       bind:selectedPeople
+      bind:selectedWatchStatuses
       {ordinals}
       {disablePeople}
       {disableTags}
