@@ -113,12 +113,17 @@ export const MediaOrdinal_Title: MediaOrdinal = "title";
 export const MediaOrdinal_Size: MediaOrdinal = "size";
 export const MediaOrdinal_Added: MediaOrdinal = "added";
 export const MediaOrdinal_Runtime: MediaOrdinal = "runtime";
+export type WatchStatus = string;
+export const WatchStatus_Watched: WatchStatus = "watched";
+export const WatchStatus_Unwatched: WatchStatus = "unwatched";
+export const WatchStatus_InProgress: WatchStatus = "in_progress";
 export interface MediaSearchDTO {
   PageRequestDTO: PageRequestDTO;
   orderBy: MediaOrdinal;
   search: string;
   tags: string[];
   people: string[];
+  watchStatus: WatchStatus[];
 }
 export interface MediaOverviewDTO {
   id: string /* UUID */;

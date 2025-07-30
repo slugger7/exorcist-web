@@ -7,3 +7,4 @@ export type JobTypeAllValues = "update_existing_videos" | "scan_path" | "generat
 export type MediaTypeAllValues = "primary" | "asset"
 export type MediaRelationTypeAllValues = "thumbnail" | "chapter" | "media"
 export type WSTopicAllValues = "job_update" | "job_create" | "video_update" | "video_create" | "video_delete"
+export type WatchStatusAllValues = "watched" | "unwatched" | "in_progress"
