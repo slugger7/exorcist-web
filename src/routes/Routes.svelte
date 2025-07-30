@@ -19,6 +19,7 @@
     import User from "./User.svelte";
     import DeleteMedia from "./delete/Media.svelte";
     import Playlists from "./Playlists.svelte";
+    import Playlist from "./Playlist.svelte";
 </script>
 
 <main>
@@ -56,4 +57,7 @@
     >
     <Route path={routes.video} let:params><Video id={params.id} /></Route>
     <Route path={routes.playlists}><Playlists /></Route>
+    <Route path={routes.playlist} let:params
+        ><Playlist id={params.id} name={params.name} /></Route
+    >
 </main>
