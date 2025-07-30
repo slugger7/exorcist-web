@@ -5,8 +5,8 @@
   import { get } from "../lib/controllers/libraryPaths";
   import routes from "./routes";
 
-  /** @type {{id: string}}*/
-  let { id } = $props();
+  /** @type {{id: string, name: string}}*/
+  let { id, name } = $props();
   let creatingScanJob = $state(false);
 
   const handleScanPathClick = async () => {
@@ -41,9 +41,8 @@
         </tr>
         <tr>
           <th>Library ID</th>
-          <!-- TODO: modify libraryFunc to have library name -->
           <td
-            ><Link to={routes.libraryFunc(libraryPath.libraryId, "")}
+            ><Link to={routes.libraryFunc(libraryPath.libraryId, name)}
               >{libraryPath.libraryId}</Link
             ></td
           >

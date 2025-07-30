@@ -26,16 +26,24 @@ const routes = {
     /** @type {ItemUrlFn} */
     userFunc: (id, name) => (`/users/${id}/${name}`),
     user: "/users/:id/:name",
+    playlists: "/playlists",
+    playlist: "/playlists/:id/:name",
+    /** @type {ItemUrlFn} */
+    playlistFn: (id, name) => (`/playlists/${id}/${name}`),
     create: {
         library: "/create/libraries",
         /** @type {ItemUrlFn} */
         libraryPathFunc: (id) => (`/create/library-paths/${id}`),
         libraryPath: "/create/library-paths/:libraryId",
+        playlist: "/create/plailsts"
     },
     edit: {
         library: "/edit/libraries/:libraryId/:name",
         /** @type {ItemUrlFn} */
-        libraryFunc: (id, name) => (`/edit/libraries/${id}/${name}`)
+        libraryFunc: (id, name) => (`/edit/libraries/${id}/${name}`),
+        playlist: "/edit/playlist/:playlistId/:name",
+        /** @type {ItemUrlFn} */
+        playlistFn: (id, name) => (`/edit/playlist/${id}/${name}`)
     },
     delete: {
         media: "/delete/media/:mediaId/:name",

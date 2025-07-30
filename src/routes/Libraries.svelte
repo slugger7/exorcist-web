@@ -2,7 +2,7 @@
   import { getLibraries } from "../lib/controllers/libraries";
   import HeaderIconLink from "../lib/components/HeaderIconLink.svelte";
   import routes from "./routes.js";
-  import LibraryCard from "../lib/components/LibraryCard.svelte";
+  import LibraryCard from "../lib/components/Card.svelte";
 </script>
 
 <div class="container">
@@ -20,7 +20,12 @@
       <div class="grid">
         {#each libraries as { id, name } (id)}
           <div class="cell">
-            <LibraryCard {name} {id} />
+            <LibraryCard
+              {name}
+              {id}
+              toFunc={routes.libraryFunc}
+              toEditFunc={routes.edit.libraryFunc}
+            />
           </div>
         {:else}
           <p>No libraries. Create one</p>
