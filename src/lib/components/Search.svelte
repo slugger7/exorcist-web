@@ -1,13 +1,30 @@
 <script>
+  /**
+   * @import { ChangeEventHandler } from "svelte/elements";
+   * @import { Ordinal, Item } from "../types"
+   */
   import { getAll as getAllTags } from "../controllers/tags";
   import { getAll as getAllPeople } from "../controllers/people";
   import ItemSelector from "./ItemSelector.svelte";
   import Select from "./Select.svelte";
 
+  /** @type {Item[]}*/
+  const watchStatuses = [
+    {
+      id: "watched",
+      name: "Watched",
+    },
+    {
+      id: "unwatched",
+      name: "Unwatched",
+    },
+    {
+      id: "in_progress",
+      name: "in_progress",
+    },
+  ];
+
   /**
-   * @import { ChangeEventHandler } from "svelte/elements";
-   * @import { Ordinal, Item } from "../types"
-   *
    * @typedef props
    * @type {object}
    * @property {string} [value]
@@ -20,6 +37,7 @@
    * @property {boolean} [ascending]
    * @property {string[]} [selectedTags]
    * @property {string[]} [selectedPeople]
+   * @property {string[]} [selectedWatchStatuses]
    */
 
   /** @type {props} */
@@ -32,6 +50,7 @@
     ascending = $bindable(),
     selectedTags = $bindable([]),
     selectedPeople = $bindable([]),
+    selectedWatchStatuses = $bindable([]),
     disablePeople = false,
     disableTags = false,
   } = $props();
@@ -86,9 +105,7 @@
     selectedTags.push(item.name);
   };
 
-  /**
-   * @param {Item} item
-   */
+  /** @param {Item} item */
   const handlePersonToggle = (item) => {
     const existing = !!selectedPeople.find((t) => t === item.name);
     if (existing) {
@@ -97,6 +114,17 @@
     }
 
     selectedPeople.push(item.name);
+  };
+
+  /** @param {Item} item */
+  const handleWatchStatusToggle = (item) => {
+    const existing = !!selectedWatchStatuses.find((w) => w === item.id);
+    if (existing) {
+      removeWatchStatus(item);
+      return;
+    }
+
+    selectedWatchStatuses.push(item.id);
   };
 
   /**
@@ -114,13 +142,27 @@
   };
 
   /**
-   *
+   * @param {{id: string}} item
+   */
+  const removeWatchStatus = (item) => {
+    selectedWatchStatuses = selectedWatchStatuses.filter((ws) => ws != item.id);
+  };
+
+  /**
    * @param {string[]} selectedItems
    * @param {Item[]} items
    * @returns {Item[]}
    */
-  const hydrateItems = (selectedItems, items) =>
+  const hydrateItemsByName = (selectedItems, items) =>
     selectedItems.map((s) => items.find((i) => i.name === s)).filter((s) => s);
+
+  /**
+   * @param {string[]} selectedItems
+   * @param {Item[]} items
+   * @returns {Item[]}
+   */
+  const hydrateItemsById = (selectedItems, items) =>
+    selectedItems.map((s) => items.find((i) => i.id === s)).filter((s) => s);
 </script>
 
 <div class="block">
@@ -195,11 +237,35 @@
 
 {#if extraOptions}
   <div class="block">
+    <ItemSelector
+      placeholder="watch status"
+      items={watchStatuses}
+      selectedItems={hydrateItemsById(selectedWatchStatuses, watchStatuses)}
+      loading={false}
+      toggle={handleWatchStatusToggle}
+    />
+    <div class="field is-grouped is-grouped-multiline">
+      {#each selectedWatchStatuses as status}
+        <div class="control">
+          <div class="tags has-addons is-medium">
+            <span class="tag"
+              >{watchStatuses.find((ws) => ws.id == status).name}</span
+            >
+
+            <button
+              class="tag is-delete"
+              aria-label="remove {status} from filter"
+              onclick={() => removeWatchStatus({ id: status })}
+            ></button>
+          </div>
+        </div>
+      {/each}
+    </div>
     {#if !disableTags}
       <ItemSelector
         placeholder="tag"
         items={tags}
-        selectedItems={hydrateItems(selectedTags, tags)}
+        selectedItems={hydrateItemsByName(selectedTags, tags)}
         loading={loadingTags}
         toggle={handleTagToggle}
         disableCreate={true}
@@ -224,7 +290,7 @@
       <ItemSelector
         placeholder="people"
         items={people}
-        selectedItems={hydrateItems(selectedPeople, people)}
+        selectedItems={hydrateItemsByName(selectedPeople, people)}
         loading={loadingPeople}
         toggle={handlePersonToggle}
         disableCreate={true}

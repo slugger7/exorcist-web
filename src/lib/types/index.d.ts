@@ -2,6 +2,8 @@ import type { Job } from "./job";
 import type { WSTopicAllValues } from "../../dto"
 import type { PageDTO } from "../../dto";
 
+export * from "../../dto"
+
 // https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
 export * from "./job"
 export * from "./item"

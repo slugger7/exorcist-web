@@ -1,4 +1,4 @@
-/** @import { PageDTO, MediaDTO, MediaOverviewDTO } from "../../dto" */
+/** @import { PageDTO, MediaDTO, MediaOverviewDTO, ProgressDTO } from "../../dto" */
 /** @import {Ordinal} from "../types" */
 import { server } from '../env.js'
 import { fetch } from './fetch.js'
@@ -70,6 +70,23 @@ export const deleteMedia = async (id, physical = false) => {
   if (!res.ok) {
     throw new Error("non ok response from server when deleting media")
   }
+}
+
+/**
+ * @param {string} id
+ * @param {number} timestamp
+ * @param {boolean} [overwrite]
+ * @returns {Promise<ProgressDTO>}
+ */
+export const updateProgress = async (id, timestamp, overwrite = false) => {
+  const params = new URLSearchParams()
+
+  params.set("progress", timestamp.toString())
+  params.set("overwrite", overwrite.toString())
+
+  const res = await fetch(`${server()}/videos/${id}?${params.toString()}`, { method: "PUT" })
+
+  return await res.json()
 }
 
 

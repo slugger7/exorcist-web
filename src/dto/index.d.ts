@@ -113,17 +113,23 @@ export const MediaOrdinal_Title: MediaOrdinal = "title";
 export const MediaOrdinal_Size: MediaOrdinal = "size";
 export const MediaOrdinal_Added: MediaOrdinal = "added";
 export const MediaOrdinal_Runtime: MediaOrdinal = "runtime";
+export type WatchStatus = string;
+export const WatchStatus_Watched: WatchStatus = "watched";
+export const WatchStatus_Unwatched: WatchStatus = "unwatched";
+export const WatchStatus_InProgress: WatchStatus = "in_progress";
 export interface MediaSearchDTO {
   PageRequestDTO: PageRequestDTO;
   orderBy: MediaOrdinal;
   search: string;
   tags: string[];
   people: string[];
+  watchStatus: WatchStatus[];
 }
 export interface MediaOverviewDTO {
   id: string /* UUID */;
   title?: string;
   thumbnailId?: string /* UUID */;
+  progress?: number /* float64 */;
   deleted: boolean;
 }
 export interface MediaDTO {
@@ -141,6 +147,7 @@ export interface MediaDTO {
   image?: ImageDTO;
   video?: VideoDTO;
   thumbnailId?: string /* UUID */;
+  progress?: number /* float64 */;
   people: PersonDTO[];
   tags: TagDTO[];
 }
@@ -159,6 +166,17 @@ export interface VideoDTO {
 }
 export interface DeleteMediaDTO {
   physical?: boolean;
+}
+
+//////////
+// source: media_progress.go
+
+export interface ProgressDTO {
+  progress: number /* float64 */;
+}
+export interface ProgressUpdateDTO {
+  overwrite: boolean;
+  progress: number /* float64 */;
 }
 
 //////////
