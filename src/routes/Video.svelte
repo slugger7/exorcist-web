@@ -1,6 +1,6 @@
 <script>
-  /** @import { Item } from "../lib/types";*/
-  import { onDestroy } from "svelte";
+  /** @import { Item, MediaDTO } from "../lib/types";*/
+  import { onDestroy, onMount } from "svelte";
   import { imageUrlById } from "../lib/controllers/image";
   import { videoUrlById, get, updateProgress } from "../lib/controllers/media";
   import Items from "../lib/components/Items.svelte";
@@ -21,11 +21,33 @@
   import { nextFocusState } from "../lib/state/nextFocus.svelte";
   import { formatFileSize } from "../lib/formatting/filesize";
   import { formatRuntime } from "../lib/formatting/runtime";
+  import HeaderIconButton from "../lib/components/HeaderIconButton.svelte";
 
   /** @type {{id: string}}*/
   let { id } = $props();
   /** @type {HTMLVideoElement}*/
   let videoNode = $state();
+  /** @type {MediaDTO}*/
+  let mediaEntity = $state();
+  let loadingMedia = $state(false);
+  let loadingProgress = $state(false);
+  let watchedPercentage = $derived(
+    mediaEntity.progress / mediaEntity.video.runtime,
+  );
+
+  const fetchMedia = async () => {
+    console.log("fetching media");
+    loadingMedia = true;
+    try {
+      mediaEntity = await get(id);
+    } finally {
+      loadingMedia = false;
+    }
+  };
+
+  onMount(() => {
+    fetchMedia();
+  });
 
   onDestroy(() => {
     localStorage.setItem("item", id);
@@ -84,25 +106,50 @@
   /** @param {Event} e*/
   const handleTimeUpdate = (e) => {
     clearTimeout(progressTimeout);
-    progressTimeout = setTimeout(() => {
-      updateProgress(id, e.timeStamp / (1000 * 1000));
+    progressTimeout = setTimeout(async () => {
+      loadingProgress = true;
+      try {
+        const prog = await updateProgress(id, videoNode.currentTime);
+
+        mediaEntity.progress = prog.progress;
+      } finally {
+        loadingProgress = false;
+      }
     }, 1000);
+  };
+
+  const handleWatchedClick = async () => {
+    let val = 0;
+    if (watchedPercentage <= 0.9) {
+      val = mediaEntity.video.runtime;
+    }
+
+    loadingProgress = true;
+    try {
+      const prog = await updateProgress(id, val, true);
+
+      mediaEntity.progress = prog.progress;
+    } finally {
+      loadingProgress = false;
+    }
   };
 </script>
 
-{#await get(id)}
+{#if loadingMedia}
   <p>loading</p>
-{:then { thumbnailId, title, tags, people, path, size, added, created, modified, checksum, video, deleted, exists }}
+{:else if mediaEntity}
   <div class="container is-fluid">
-    {#if !exists || deleted}
-      <section class={`hero ${exists ? "is-warning" : "is-danger"}`}>
+    {#if !mediaEntity.exists || mediaEntity.deleted}
+      <section
+        class={`hero ${mediaEntity.exists ? "is-warning" : "is-danger"}`}
+      >
         <div class="hero-body">
-          {#if !exists && !deleted}
+          {#if !mediaEntity.exists && !mediaEntity.deleted}
             <p class="title">File deleted from disk</p>
             <p class="subtitle">
               The file has been deleted from disk outside of Exorcist
             </p>
-          {:else if !exists}
+          {:else if !mediaEntity.exists}
             <p class="title">File does not exist</p>
             <p class="subtitle">
               Not much we can do here but show you the information that remains
@@ -121,11 +168,11 @@
       <br />
     {/if}
     <!-- svelte-ignore a11y_media_has_caption -->
-    {#if exists}
+    {#if mediaEntity.exists}
       <video
         src={videoUrlById(id)}
         controls
-        poster={imageUrlById(thumbnailId)}
+        poster={imageUrlById(mediaEntity.thumbnailId)}
         bind:this={videoNode}
         onkeyup={handleOnKeyUp}
         onfocus={handleOnFocus}
@@ -135,12 +182,20 @@
 
     <div class="container">
       <h1 class="title is-1">
-        {title}
-        {#if !deleted || exists}
+        {mediaEntity.title}
+        {#if !mediaEntity.deleted || mediaEntity.exists}
           <HeaderIconLink
             icon="fas fa-trash"
             ariaLabel="delete-media"
-            to={routes.delete.mediaFunc(id, title)}
+            to={routes.delete.mediaFunc(id, mediaEntity.title)}
+          />
+        {/if}
+        {#if !mediaEntity.deleted && mediaEntity.exists}
+          <HeaderIconButton
+            icon={`fas ${watchedPercentage > 0.9 ? "fa-eye-slash" : "fa-eye"}`}
+            ariaLabel="toggle watched"
+            onclick={handleWatchedClick}
+            disabled={loadingProgress}
           />
         {/if}
       </h1>
@@ -149,26 +204,26 @@
     <div class="container">
       <Items
         title="Tags"
-        items={tags}
+        items={mediaEntity.tags}
         fetch={getAllTags}
         remove={async (tagId) => removeTag(id, tagId)}
         add={async (tagId) => addTag(id, tagId)}
         create={createTagHandler}
         urlFn={routes.tagFunc}
-        disableEdit={deleted}
+        disableEdit={mediaEntity.deleted}
       />
     </div>
     <br />
     <div class="container">
       <Items
         title="People"
-        items={people}
+        items={mediaEntity.people}
         fetch={getAllPeople}
         remove={async (personId) => removePerson(id, personId)}
         add={async (personId) => addPerson(id, personId)}
         create={createPersonHandler}
         urlFn={routes.personFunc}
-        disableEdit={deleted}
+        disableEdit={mediaEntity.deleted}
       />
     </div>
     <div class="section">
@@ -182,51 +237,49 @@
         <tbody>
           <tr>
             <td>Dimensions</td>
-            <td>{video.width}x{video.height}</td>
+            <td>{mediaEntity.video.width}x{mediaEntity.video.height}</td>
           </tr>
           <tr>
             <td>Runtime</td>
-            <td>{formatRuntime(video.runtime)}</td>
+            <td>{formatRuntime(mediaEntity.video.runtime)}</td>
           </tr>
           <tr>
             <td>Size</td>
-            <td>{formatFileSize(size)}</td>
+            <td>{formatFileSize(mediaEntity.size)}</td>
           </tr>
           <tr>
             <td>Path</td>
-            <td>{path}</td>
+            <td>{mediaEntity.path}</td>
           </tr>
           <tr>
             <td>Added</td>
-            <td>{added}</td>
+            <td>{mediaEntity.added}</td>
           </tr>
           <tr>
             <td>Created</td>
-            <td>{created}</td>
+            <td>{mediaEntity.created}</td>
           </tr>
           <tr>
             <td>Modified</td>
-            <td>{modified}</td>
+            <td>{mediaEntity.modified}</td>
           </tr>
           <tr>
             <td>Checksum</td>
-            <td>{checksum}</td>
+            <td>{mediaEntity.checksum}</td>
           </tr>
           <tr>
             <td>Deleted</td>
-            <td>{deleted}</td>
+            <td>{mediaEntity.deleted}</td>
           </tr>
           <tr>
             <td>Exists</td>
-            <td>{exists}</td>
+            <td>{mediaEntity.exists}</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-{:catch}
-  <p>something went wrong</p>
-{/await}
+{/if}
 
 <style>
   video {
