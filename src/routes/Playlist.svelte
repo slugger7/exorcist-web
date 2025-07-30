@@ -12,5 +12,4 @@
   route={routes.playlistFn(id, name)}
   {ordinals}
   fetchFn={async (params) => await getMediaWithParams(id, params)}
-  disablePeople={true}
 />
