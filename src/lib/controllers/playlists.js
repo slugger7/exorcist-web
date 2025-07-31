@@ -42,3 +42,14 @@ export const addMedia = async (playlists, media) => {
       { method: "PUT", body: JSON.stringify(media.map(m => ({ mediaId: m }))) })
   }))
 }
+
+/**
+ * @param {string} id
+ * @param {string} name
+ * @returns {Promise<PlaylistDTO>}
+ */
+export const updatePlaylist = async (id, name) => {
+  const res = await fetch(`${server()}/playlists/${id}`, { method: "PUT", body: JSON.stringify({ name }) })
+
+  return await res.json()
+}

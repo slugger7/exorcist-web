@@ -62,6 +62,17 @@ export const getMediaWithParams = async (id, params = new URLSearchParams) => {
   return await res.json()
 }
 
+/**
+ * @param {string} id
+ * @param {string} name
+ * @returns {Promise<TagDTO>}
+ */
+export const updateTag = async (id, name) => {
+  const res = await fetch(`${server()}/tags/${id}`, { method: "PUT", body: JSON.stringify({ name }) })
+
+  return res.json()
+}
+
 /** @type {Ordinal[]} */
 export const ordinals = [
   {

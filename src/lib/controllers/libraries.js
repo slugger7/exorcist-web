@@ -50,3 +50,14 @@ export const getMediaWithParams = async (id, params = new URLSearchParams) => {
 
   return await res.json()
 }
+
+/**
+ * @param {string} id
+ * @param {string} name
+ * @returns {Promise<LibraryDTO>}
+ */
+export const updateLibrary = async (id, name) => {
+  const res = await fetch(`${server()}/libraries/${id}`, { method: "PUT", body: JSON.stringify({ name }) })
+
+  return await res.json()
+}

@@ -1,8 +1,7 @@
 <script>
   import { Link } from "svelte-routing";
   /**
-   * @import { FetchMedia, Ordinal, WSTopicMapView, WSMessage } from "../types"
-   * @import { PageDTO, MediaOverviewDTO } from "../../dto"
+   * @import { FetchMedia, Ordinal, WSTopicMapView, WSMessage, PageDTO, MediaOverviewDTO } from "../types"
    */
   import {
     getArrayOfStringsSearchParamOrDefault,
@@ -19,6 +18,8 @@
   import { onDestroy, onMount } from "svelte";
   import { PONG } from "../constants/websocket";
   import { wsState } from "../state/wsState.svelte";
+  import HeaderIconButton from "./HeaderIconButton.svelte";
+  import EditHeading from "./EditHeading.svelte";
 
   /**
    * @typedef props
@@ -30,6 +31,8 @@
    * @property {WSTopicMapView<MediaOverviewDTO>} [topicMap]
    * @property {boolean} [disablePeople]
    * @property {boolean} [disableTags]
+   * @property {(title) => Promise<string>} [updateTitle]
+   * @property {boolean} [submittingTitle]
    */
   /** @type {props}*/
   let {
@@ -38,6 +41,8 @@
     ordinals,
     topicMap = {},
     fetchFn,
+    updateTitle,
+    submittingTitle = $bindable(false),
     disablePeople = false,
     disableTags = false,
   } = $props();
@@ -64,6 +69,7 @@
   let selectedMedia = $state(
     getArrayOfStringsSearchParamOrDefault("selected", []),
   );
+  let editingTitle = $state(false);
 
   onMount(async () => {
     window.addEventListener("popstate", onPopState);
@@ -163,7 +169,10 @@
   });
 
   $effect(() => {
-    setValuesAndNavigate("selected", selectedMedia, route, { replace: true });
+    setValuesAndNavigate("selected", selectedMedia, route, {
+      replace: true,
+      preserveScroll: true,
+    });
   });
 
   $effect(() => {
@@ -232,7 +241,31 @@
 </script>
 
 <div class="container is-fluid">
-  <h1 class="title is-1">{title}</h1>
+  <div class="block">
+    {#if editingTitle}
+      <EditHeading
+        value={title}
+        loading={submittingTitle}
+        onsave={async (e, updatedTitle) => {
+          await updateTitle(updatedTitle);
+
+          editingTitle = false;
+        }}
+        oncancel={() => (editingTitle = false)}
+      />
+    {:else}
+      <h1 class="title is-1">
+        {title}
+        {#if updateTitle}
+          <HeaderIconButton
+            icon="fas fa-pen"
+            ariaLabel="edit title"
+            onclick={() => (editingTitle = true)}
+          />
+        {/if}
+      </h1>
+    {/if}
+  </div>
   <div class="block">
     <Search
       onkeyup={onSearchChange}
