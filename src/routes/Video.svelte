@@ -208,28 +208,15 @@
     {/if}
 
     <div class="container">
-      {#if editingTitle}
-        <EditHeading
-          value={mediaEntity.title}
-          oncancel={() => (editingTitle = false)}
-          onsave={handleTitleUpdate}
-          loading={loadingTitle}
-        />
-      {:else}
-        <h1 class="title is-1">
-          {mediaEntity.title}
-          <HeaderIconButton
-            icon={`fas fa-pen`}
-            iconClass={editingTitle ? "has-text-info" : ""}
-            ariaLabel="edit title toggle"
-            onclick={() => {
-              editingTitle = !editingTitle;
-            }}
-          />
-        </h1>
-      {/if}
       <div class="field has-addons">
         {#if !mediaEntity.deleted && mediaEntity.exists}
+          <p class="control">
+            <Link class="button" to={routes.playlistAdd + `?media=${id}`}>
+              <span class="icon">
+                <i class="fas fa-plus"></i>
+              </span>
+            </Link>
+          </p>
           <p class="control">
             <button
               class="button"
@@ -257,6 +244,26 @@
           </p>
         {/if}
       </div>
+      {#if editingTitle}
+        <EditHeading
+          value={mediaEntity.title}
+          oncancel={() => (editingTitle = false)}
+          onsave={handleTitleUpdate}
+          loading={loadingTitle}
+        />
+      {:else}
+        <h1 class="title is-1">
+          {mediaEntity.title}
+          <HeaderIconButton
+            icon={`fas fa-pen`}
+            iconClass={editingTitle ? "has-text-info" : ""}
+            ariaLabel="edit title toggle"
+            onclick={() => {
+              editingTitle = !editingTitle;
+            }}
+          />
+        </h1>
+      {/if}
     </div>
     <br />
     <div class="container">
