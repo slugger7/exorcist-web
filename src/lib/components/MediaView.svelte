@@ -60,6 +60,8 @@
   let mediaPage = $state();
   /** @type {MediaOverviewDTO[]}*/
   let newMedia = $state([]);
+  let selecting = $state(false);
+  let selectedMedia = $state([]);
 
   onMount(async () => {
     window.addEventListener("popstate", onPopState);
@@ -208,6 +210,15 @@
   const onSearchClear = () => {
     setSearchAndNavigate("");
   };
+
+  const toggleMediaSelected = (id) => () => {
+    const exists = !!selectedMedia.find((m) => m === id);
+    if (exists) {
+      selectedMedia = selectedMedia.filter((m) => m !== id);
+    } else {
+      selectedMedia.push(id);
+    }
+  };
 </script>
 
 <div class="container is-fluid">
@@ -225,6 +236,7 @@
       {ordinals}
       {disablePeople}
       {disableTags}
+      bind:selecting
     />
   </div>
 
@@ -240,7 +252,12 @@
     <div class="grid is-col-min-13 is-gap-1">
       {#each mediaPage.data as video (video.id)}
         <div class="cell">
-          <VideoCard {video} />
+          <VideoCard
+            {video}
+            {selecting}
+            selected={selectedMedia.includes(video.id)}
+            onselect={toggleMediaSelected(video.id)}
+          />
         </div>
       {:else}
         <div class="cell content">

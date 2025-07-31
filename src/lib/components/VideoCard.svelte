@@ -3,10 +3,23 @@
   import routes from "../../routes/routes";
   import { imageUrlById } from "../controllers/image";
 
-  /** @import { MediaOverviewDTO } from "../../dto"*/
+  /** @import { MediaOverviewDTO } from "../types"*/
 
-  /** @type {{video: MediaOverviewDTO}} */
-  let { video } = $props();
+  /**
+   * @typedef props
+   * @type {object}
+   * @property {MediaOverviewDTO} video
+   * @property {boolean} [selected]
+   * @property {boolean} [selecting]
+   * @property {() => void} [onselect]
+   */
+  /** @type {props}*/
+  let {
+    video,
+    selecting = false,
+    selected = false,
+    onselect = () => {},
+  } = $props();
   /** @type {HTMLElement}*/
   let element = $state();
 
@@ -25,7 +38,13 @@
   class={`image ${video.thumbnailId === "00000000-0000-0000-000000000000" ? "is-skeleton" : ""}`}
   bind:this={element}
 >
-  <Link to={routes.videoFunc(video.id)}
-    ><img src={imageUrlById(video.thumbnailId)} alt={video.title} /></Link
-  >
+  {#if selecting}
+    <button class={`button ${selected ? "is-focused" : ""}`} onclick={onselect}
+      ><img src={imageUrlById(video.thumbnailId)} alt={video.title} /></button
+    >
+  {:else}
+    <Link to={routes.videoFunc(video.id, video.title)}
+      ><img src={imageUrlById(video.thumbnailId)} alt={video.title} /></Link
+    >
+  {/if}
 </figure>
