@@ -71,3 +71,14 @@ export const ordinals = [
     value: "name"
   }
 ]
+
+/**
+ * @param {string} id
+ * @param {string} name
+ * @returns {Promise<PersonDTO>}
+ */
+export const updatePerson = async (id, name) => {
+  const res = await fetch(`${server()}/people/${id}`, { method: "PUT", body: JSON.stringify({ name }) })
+
+  return await res.json()
+}
