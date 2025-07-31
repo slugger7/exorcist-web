@@ -167,6 +167,14 @@ export interface VideoDTO {
 export interface DeleteMediaDTO {
   physical?: boolean;
 }
+export interface MediaUpdateDTO {
+  title?: string;
+}
+export interface MediaUpdatedDTO {
+  id: string /* UUID */;
+  title?: string;
+  modified: Date;
+}
 
 //////////
 // source: media_progress.go
@@ -216,7 +224,7 @@ export interface PersonSearchDTO {
 // source: playlist.go
 
 export interface CreatePlaylistDTO {
-  string: string;
+  name: string;
 }
 export interface PlaylistDTO {
   id: string /* UUID */;
