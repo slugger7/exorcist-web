@@ -9,6 +9,7 @@
   import Select from "./Select.svelte";
   import { Link } from "svelte-routing";
   import routes from "../../routes/routes";
+  import { updateProgress } from "../controllers/media";
 
   /** @type {Item[]}*/
   const watchStatuses = [
@@ -69,6 +70,7 @@
   let loadingTags = $state(false);
   let people = $state([]);
   let loadingPeople = $state(false);
+  let loadingWatchStatus = $state(false);
 
   const fetchTags = async () => {
     loadingTags = true;
@@ -171,6 +173,31 @@
    */
   const hydrateItemsById = (selectedItems, items) =>
     selectedItems.map((s) => items.find((i) => i.id === s)).filter((s) => s);
+
+  const handleWatchedClick = async () => {
+    let loadingWatchStatus = true;
+    try {
+      await Promise.all(
+        selection.map(async (s) => {
+          await updateProgress(s, -1, true);
+        }),
+      );
+    } finally {
+      loadingWatchStatus = false;
+    }
+  };
+  const handleUnwatchClick = async () => {
+    let loadingWatchStatus = true;
+    try {
+      await Promise.all(
+        selection.map(async (s) => {
+          await updateProgress(s, 0, true);
+        }),
+      );
+    } finally {
+      loadingWatchStatus = false;
+    }
+  };
 </script>
 
 <div class="block">
@@ -336,6 +363,30 @@
                 <i class="fas fa-plus"></i>
               </span>
             </Link>
+          </p>
+          <p class="control">
+            <button
+              class={`button ${loadingWatchStatus ? "is-loading" : ""}`}
+              aria-label="mark selection watched"
+              onclick={handleWatchedClick}
+              disabled={loadingWatchStatus}
+            >
+              <span class="icon">
+                <i class="fas fa-eye"></i>
+              </span>
+            </button>
+          </p>
+          <p class="control">
+            <button
+              class={`button ${loadingWatchStatus ? "is-loading" : ""}`}
+              aria-label="mark selection unwatched"
+              onclick={handleUnwatchClick}
+              disabled={loadingWatchStatus}
+            >
+              <span class="icon">
+                <i class="fas fa-eye-slash"></i>
+              </span>
+            </button>
           </p>
         </div>
       {/if}
