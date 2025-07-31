@@ -241,29 +241,31 @@
 </script>
 
 <div class="container is-fluid">
-  {#if editingTitle}
-    <EditHeading
-      value={title}
-      loading={submittingTitle}
-      onsave={async (e, updatedTitle) => {
-        await updateTitle(updatedTitle);
+  <div class="block">
+    {#if editingTitle}
+      <EditHeading
+        value={title}
+        loading={submittingTitle}
+        onsave={async (e, updatedTitle) => {
+          await updateTitle(updatedTitle);
 
-        editingTitle = false;
-      }}
-      oncancel={() => (editingTitle = false)}
-    />
-  {:else}
-    <h1 class="title is-1">
-      {title}
-      {#if updateTitle}
-        <HeaderIconButton
-          icon="fas fa-pen"
-          ariaLabel="edit title"
-          onclick={() => (editingTitle = true)}
-        />
-      {/if}
-    </h1>
-  {/if}
+          editingTitle = false;
+        }}
+        oncancel={() => (editingTitle = false)}
+      />
+    {:else}
+      <h1 class="title is-1">
+        {title}
+        {#if updateTitle}
+          <HeaderIconButton
+            icon="fas fa-pen"
+            ariaLabel="edit title"
+            onclick={() => (editingTitle = true)}
+          />
+        {/if}
+      </h1>
+    {/if}
+  </div>
   <div class="block">
     <Search
       onkeyup={onSearchChange}
