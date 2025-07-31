@@ -2,7 +2,12 @@
   /** @import { Item, MediaDTO } from "../lib/types";*/
   import { onDestroy, onMount } from "svelte";
   import { imageUrlById } from "../lib/controllers/image";
-  import { videoUrlById, get, updateProgress } from "../lib/controllers/media";
+  import {
+    videoUrlById,
+    get,
+    updateProgress,
+    updateMedia,
+  } from "../lib/controllers/media";
   import Items from "../lib/components/Items.svelte";
   import {
     add as addTag,
@@ -22,6 +27,9 @@
   import { formatFileSize } from "../lib/formatting/filesize";
   import { formatRuntime } from "../lib/formatting/runtime";
   import HeaderIconButton from "../lib/components/HeaderIconButton.svelte";
+  import EditHeading from "../lib/components/EditHeading.svelte";
+  import { update } from "ramda";
+  import { Link } from "svelte-routing";
 
   /** @type {{id: string}}*/
   let { id } = $props();
@@ -31,6 +39,9 @@
   let mediaEntity = $state();
   let loadingMedia = $state(false);
   let loadingProgress = $state(false);
+  let editingTitle = $state(false);
+  let loadingTitle = $state(false);
+
   let watchedPercentage = $derived(
     mediaEntity.progress / mediaEntity.video.runtime,
   );
@@ -133,6 +144,22 @@
       loadingProgress = false;
     }
   };
+
+  /**
+   * @param {Event} e
+   * @param {String} updatedTitle
+   */
+  const handleTitleUpdate = async (e, updatedTitle) => {
+    loadingTitle = true;
+    try {
+      const res = await updateMedia(id, { title: updatedTitle });
+
+      mediaEntity.title = res.title;
+      editingTitle = false;
+    } finally {
+      loadingTitle = false;
+    }
+  };
 </script>
 
 {#if loadingMedia}
@@ -181,24 +208,55 @@
     {/if}
 
     <div class="container">
-      <h1 class="title is-1">
-        {mediaEntity.title}
-        {#if !mediaEntity.deleted || mediaEntity.exists}
-          <HeaderIconLink
-            icon="fas fa-trash"
-            ariaLabel="delete-media"
-            to={routes.delete.mediaFunc(id, mediaEntity.title)}
-          />
-        {/if}
-        {#if !mediaEntity.deleted && mediaEntity.exists}
+      {#if editingTitle}
+        <EditHeading
+          value={mediaEntity.title}
+          oncancel={() => (editingTitle = false)}
+          onsave={handleTitleUpdate}
+          loading={loadingTitle}
+        />
+      {:else}
+        <h1 class="title is-1">
+          {mediaEntity.title}
           <HeaderIconButton
-            icon={`fas ${watchedPercentage > 0.9 ? "fa-eye-slash" : "fa-eye"}`}
-            ariaLabel="toggle watched"
-            onclick={handleWatchedClick}
-            disabled={loadingProgress}
+            icon={`fas fa-pen`}
+            iconClass={editingTitle ? "has-text-info" : ""}
+            ariaLabel="edit title toggle"
+            onclick={() => {
+              editingTitle = !editingTitle;
+            }}
           />
+        </h1>
+      {/if}
+      <div class="field has-addons">
+        {#if !mediaEntity.deleted && mediaEntity.exists}
+          <p class="control">
+            <button
+              class="button"
+              onclick={handleWatchedClick}
+              aria-label="toggle watched"
+            >
+              <span class="icon">
+                <i
+                  class={`fas ${watchedPercentage > 0.9 ? "fa-eye-slash" : "fa-eye"}`}
+                ></i>
+              </span>
+            </button>
+          </p>
         {/if}
-      </h1>
+        {#if !mediaEntity.deleted || mediaEntity.exists}
+          <p class="control">
+            <Link
+              class="button"
+              to={routes.delete.mediaFunc(id, mediaEntity.title)}
+            >
+              <span class="icon">
+                <i class="fas fa-trash"></i>
+              </span>
+            </Link>
+          </p>
+        {/if}
+      </div>
     </div>
     <br />
     <div class="container">
