@@ -86,6 +86,9 @@ export interface LibraryDTO {
   created?: Date;
   modified?: Date;
 }
+export interface LibraryUpdateDTO {
+  name: string;
+}
 
 //////////
 // source: library_path.go

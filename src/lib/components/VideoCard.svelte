@@ -40,11 +40,19 @@
 >
   {#if selecting}
     <button class={`button ${selected ? "is-focused" : ""}`} onclick={onselect}
-      ><img src={imageUrlById(video.thumbnailId)} alt={video.title} /></button
+      ><img
+        class="image"
+        src={imageUrlById(video.thumbnailId)}
+        alt={video.title}
+      /></button
     >
   {:else}
     <Link to={routes.videoFunc(video.id, video.title)}
-      ><img src={imageUrlById(video.thumbnailId)} alt={video.title} /></Link
+      ><img
+        class="image"
+        src={imageUrlById(video.thumbnailId)}
+        alt={video.title}
+      /></Link
     >
   {/if}
 </figure>

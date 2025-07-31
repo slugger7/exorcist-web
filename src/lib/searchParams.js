@@ -84,7 +84,7 @@ export const setValueAndNavigate = (key, val, route, options) => {
  * @param {string} key
  * @param {string[]} values
  * @param {string} route
- * @param {{replace: boolean}} [options]
+ * @param {{replace?: boolean, preserveScroll?: boolean}} [options]
  */
 export const setValuesAndNavigate = (key, values, route, options) => {
   const params = new URLSearchParams(window.location.search)
