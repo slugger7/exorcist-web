@@ -21,6 +21,7 @@
     import Playlists from "./Playlists.svelte";
     import Playlist from "./Playlist.svelte";
     import CreatePlaylist from "./create/Playlist.svelte";
+    import PlaylistAdd from "./PlaylistAdd.svelte";
 </script>
 
 <main>
@@ -62,4 +63,5 @@
         ><Playlist id={params.id} name={params.name} /></Route
     >
     <Route path={routes.create.playlist}><CreatePlaylist /></Route>
+    <Route path={routes.playlistAdd}><PlaylistAdd /></Route>
 </main>

@@ -30,6 +30,7 @@ const routes = {
     playlist: "/playlists/:id/:name",
     /** @type {ItemUrlFn} */
     playlistFn: (id, name) => (`/playlists/${id}/${name}`),
+    playlistAdd: "/playlists-add",
     create: {
         library: "/create/libraries",
         /** @type {ItemUrlFn} */
