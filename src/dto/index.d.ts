@@ -131,6 +131,7 @@ export interface MediaOverviewDTO {
   thumbnailId?: string /* UUID */;
   progress?: number /* float64 */;
   deleted: boolean;
+  runtime: number /* float64 */;
 }
 export interface MediaDTO {
   id: string /* UUID */;
