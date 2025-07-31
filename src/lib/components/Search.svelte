@@ -7,6 +7,8 @@
   import { getAll as getAllPeople } from "../controllers/people";
   import ItemSelector from "./ItemSelector.svelte";
   import Select from "./Select.svelte";
+  import { Link } from "svelte-routing";
+  import routes from "../../routes/routes";
 
   /** @type {Item[]}*/
   const watchStatuses = [
@@ -39,6 +41,8 @@
    * @property {string[]} [selectedPeople]
    * @property {string[]} [selectedWatchStatuses]
    * @property {boolean} [selecting]
+   * @property {() => void} [clearSelection]
+   * @property {string[]} [selection]
    */
 
   /** @type {props} */
@@ -55,6 +59,8 @@
     disablePeople = false,
     disableTags = false,
     selecting = $bindable(false),
+    clearSelection = () => {},
+    selection = [],
   } = $props();
 
   let extraOptions = $state(false);
@@ -313,10 +319,27 @@
         {/each}
       </div>
     {/if}
-    <button class="button" onclick={() => (selecting = !selecting)}
-      ><span>Select</span><span class="icon"
-        ><i class={`fas ${selecting ? "fa-xmark" : "fa-check"}`}></i></span
-      >
-    </button>
+    <div class="field is-grouped">
+      <button
+        class={`button ${selecting ? "is-primary" : ""}`}
+        onclick={() => (selecting = !selecting)}
+        ><span>Select</span><span class="icon"
+          ><i class={`fas ${selecting ? "fa-xmark" : "fa-check"}`}></i></span
+        >
+      </button>
+      {#if selection.length > 0}
+        <button class="button" onclick={clearSelection}>Clear</button>
+        <div class="field has-addons">
+          <p class="control">
+            <Link class="button" to={routes.playlistAddFn(selection)}>
+              <span class="icon">
+                <i class="fas fa-plus"></i>
+              </span>
+            </Link>
+          </p>
+        </div>
+      {/if}
+    </div>
+    {#if selection.length > 0}{/if}
   </div>
 {/if}
