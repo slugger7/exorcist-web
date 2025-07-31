@@ -38,6 +38,7 @@
    * @property {string[]} [selectedTags]
    * @property {string[]} [selectedPeople]
    * @property {string[]} [selectedWatchStatuses]
+   * @property {boolean} [selecting]
    */
 
   /** @type {props} */
@@ -53,6 +54,7 @@
     selectedWatchStatuses = $bindable([]),
     disablePeople = false,
     disableTags = false,
+    selecting = $bindable(false),
   } = $props();
 
   let extraOptions = $state(false);
@@ -311,5 +313,10 @@
         {/each}
       </div>
     {/if}
+    <button class="button" onclick={() => (selecting = !selecting)}
+      ><span>Select</span><span class="icon"
+        ><i class={`fas ${selecting ? "fa-xmark" : "fa-check"}`}></i></span
+      >
+    </button>
   </div>
 {/if}
