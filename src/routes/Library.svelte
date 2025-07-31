@@ -6,9 +6,10 @@
     getMediaWithParams,
     updateLibrary,
   } from "../lib/controllers/libraries";
+  import { navigate } from "svelte-routing";
 
   let { id, name } = $props();
-  let title = $state("");
+  let title = $state(name);
   let submittingTitle = $state(false);
 
   const updateTitle = async (newTitle) => {
@@ -17,6 +18,12 @@
       const updatedLibrary = await updateLibrary(id, newTitle);
 
       title = updatedLibrary.name;
+
+      const params = new URLSearchParams(location.search);
+
+      navigate(`${routes.libraryFunc(id, title)}?${params.toString()}`, {
+        replace: true,
+      });
     } finally {
       submittingTitle = false;
     }
