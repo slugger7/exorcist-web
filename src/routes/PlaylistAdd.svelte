@@ -81,8 +81,10 @@
     </div>
     <div class="field is-grouped">
       <div class="control">
-        <button class="button is-primary" disabled={submitting} onclick={onadd}
-          >Add</button
+        <button
+          class="button is-primary"
+          disabled={submitting || media.length == 0}
+          onclick={onadd}>Add</button
         >
       </div>
       <div class="control">

@@ -31,6 +31,18 @@ const routes = {
     /** @type {ItemUrlFn} */
     playlistFn: (id, name) => (`/playlists/${id}/${name}`),
     playlistAdd: "/playlists-add",
+    /** 
+     * @param {string[]} media
+     * @returns {string}
+     */
+    playlistAddFn: (media) => {
+        const params = new URLSearchParams()
+        media.forEach(m => {
+            params.append("media", m)
+        })
+
+        return `/playlists-add?${params.toString()}`
+    },
     create: {
         library: "/create/libraries",
         /** @type {ItemUrlFn} */

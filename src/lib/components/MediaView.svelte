@@ -60,8 +60,10 @@
   let mediaPage = $state();
   /** @type {MediaOverviewDTO[]}*/
   let newMedia = $state([]);
-  let selecting = $state(false);
-  let selectedMedia = $state([]);
+  let selecting = $state(getBoolParamOrDefault("selecting", false));
+  let selectedMedia = $state(
+    getArrayOfStringsSearchParamOrDefault("selected", []),
+  );
 
   onMount(async () => {
     window.addEventListener("popstate", onPopState);
@@ -157,6 +159,14 @@
   });
 
   $effect(() => {
+    setValueAndNavigate("selecting", selecting, route, { replace: true });
+  });
+
+  $effect(() => {
+    setValuesAndNavigate("selected", selectedMedia, route, { replace: true });
+  });
+
+  $effect(() => {
     const params = new URLSearchParams(location.search);
 
     setValueAndNavigate("page", page.toString(), route, {
@@ -237,6 +247,8 @@
       {disablePeople}
       {disableTags}
       bind:selecting
+      clearSelection={() => (selectedMedia = [])}
+      selection={selectedMedia}
     />
   </div>
 
