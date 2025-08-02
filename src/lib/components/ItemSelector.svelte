@@ -41,7 +41,7 @@
   let showCreateItem = $derived(
     !disableCreate &&
       query.length >= 1 &&
-      !items.find((item) => item.name === query),
+      !items.find((item) => item.name.toLowerCase() === query.toLowerCase()),
   );
   let selectionBoundary = $derived(
     showCreateItem ? itemsInView.length : itemsInView.length - 1,
@@ -57,12 +57,12 @@
     }
   });
 
-  const onDropdownFocus = () => {
-    active = query.length > 0;
+  $effect(() => {
+    itemsInView = items.slice(0, itemsInViewCount);
+  });
 
-    if (!nextFocusState.node) {
-      nextFocusState.node = inputNode;
-    }
+  const onDropdownFocus = () => {
+    active = true;
   };
 
   const onDropdownBlur = () => {
@@ -71,15 +71,13 @@
 
   const reset = () => {
     query = "";
-    active = false;
-    itemsInView = [];
+    itemsInView = itemsInView = items.slice(0, itemsInViewCount);
     selectedIndex = null;
   };
 
   const onMouseDown = (item) => (e) => {
     e.preventDefault();
     toggle(item);
-    reset();
   };
 
   const handleUpArrow = () => {
@@ -115,6 +113,12 @@
 
   const handleEscape = () => {
     active = false;
+    inputNode.blur();
+
+    if (nextFocusState.node) {
+      nextFocusState.node.focus();
+      nextFocusState.node = inputNode;
+    }
   };
 
   const onKeyDown = (e) => {
@@ -144,7 +148,7 @@
 
     itemsInView = items
       .filter((t) =>
-        t.name.toLowerCase().includes(e.target.value.toLowerCase()),
+        t.name.toLocaleLowerCase().includes(e.target.value.toLowerCase()),
       )
       .slice(0, itemsInViewCount);
 
@@ -153,7 +157,7 @@
     );
     if (exact) {
       itemsInView = itemsInView.filter(
-        (t) => t.name.toLowerCase() !== exact.name,
+        (t) => t.name.toLowerCase() !== exact.name.toLowerCase(),
       );
       itemsInView = [exact, ...itemsInView];
 
@@ -179,18 +183,6 @@
     create(query);
     reset();
   };
-
-  /** @param {KeyboardEvent} e*/
-  const handleOnKeyUp = (e) => {
-    switch (e.code) {
-      case "Escape":
-        if (nextFocusState.node) {
-          nextFocusState.node.focus();
-          nextFocusState.node = inputNode;
-        }
-        break;
-    }
-  };
 </script>
 
 <div class="field is-grouped">
@@ -205,7 +197,6 @@
           onfocus={onDropdownFocus}
           onblur={onDropdownBlur}
           onkeydown={onKeyDown}
-          onkeyup={handleOnKeyUp}
           oninput={onQueryChange}
           bind:this={inputNode}
         />

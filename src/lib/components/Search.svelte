@@ -23,7 +23,7 @@
     },
     {
       id: "in_progress",
-      name: "in_progress",
+      name: "In Progress",
     },
   ];
 

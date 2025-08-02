@@ -110,11 +110,10 @@
   const handleCreateItem = async (itemName) => {
     try {
       const createdTag = await create(itemName);
-      console.log("created tag", createdTag);
+
       allItems.push(createdTag);
-      allItems = sortItems(allItems);
+
       addItem(createdTag);
-      createdTag;
     } catch (e) {
       console.error(e);
     }

@@ -1,6 +1,6 @@
 <script>
   /** @import { Item, MediaDTO } from "../lib/types";*/
-  import { onDestroy, onMount } from "svelte";
+  import { onDestroy, onMount, tick } from "svelte";
   import { imageUrlById } from "../lib/controllers/image";
   import {
     videoUrlById,
@@ -22,13 +22,11 @@
     remove as removePerson,
   } from "../lib/controllers/people";
   import routes from "./routes";
-  import HeaderIconLink from "../lib/components/HeaderIconLink.svelte";
   import { nextFocusState } from "../lib/state/nextFocus.svelte";
   import { formatFileSize } from "../lib/formatting/filesize";
   import { formatRuntime } from "../lib/formatting/runtime";
   import HeaderIconButton from "../lib/components/HeaderIconButton.svelte";
   import EditHeading from "../lib/components/EditHeading.svelte";
-  import { update } from "ramda";
   import { Link } from "svelte-routing";
 
   /** @type {{id: string}}*/
@@ -47,7 +45,6 @@
   );
 
   const fetchMedia = async () => {
-    console.log("fetching media");
     loadingMedia = true;
     try {
       mediaEntity = await get(id);
@@ -62,6 +59,19 @@
 
   onDestroy(() => {
     localStorage.setItem("item", id);
+    nextFocusState.node = null;
+  });
+
+  $effect(() => {
+    if (nextFocusState.node === null && videoNode) {
+      nextFocusState.node = videoNode;
+    }
+  });
+
+  $effect(() => {
+    if (videoNode) {
+      videoNode.focus();
+    }
   });
 
   /** @param {string} tagName
@@ -92,18 +102,24 @@
   /** @param {KeyboardEvent} e*/
   const handleOnKeyUp = (e) => {
     switch (e.code) {
-      case "Escape":
-        if (nextFocusState.node) {
-          nextFocusState.node.focus();
-          nextFocusState.node = videoNode;
-        }
-        break;
       case "KeyL":
         console.log;
         videoNode.currentTime = videoNode.currentTime + 10;
         break;
       case "KeyJ":
         videoNode.currentTime = videoNode.currentTime - 10;
+    }
+  };
+
+  /** @param {KeyboardEvent} e*/
+  const handleOnKeyDown = (e) => {
+    switch (e.code) {
+      case "Escape":
+        if (nextFocusState.node) {
+          nextFocusState.node.focus();
+          nextFocusState.node = videoNode;
+        }
+        break;
     }
   };
 
@@ -202,6 +218,7 @@
         poster={imageUrlById(mediaEntity.thumbnailId)}
         bind:this={videoNode}
         onkeyup={handleOnKeyUp}
+        onkeydown={handleOnKeyDown}
         onfocus={handleOnFocus}
         ontimeupdate={handleTimeUpdate}
       ></video>
