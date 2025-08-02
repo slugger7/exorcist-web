@@ -102,18 +102,24 @@
   /** @param {KeyboardEvent} e*/
   const handleOnKeyUp = (e) => {
     switch (e.code) {
-      case "Escape":
-        if (nextFocusState.node) {
-          nextFocusState.node.focus();
-          nextFocusState.node = videoNode;
-        }
-        break;
       case "KeyL":
         console.log;
         videoNode.currentTime = videoNode.currentTime + 10;
         break;
       case "KeyJ":
         videoNode.currentTime = videoNode.currentTime - 10;
+    }
+  };
+
+  /** @param {KeyboardEvent} e*/
+  const handleOnKeyDown = (e) => {
+    switch (e.code) {
+      case "Escape":
+        if (nextFocusState.node) {
+          nextFocusState.node.focus();
+          nextFocusState.node = videoNode;
+        }
+        break;
     }
   };
 
@@ -212,6 +218,7 @@
         poster={imageUrlById(mediaEntity.thumbnailId)}
         bind:this={videoNode}
         onkeyup={handleOnKeyUp}
+        onkeydown={handleOnKeyDown}
         onfocus={handleOnFocus}
         ontimeupdate={handleTimeUpdate}
       ></video>
