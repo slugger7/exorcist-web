@@ -73,6 +73,13 @@ export interface GenerateThumbnailData {
    */
   width: number /* int */;
 }
+export interface RefreshMetadata {
+  mediaId: string /* UUID */;
+}
+export interface RefreshLibraryMetadata {
+  libraryId: string /* UUID */;
+  batchSize: number /* int */;
+}
 
 //////////
 // source: library.go
@@ -223,6 +230,9 @@ export interface PersonSearchDTO {
   orderBy: PersonOrdinal;
   asc: boolean;
 }
+export interface PersonUpdateDTO {
+  name: string;
+}
 
 //////////
 // source: playlist.go
@@ -238,6 +248,9 @@ export interface PlaylistDTO {
 }
 export interface CreatePlaylistMediaDTO {
   mediaId: string /* UUID */;
+}
+export interface PlaylistUpdateDTO {
+  name: string;
 }
 
 //////////
@@ -265,6 +278,9 @@ export interface TagSearchDTO {
   search: string;
   orderBy: TagOrdinal;
   asc: boolean;
+}
+export interface TagUpdateDTO {
+  name: string;
 }
 
 //////////

@@ -46,12 +46,12 @@ export interface Job {
   ID: string /* UUID */;
   Parent?: string /* UUID */;
   Priority: number /* int16 */;
-  JobType: JobTypeEnum;
   Status: JobStatusEnum;
   Data?: string;
   Outcome?: string;
   Created: Date;
   Modified: Date;
+  JobType: JobTypeEnum;
 }
 
 //////////
@@ -72,6 +72,11 @@ export const JobTypeEnum_UpdateExistingVideos: JobTypeEnum = "update_existing_vi
 export const JobTypeEnum_ScanPath: JobTypeEnum = "scan_path";
 export const JobTypeEnum_GenerateChecksum: JobTypeEnum = "generate_checksum";
 export const JobTypeEnum_GenerateThumbnail: JobTypeEnum = "generate_thumbnail";
+export const JobTypeEnum_ScanLibrary: JobTypeEnum = "scan_library";
+export const JobTypeEnum_RefreshMetadata: JobTypeEnum = "refresh_metadata";
+export const JobTypeEnum_RefreshLibraryMetadata: JobTypeEnum = "refresh_library_metadata";
+export const JobTypeEnum_GenerateChapters: JobTypeEnum = "generate_chapters";
+export const JobTypeEnum_GenerateLibraryChapters: JobTypeEnum = "generate_library_chapters";
 
 //////////
 // source: library.go
