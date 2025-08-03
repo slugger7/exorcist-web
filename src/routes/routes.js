@@ -43,6 +43,10 @@ const routes = {
 
         return `/playlists-add?${params.toString()}`
     },
+    refreshMetadata: "/jobs/refresh-metadata/media/:id/:redirect",
+    refreshMetadataFn: (id, redirect) => (`/jobs/refresh-metadata/media/${id}/${redirect}`),
+    refreshLibraryMetadata: "/jobs/refresh-metadata/library/:id/:redirect",
+    refreshLibraryMetadataFn: (id, redirect) => (`/jobs/refresh-metadata/library/${id}/${redirect}`),
     create: {
         library: "/create/libraries",
         /** @type {ItemUrlFn} */
