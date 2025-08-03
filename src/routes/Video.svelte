@@ -247,6 +247,16 @@
               </span>
             </button>
           </p>
+          <p class="control">
+            <Link
+              class={`button`}
+              aria-label="refresh metadata"
+              to={routes.refreshMetadataFn(id)}
+            >
+              <span class="icon"><i class="fas fa-arrows-rotate"></i></span
+              ></Link
+            >
+          </p>
         {/if}
         {#if !mediaEntity.deleted || mediaEntity.exists}
           <p class="control">

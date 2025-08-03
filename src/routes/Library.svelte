@@ -6,7 +6,7 @@
     getMediaWithParams,
     updateLibrary,
   } from "../lib/controllers/libraries";
-  import { navigate } from "svelte-routing";
+  import { Link, navigate } from "svelte-routing";
 
   let { id, name } = $props();
   let title = $state(name);
@@ -32,6 +32,23 @@
   };
 </script>
 
+{#snippet headerAddons()}
+  <p class="control">
+    <Link
+      class="button"
+      to={routes.refreshLibraryMetadataFn(
+        id,
+        encodeURIComponent(routes.libraryFunc(id, name)),
+      )}
+    >
+      <span>Refresh metadata</span>
+      <span class="icon">
+        <i class="fas fa-rotate-right"></i>
+      </span>
+    </Link>
+  </p>
+{/snippet}
+
 <MediaView
   title={title.length > 0 ? title : name}
   route={routes.libraryFunc(id, name)}
@@ -39,4 +56,5 @@
   fetchFn={async (params) => await getMediaWithParams(id, params)}
   {updateTitle}
   bind:submittingTitle
+  {headerAddons}
 />

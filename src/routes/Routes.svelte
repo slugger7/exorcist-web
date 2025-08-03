@@ -22,6 +22,7 @@
     import Playlist from "./Playlist.svelte";
     import CreatePlaylist from "./create/Playlist.svelte";
     import PlaylistAdd from "./PlaylistAdd.svelte";
+    import RefreshMetadata from "./RefreshMetadata.svelte";
 </script>
 
 <main>
@@ -64,4 +65,16 @@
     >
     <Route path={routes.create.playlist}><CreatePlaylist /></Route>
     <Route path={routes.playlistAdd}><PlaylistAdd /></Route>
+    <Route path={routes.refreshMetadata} let:params
+        ><RefreshMetadata
+            mediaId={params.id}
+            redirect={params.redirect}
+        /></Route
+    >
+    <Route path={routes.refreshLibraryMetadata} let:params
+        ><RefreshMetadata
+            libraryId={params.id}
+            redirect={params.redirect}
+        /></Route
+    >
 </main>
