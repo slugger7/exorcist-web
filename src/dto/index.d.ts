@@ -73,12 +73,18 @@ export interface GenerateThumbnailData {
    */
   width: number /* int */;
 }
+export interface RefreshFields {
+  size: boolean;
+  checksum: boolean;
+}
 export interface RefreshMetadata {
   mediaId: string /* UUID */;
+  refreshFields?: RefreshFields;
 }
 export interface RefreshLibraryMetadata {
   libraryId: string /* UUID */;
   batchSize: number /* int */;
+  refreshFields?: RefreshFields;
 }
 
 //////////
