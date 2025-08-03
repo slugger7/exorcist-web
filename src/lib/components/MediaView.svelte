@@ -31,8 +31,9 @@
    * @property {WSTopicMapView<MediaOverviewDTO>} [topicMap]
    * @property {boolean} [disablePeople]
    * @property {boolean} [disableTags]
-   * @property {(title) => Promise<string>} [updateTitle]
+   * @property {(title: string) => Promise<string>} [updateTitle]
    * @property {boolean} [submittingTitle]
+   * @property {any} [headerAddons]
    */
   /** @type {props}*/
   let {
@@ -45,6 +46,7 @@
     submittingTitle = $bindable(false),
     disablePeople = false,
     disableTags = false,
+    headerAddons,
   } = $props();
 
   let page = $state(getIntSearchParamOrDefault("page", 1));
@@ -256,6 +258,7 @@
     {:else}
       <h1 class="title is-1">
         {title}
+
         {#if updateTitle}
           <HeaderIconButton
             icon="fas fa-pen"
@@ -266,6 +269,13 @@
       </h1>
     {/if}
   </div>
+  {#if headerAddons}
+    <div class="block">
+      <div class="field has-addons">
+        {@render headerAddons?.()}
+      </div>
+    </div>
+  {/if}
   <div class="block">
     <Search
       onkeyup={onSearchChange}
