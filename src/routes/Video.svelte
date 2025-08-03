@@ -28,7 +28,6 @@
   import HeaderIconButton from "../lib/components/HeaderIconButton.svelte";
   import EditHeading from "../lib/components/EditHeading.svelte";
   import { Link } from "svelte-routing";
-  import { create } from "../lib/controllers/job";
 
   /** @type {{id: string}}*/
   let { id } = $props();
@@ -40,7 +39,6 @@
   let loadingProgress = $state(false);
   let editingTitle = $state(false);
   let loadingTitle = $state(false);
-  let loadingMetadata = $state(false);
 
   let watchedPercentage = $derived(
     mediaEntity.progress / mediaEntity.video.runtime,
@@ -178,15 +176,6 @@
       loadingTitle = false;
     }
   };
-
-  const handleRefreshMetadataClick = async () => {
-    loadingMetadata = true;
-    try {
-      const res = await create("refresh_metadata", { mediaId: id });
-    } finally {
-      loadingMetadata = false;
-    }
-  };
 </script>
 
 {#if loadingMedia}
@@ -259,13 +248,13 @@
             </button>
           </p>
           <p class="control">
-            <button
-              class={`button ${loadingMetadata ? "is-loading" : ""}`}
+            <Link
+              class={`button`}
               aria-label="refresh metadata"
-              onclick={handleRefreshMetadataClick}
+              to={routes.refreshMetadataFn(id)}
             >
               <span class="icon"><i class="fas fa-arrows-rotate"></i></span
-              ></button
+              ></Link
             >
           </p>
         {/if}
