@@ -44,6 +44,7 @@
    * @property {boolean} [selecting]
    * @property {() => void} [clearSelection]
    * @property {string[]} [selection]
+   * @property {boolean} [favourites]
    */
 
   /** @type {props} */
@@ -62,6 +63,7 @@
     selecting = $bindable(false),
     clearSelection = () => {},
     selection = [],
+    favourites = $bindable(false),
   } = $props();
 
   let extraOptions = $state(false);
@@ -231,6 +233,20 @@
       <span class="icon is-left">
         <i class="fas fa-search"></i>
       </span>
+    </p>
+    <p class="control">
+      <button
+        class="button"
+        aria-label="filter by favourites"
+        onclick={() => {
+          favourites = !favourites;
+        }}
+      >
+        <span class="icon">
+          <i class={`${favourites ? "fa fa-heart" : "fa-regular fa-heart"}`}
+          ></i>
+        </span>
+      </button>
     </p>
     {#if value !== ""}
       <p class="control">
