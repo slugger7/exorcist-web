@@ -140,6 +140,7 @@ export interface MediaSearchDTO {
   tags: string[];
   people: string[];
   watchStatus: WatchStatus[];
+  favourites: boolean;
 }
 export interface MediaOverviewDTO {
   id: string /* UUID */;
@@ -148,6 +149,7 @@ export interface MediaOverviewDTO {
   progress?: number /* float64 */;
   deleted: boolean;
   runtime: number /* float64 */;
+  favourite: boolean;
 }
 export interface MediaDTO {
   id: string /* UUID */;
@@ -167,6 +169,7 @@ export interface MediaDTO {
   progress: number /* float64 */;
   people: PersonDTO[];
   tags: TagDTO[];
+  favourite: boolean;
 }
 export interface ImageDTO {
   id: string /* UUID */;

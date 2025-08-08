@@ -72,6 +72,7 @@
     getArrayOfStringsSearchParamOrDefault("selected", []),
   );
   let editingTitle = $state(false);
+  let favourites = $state(getBoolParamOrDefault("favourites", false));
 
   onMount(async () => {
     window.addEventListener("popstate", onPopState);
@@ -93,6 +94,8 @@
     ascending = getBoolParamOrDefault("ascending", true);
     selectedPeople = getArrayOfStringsSearchParamOrDefault("people", []);
     selectedTags = getArrayOfStringsSearchParamOrDefault("tags", []);
+    selecting = getBoolParamOrDefault("selecting", false);
+    favourites = getBoolParamOrDefault("favourites", false);
   };
 
   const fetchPage = async () => {
@@ -101,6 +104,7 @@
     params.set("limit", limit.toString());
     params.set("asc", ascending.toString());
     params.set("orderBy", orderBy);
+    params.set("favourites", favourites.toString());
 
     if (selectedTags.length > 0) {
       selectedTags.forEach((tag) => {
@@ -168,6 +172,10 @@
 
   $effect(() => {
     setValueAndNavigate("selecting", selecting, route, { replace: true });
+  });
+
+  $effect(() => {
+    setValueAndNavigate("favourites", favourites, route, { replace: true });
   });
 
   $effect(() => {
@@ -292,6 +300,7 @@
       bind:selecting
       clearSelection={() => (selectedMedia = [])}
       selection={selectedMedia}
+      bind:favourites
     />
   </div>
 

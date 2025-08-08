@@ -28,6 +28,7 @@
   import HeaderIconButton from "../lib/components/HeaderIconButton.svelte";
   import EditHeading from "../lib/components/EditHeading.svelte";
   import { Link } from "svelte-routing";
+  import { addFavourite, removeFavourite } from "../lib/controllers/users";
 
   /** @type {{id: string}}*/
   let { id } = $props();
@@ -39,6 +40,7 @@
   let loadingProgress = $state(false);
   let editingTitle = $state(false);
   let loadingTitle = $state(false);
+  let loadingFavourite = $state(false);
 
   let watchedPercentage = $derived(
     mediaEntity.progress / mediaEntity.video.runtime,
@@ -176,6 +178,22 @@
       loadingTitle = false;
     }
   };
+
+  const handleFavouriteClick = async () => {
+    loadingFavourite = true;
+
+    try {
+      if (mediaEntity.favourite) {
+        await removeFavourite(id);
+        mediaEntity.favourite = false;
+      } else {
+        await addFavourite(id);
+        mediaEntity.favourite = true;
+      }
+    } finally {
+      loadingFavourite = false;
+    }
+  };
 </script>
 
 {#if loadingMedia}
@@ -243,6 +261,20 @@
               <span class="icon">
                 <i
                   class={`fas ${watchedPercentage > 0.9 ? "fa-eye-slash" : "fa-eye"}`}
+                ></i>
+              </span>
+            </button>
+          </p>
+          <p class="control">
+            <button
+              class={`button ${loadingFavourite ? "is-loading" : ""}`}
+              onclick={handleFavouriteClick}
+              aria-label="toggle favourite"
+              disabled={loadingFavourite}
+            >
+              <span class="icon">
+                <i
+                  class={`${mediaEntity.favourite ? "fas fa-heart" : "fa-regular fa-heart"}`}
                 ></i>
               </span>
             </button>
