@@ -19,7 +19,7 @@ export const updatePassword = async (updatePasswordDTO) => {
  * @param {string} mediaId
  */
 export const removeFavourite = async (mediaId) => {
-  const res = await fetch(`${server()}/users/favourites/${mediaId}`, { method: "PUT" })
+  const res = await fetch(`${server()}/users/favourites/${mediaId}`, { method: "DELETE" })
 
   return res.ok
 }
@@ -28,7 +28,7 @@ export const removeFavourite = async (mediaId) => {
  * @param {string} mediaId
  */
 export const addFavourite = async (mediaId) => {
-  const res = await fetch(`${server()}/users/favourites/${mediaId}`, { method: "DELETE" })
+  const res = await fetch(`${server()}/users/favourites/${mediaId}`, { method: "PUT" })
 
   return res.ok
 }
