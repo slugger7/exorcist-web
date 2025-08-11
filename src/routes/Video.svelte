@@ -1,5 +1,5 @@
 <script>
-  /** @import { Item, MediaDTO } from "../lib/types";*/
+  /** @import { Item, MediaDTO, ChapterDTO } from "../lib/types";*/
   import { onDestroy, onMount, tick } from "svelte";
   import { imageUrlById } from "../lib/controllers/image";
   import {
@@ -29,6 +29,7 @@
   import EditHeading from "../lib/components/EditHeading.svelte";
   import { Link } from "svelte-routing";
   import { addFavourite, removeFavourite } from "../lib/controllers/users";
+  import Chapters from "../lib/components/Chapters.svelte";
 
   /** @type {{id: string}}*/
   let { id } = $props();
@@ -194,6 +195,16 @@
       loadingFavourite = false;
     }
   };
+
+  /**
+   * @param {Event} e
+   * @param {ChapterDTO} chapter
+   */
+  const handleChapterClick = (e, chapter) => {
+    const newTime = chapter.timestamp;
+    console.log("current time", videoNode.currentTime, "chapter time", newTime);
+    videoNode.currentTime = newTime;
+  };
 </script>
 
 {#if loadingMedia}
@@ -350,7 +361,17 @@
         disableEdit={mediaEntity.deleted}
       />
     </div>
-    <div class="section">
+    <br />
+    {#if mediaEntity.chapters}
+      <div class="container">
+        <Chapters
+          chapters={mediaEntity.chapters}
+          onclick={handleChapterClick}
+        />
+      </div>
+    {/if}
+    <br />
+    <div class="container">
       <table class="table">
         <thead>
           <tr>
