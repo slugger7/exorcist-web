@@ -58,12 +58,12 @@ export interface ScanPathData {
   libraryPathId: string /* UUID */;
 }
 export interface GenerateThumbnailData {
-  videoId: string /* UUID */;
+  mediaId: string /* UUID */;
   path: string;
   /**
-   * Optional: If set to 0, timestamp at 25% of video playback will be used
+   * Optional: If set to 0, timestamp at 25% of video playback will be used. Value in seconds
    */
-  timestamp: number /* int */;
+  timestamp: number /* float64 */;
   /**
    * Optional: If set to 0, video height will be used
    */
@@ -72,6 +72,8 @@ export interface GenerateThumbnailData {
    * Optional: If set to 0, video widtch will be used
    */
   width: number /* int */;
+  relationType?: any /* model.MediaRelationTypeEnum */;
+  metadata?: ThumbnailMetadataDTO;
 }
 export interface RefreshFields {
   size: boolean;
@@ -85,6 +87,15 @@ export interface RefreshLibraryMetadata {
   libraryId: string /* UUID */;
   batchSize: number /* int */;
   refreshFields?: RefreshFields;
+}
+export interface GenerateChaptersData {
+  mediaId: string /* UUID */;
+  interval: number /* float64 */;
+  height: number /* int */;
+  width: number /* int */;
+  maxDimension: number /* int */;
+  metadata?: ChapterMetadadataDTO;
+  overwrite: boolean;
 }
 
 //////////
@@ -170,6 +181,7 @@ export interface MediaDTO {
   people: PersonDTO[];
   tags: TagDTO[];
   favourite: boolean;
+  chapters: ChapterDTO[];
 }
 export interface ImageDTO {
   id: string /* UUID */;
@@ -195,6 +207,10 @@ export interface MediaUpdatedDTO {
   title?: string;
   modified: Date;
 }
+export interface ChapterDTO {
+  thumbnailId: string /* UUID */;
+  timestamp: number /* float64 */;
+}
 
 //////////
 // source: media_progress.go
@@ -205,6 +221,16 @@ export interface ProgressDTO {
 export interface ProgressUpdateDTO {
   overwrite: boolean;
   progress: number /* float64 */;
+}
+
+//////////
+// source: media_relation_metadata.go
+
+export interface ThumbnailMetadataDTO {
+  timestamp: number /* float64 */;
+}
+export interface ChapterMetadadataDTO {
+  timestamp: number /* float64 */;
 }
 
 //////////
@@ -298,9 +324,10 @@ export interface TagUpdateDTO {
 export type WSTopic = string;
 export const WSTopic_JobUpdate: WSTopic = "job_update";
 export const WSTopic_JobCreate: WSTopic = "job_create";
-export const WSTopic_VideoUpdate: WSTopic = "video_update";
-export const WSTopic_VideoCreate: WSTopic = "video_create";
-export const WSTopic_VideoDelete: WSTopic = "video_delete";
+export const WSTopic_MediaUpdate: WSTopic = "media_update";
+export const WSTopic_MediaOverviewUpdate: WSTopic = "media_overview_update";
+export const WSTopic_MediaCreate: WSTopic = "media_create";
+export const WSTopic_MediaDelete: WSTopic = "media_delete";
 export interface WSMessage<T extends any> {
   topic: WSTopic;
   data?: T;

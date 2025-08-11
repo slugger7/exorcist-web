@@ -165,6 +165,7 @@ export interface MediaRelation {
   Created: Date;
   Modified: Date;
   GhostID?: number /* int32 */;
+  Metadata?: string;
 }
 
 //////////

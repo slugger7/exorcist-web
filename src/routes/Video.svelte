@@ -1,6 +1,6 @@
 <script>
-  /** @import { Item, MediaDTO } from "../lib/types";*/
-  import { onDestroy, onMount, tick } from "svelte";
+  /** @import { Item, MediaDTO, ChapterDTO, WSMessage, WSTopicMap } from "../lib/types";*/
+  import { onDestroy, onMount } from "svelte";
   import { imageUrlById } from "../lib/controllers/image";
   import {
     videoUrlById,
@@ -29,6 +29,9 @@
   import EditHeading from "../lib/components/EditHeading.svelte";
   import { Link } from "svelte-routing";
   import { addFavourite, removeFavourite } from "../lib/controllers/users";
+  import Chapters from "../lib/components/Chapters.svelte";
+  import { wsState } from "../lib/state/wsState.svelte";
+  import { PONG } from "../lib/constants/websocket";
 
   /** @type {{id: string}}*/
   let { id } = $props();
@@ -62,7 +65,43 @@
   onDestroy(() => {
     localStorage.setItem("item", id);
     nextFocusState.node = null;
+
+    if (wsState.active) {
+      wsState.connection.removeEventListener("message", onWsMessage);
+    }
   });
+
+  $effect(() => {
+    if (wsState.active) {
+      wsState.connection.addEventListener("message", onWsMessage);
+    }
+  });
+
+  /** @param {MessageEvent<string>} e*/
+  const onWsMessage = (e) => {
+    if (e.data === PONG) return;
+
+    /** @type {WSMessage<MediaDTO>}*/
+    const data = JSON.parse(e.data);
+
+    const topic = topicMap[data.topic];
+    if (topic) {
+      topic(data.data);
+    }
+  };
+
+  /** @type {WSTopicMap<MediaDTO>}*/
+  const topicMap = {
+    media_update: (updatedMedia) => {
+      if (updatedMedia.chapters.length > 0) {
+        // TODO: update chapters to nothing when they get cleared
+        mediaEntity.chapters = [
+          ...(mediaEntity.chapters || []),
+          ...updatedMedia.chapters,
+        ];
+      }
+    },
+  };
 
   $effect(() => {
     if (nextFocusState.node === null && videoNode) {
@@ -194,6 +233,16 @@
       loadingFavourite = false;
     }
   };
+
+  /**
+   * @param {Event} e
+   * @param {ChapterDTO} chapter
+   */
+  const handleChapterClick = (e, chapter) => {
+    const newTime = chapter.timestamp;
+    console.log("current time", videoNode.currentTime, "chapter time", newTime);
+    videoNode.currentTime = newTime;
+  };
 </script>
 
 {#if loadingMedia}
@@ -283,11 +332,27 @@
             <Link
               class={`button`}
               aria-label="refresh metadata"
-              to={routes.refreshMetadataFn(id)}
+              to={routes.refreshMetadataFn(
+                id,
+                routes.videoFunc(id, mediaEntity.title),
+              )}
             >
               <span class="icon"><i class="fas fa-arrows-rotate"></i></span
               ></Link
             >
+          </p>
+          <p class="control">
+            <Link
+              class="button"
+              aria-label="generate chapters"
+              to={routes.generateChaptersFn(
+                id,
+                routes.videoFunc(id, mediaEntity.title),
+              )}
+              replace={true}
+            >
+              <span class="icon"><i class="fas fa-images"></i></span>
+            </Link>
           </p>
         {/if}
         {#if !mediaEntity.deleted || mediaEntity.exists}
@@ -350,7 +415,17 @@
         disableEdit={mediaEntity.deleted}
       />
     </div>
-    <div class="section">
+    <br />
+    {#if mediaEntity.chapters}
+      <div class="container">
+        <Chapters
+          chapters={mediaEntity.chapters}
+          onclick={handleChapterClick}
+        />
+      </div>
+    {/if}
+    <br />
+    <div class="container">
       <table class="table">
         <thead>
           <tr>

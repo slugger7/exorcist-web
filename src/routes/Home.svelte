@@ -9,14 +9,14 @@
 
   /** @type {WSTopicMapView<MediaOverviewDTO>}*/
   const topics = {
-    video_create: (mediaPage, newItems, media) => {
+    media_create: (mediaPage, newItems, media) => {
       newItems.push(media);
 
       mediaPage.total++;
 
       return [mediaPage, newItems];
     },
-    video_update: (mediaPage, newItems, updatedMedia) => {
+    media_overview_update: (mediaPage, newItems, updatedMedia) => {
       newItems = newItems.map((v) => {
         if (v.id === updatedMedia.id) {
           return { ...v, ...updatedMedia };

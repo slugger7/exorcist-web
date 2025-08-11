@@ -13,9 +13,9 @@ const routes = {
     libraryFunc: (id, name) => (`/libraries/${id}/${name}`),
     library: "/libraries/:id/:name",
     libraryPaths: "/library-paths",
-    libraryPath: "/library-paths/:id",
+    libraryPath: "/library-paths/:id/:name",
     /** @type {ItemUrlFn} */
-    libraryPathFunc: (id, name) => (`/library-paths/${id}`),
+    libraryPathFunc: (id, name) => (`/library-paths/${id}/${name}`),
     home: "/",
     video: "/videos/:id",
     /** @type {ItemUrlFn} */
@@ -44,9 +44,11 @@ const routes = {
         return `/playlists-add?${params.toString()}`
     },
     refreshMetadata: "/jobs/refresh-metadata/media/:id/:redirect",
-    refreshMetadataFn: (id, redirect) => (`/jobs/refresh-metadata/media/${id}/${redirect}`),
+    refreshMetadataFn: (id, redirect) => (`/jobs/refresh-metadata/media/${id}/${encodeURIComponent(redirect)}`),
     refreshLibraryMetadata: "/jobs/refresh-metadata/library/:id/:redirect",
-    refreshLibraryMetadataFn: (id, redirect) => (`/jobs/refresh-metadata/library/${id}/${redirect}`),
+    refreshLibraryMetadataFn: (id, redirect) => (`/jobs/refresh-metadata/library/${id}/${encodeURIComponent(redirect)}`),
+    generateChapters: "/jobs/generate-chapters/media/:id/:redirect",
+    generateChaptersFn: (id, redirect) => (`/jobs/generate-chapters/media/${id}/${encodeURIComponent(redirect)}`),
     create: {
         library: "/create/libraries",
         /** @type {ItemUrlFn} */
