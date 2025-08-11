@@ -324,9 +324,10 @@ export interface TagUpdateDTO {
 export type WSTopic = string;
 export const WSTopic_JobUpdate: WSTopic = "job_update";
 export const WSTopic_JobCreate: WSTopic = "job_create";
-export const WSTopic_VideoUpdate: WSTopic = "video_update";
-export const WSTopic_VideoCreate: WSTopic = "video_create";
-export const WSTopic_VideoDelete: WSTopic = "video_delete";
+export const WSTopic_MediaUpdate: WSTopic = "media_update";
+export const WSTopic_MediaOverviewUpdate: WSTopic = "media_overview_update";
+export const WSTopic_MediaCreate: WSTopic = "media_create";
+export const WSTopic_MediaDelete: WSTopic = "media_delete";
 export interface WSMessage<T extends any> {
   topic: WSTopic;
   data?: T;
