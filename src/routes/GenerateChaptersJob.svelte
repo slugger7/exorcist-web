@@ -27,7 +27,7 @@
         maxDimension,
       });
 
-      navigate(redirect);
+      navigate(redirect, { replace: true });
     } finally {
       submitting = false;
     }
