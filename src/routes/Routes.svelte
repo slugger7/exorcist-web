@@ -23,6 +23,7 @@
     import CreatePlaylist from "./create/Playlist.svelte";
     import PlaylistAdd from "./PlaylistAdd.svelte";
     import RefreshMetadata from "./RefreshMetadata.svelte";
+    import GenerateChaptersJob from "./GenerateChaptersJob.svelte";
 </script>
 
 <main>
@@ -48,7 +49,7 @@
         ><CreateLibraryPath libraryId={params.libraryId} /></Route
     >
     <Route path={routes.libraryPath} let:params
-        ><LibraryPath id={params.id} /></Route
+        ><LibraryPath id={params.id} name={params.name} /></Route
     >
     <Route path={routes.user} let:params
         ><User id={params.id} name={params.name} /></Route
@@ -74,6 +75,12 @@
     <Route path={routes.refreshLibraryMetadata} let:params
         ><RefreshMetadata
             libraryId={params.id}
+            redirect={params.redirect}
+        /></Route
+    >
+    <Route path={routes.generateChapters} let:params
+        ><GenerateChaptersJob
+            mediaId={params.id}
             redirect={params.redirect}
         /></Route
     >

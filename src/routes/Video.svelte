@@ -42,6 +42,7 @@
   let editingTitle = $state(false);
   let loadingTitle = $state(false);
   let loadingFavourite = $state(false);
+  let loadingChapters = $state(false);
 
   let watchedPercentage = $derived(
     mediaEntity.progress / mediaEntity.video.runtime,
@@ -294,11 +295,26 @@
             <Link
               class={`button`}
               aria-label="refresh metadata"
-              to={routes.refreshMetadataFn(id)}
+              to={routes.refreshMetadataFn(
+                id,
+                routes.videoFunc(id, mediaEntity.title),
+              )}
             >
               <span class="icon"><i class="fas fa-arrows-rotate"></i></span
               ></Link
             >
+          </p>
+          <p class="control">
+            <Link
+              class="button"
+              aria-label="generate chapters"
+              to={routes.generateChaptersFn(
+                id,
+                routes.videoFunc(id, mediaEntity.title),
+              )}
+            >
+              <span class="icon"><i class="fas fa-images"></i></span>
+            </Link>
           </p>
         {/if}
         {#if !mediaEntity.deleted || mediaEntity.exists}

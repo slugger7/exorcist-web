@@ -69,6 +69,7 @@
           type="submit"
           class={`button is-primary ${submitting ? "is-loading" : ""}`}
           value="Submit"
+          disabled={submitting}
         />
       </p>
       <p class="control">
