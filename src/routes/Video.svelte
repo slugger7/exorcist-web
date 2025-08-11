@@ -1,6 +1,6 @@
 <script>
-  /** @import { Item, MediaDTO, ChapterDTO } from "../lib/types";*/
-  import { onDestroy, onMount, tick } from "svelte";
+  /** @import { Item, MediaDTO, ChapterDTO, WSMessage, WSTopicMap } from "../lib/types";*/
+  import { onDestroy, onMount } from "svelte";
   import { imageUrlById } from "../lib/controllers/image";
   import {
     videoUrlById,
@@ -30,6 +30,8 @@
   import { Link } from "svelte-routing";
   import { addFavourite, removeFavourite } from "../lib/controllers/users";
   import Chapters from "../lib/components/Chapters.svelte";
+  import { wsState } from "../lib/state/wsState.svelte";
+  import { PONG } from "../lib/constants/websocket";
 
   /** @type {{id: string}}*/
   let { id } = $props();
@@ -42,7 +44,6 @@
   let editingTitle = $state(false);
   let loadingTitle = $state(false);
   let loadingFavourite = $state(false);
-  let loadingChapters = $state(false);
 
   let watchedPercentage = $derived(
     mediaEntity.progress / mediaEntity.video.runtime,
@@ -64,7 +65,43 @@
   onDestroy(() => {
     localStorage.setItem("item", id);
     nextFocusState.node = null;
+
+    if (wsState.active) {
+      wsState.connection.removeEventListener("message", onWsMessage);
+    }
   });
+
+  $effect(() => {
+    if (wsState.active) {
+      wsState.connection.addEventListener("message", onWsMessage);
+    }
+  });
+
+  /** @param {MessageEvent<string>} e*/
+  const onWsMessage = (e) => {
+    if (e.data === PONG) return;
+
+    /** @type {WSMessage<MediaDTO>}*/
+    const data = JSON.parse(e.data);
+
+    const topic = topicMap[data.topic];
+    if (topic) {
+      topic(data.data);
+    }
+  };
+
+  /** @type {WSTopicMap<MediaDTO>}*/
+  const topicMap = {
+    media_update: (updatedMedia) => {
+      if (updatedMedia.chapters.length > 0) {
+        // TODO: update chapters to nothing when they get cleared
+        mediaEntity.chapters = [
+          ...(mediaEntity.chapters || []),
+          ...updatedMedia.chapters,
+        ];
+      }
+    },
+  };
 
   $effect(() => {
     if (nextFocusState.node === null && videoNode) {
@@ -312,6 +349,7 @@
                 id,
                 routes.videoFunc(id, mediaEntity.title),
               )}
+              replace={true}
             >
               <span class="icon"><i class="fas fa-images"></i></span>
             </Link>
