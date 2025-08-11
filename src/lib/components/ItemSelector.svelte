@@ -20,6 +20,7 @@
    * @property {CreateItemNoReturn} [create]
    * @property {boolean} [disableCreate]
    * @property {string} [placeholder]
+   * @property {boolean} [autofocus]
    */
   /** @type {props}*/
   let {
@@ -30,6 +31,7 @@
     create,
     disableCreate = false,
     placeholder = "",
+    autofocus = false,
   } = $props();
 
   const itemsInViewCount = 5;
@@ -52,7 +54,7 @@
   onMount(async () => {
     await tick();
 
-    if (inputNode) {
+    if (inputNode && autofocus) {
       inputNode.focus();
     }
   });

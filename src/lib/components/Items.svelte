@@ -143,6 +143,7 @@
       loading={loadingItems}
       toggle={handleItemToggle}
       create={handleCreateItem}
+      autofocus={true}
     />
   {/if}
   <div class="field is-grouped is-grouped-multiline">
