@@ -68,7 +68,7 @@ export const getBoolParamOrDefault = (param, def) => {
  * @param {string} key 
  * @param {string|boolean} val 
  * @param {string} route 
- * @param {{replace: boolean}} [options]
+ * @param {{replace?: boolean, preserveScroll?: boolean}} [options]
  */
 export const setValueAndNavigate = (key, val, route, options) => {
   const params = new URLSearchParams(window.location.search);

@@ -61,6 +61,7 @@
   let selectedPeople = $state(
     getArrayOfStringsSearchParamOrDefault("people", []),
   );
+  let expanded = $state(getBoolParamOrDefault("expanded", false));
   let loading = $state(false);
   let error = $state();
   /** @type {PageDTO<MediaOverviewDTO>}*/
@@ -96,6 +97,7 @@
     selectedTags = getArrayOfStringsSearchParamOrDefault("tags", []);
     selecting = getBoolParamOrDefault("selecting", false);
     favourites = getBoolParamOrDefault("favourites", false);
+    expanded = getBoolParamOrDefault("expanded", false);
   };
 
   const fetchPage = async () => {
@@ -180,6 +182,13 @@
 
   $effect(() => {
     setValuesAndNavigate("selected", selectedMedia, route, {
+      replace: true,
+      preserveScroll: true,
+    });
+  });
+
+  $effect(() => {
+    setValueAndNavigate("expanded", expanded, route, {
       replace: true,
       preserveScroll: true,
     });
@@ -294,6 +303,7 @@
       bind:selectedTags
       bind:selectedPeople
       bind:selectedWatchStatuses
+      bind:expanded
       {ordinals}
       {disablePeople}
       {disableTags}

@@ -10,6 +10,7 @@
   import { Link } from "svelte-routing";
   import routes from "../../routes/routes";
   import { updateProgress } from "../controllers/media";
+  import { bind } from "ramda";
 
   /** @type {Item[]}*/
   const watchStatuses = [
@@ -45,6 +46,7 @@
    * @property {() => void} [clearSelection]
    * @property {string[]} [selection]
    * @property {boolean} [favourites]
+   * @property {boolean} [expanded]
    */
 
   /** @type {props} */
@@ -64,9 +66,8 @@
     clearSelection = () => {},
     selection = [],
     favourites = $bindable(false),
+    expanded = $bindable(false),
   } = $props();
-
-  let extraOptions = $state(false);
   /** @type {Item[]}*/
   let tags = $state([]);
   let loadingTags = $state(false);
@@ -93,13 +94,13 @@
   };
 
   $effect(() => {
-    if (extraOptions && tags.length === 0) {
+    if (expanded && tags.length === 0) {
       fetchTags();
     }
   });
 
   $effect(() => {
-    if (extraOptions && people.length === 0) {
+    if (expanded && people.length === 0) {
       fetchPeople();
     }
   });
@@ -204,24 +205,6 @@
 
 <div class="block">
   <div class="field has-addons">
-    <p class="control">
-      <button
-        class="button"
-        aria-label="change sort order"
-        onclick={() => {
-          ascending = !ascending;
-        }}
-      >
-        <span class="icon is-left">
-          {#if ascending}
-            <i class="fas fa-arrow-up-short-wide"></i>
-          {:else}
-            <i class="fas fa-arrow-up-wide-short"></i>
-          {/if}
-        </span>
-      </button>
-    </p>
-    <Select options={ordinals} bind:value={orderBy} />
     <p class="control has-icons-left is-expanded">
       <input
         class="input"
@@ -233,20 +216,6 @@
       <span class="icon is-left">
         <i class="fas fa-search"></i>
       </span>
-    </p>
-    <p class="control">
-      <button
-        class="button"
-        aria-label="filter by favourites"
-        onclick={() => {
-          favourites = !favourites;
-        }}
-      >
-        <span class="icon">
-          <i class={`${favourites ? "fa fa-heart" : "fa-regular fa-heart"}`}
-          ></i>
-        </span>
-      </button>
     </p>
     {#if value !== ""}
       <p class="control">
@@ -269,10 +238,10 @@
         class="button"
         aria-label="extra filters"
         onclick={() => {
-          extraOptions = !extraOptions;
+          expanded = !expanded;
         }}
       >
-        {#if extraOptions}
+        {#if expanded}
           <span class="icon is-right">
             <i class="fas fa-chevron-up"></i>
           </span>
@@ -286,7 +255,46 @@
   </div>
 </div>
 
-{#if extraOptions}
+{#if expanded}
+  <div class="block">
+    <div class="field has-addons">
+      <p class="control">
+        <button
+          class="button"
+          aria-label="change sort order"
+          onclick={() => {
+            ascending = !ascending;
+          }}
+        >
+          <span class="icon is-left">
+            {#if ascending}
+              <i class="fas fa-arrow-up-short-wide"></i>
+            {:else}
+              <i class="fas fa-arrow-up-wide-short"></i>
+            {/if}
+          </span>
+        </button>
+      </p>
+      <p class="control">
+        <Select options={ordinals} bind:value={orderBy} />
+      </p>
+
+      <p class="control">
+        <button
+          class="button"
+          aria-label="filter by favourites"
+          onclick={() => {
+            favourites = !favourites;
+          }}
+        >
+          <span class="icon">
+            <i class={`${favourites ? "fa fa-heart" : "fa-regular fa-heart"}`}
+            ></i>
+          </span>
+        </button>
+      </p>
+    </div>
+  </div>
   <div class="block">
     <ItemSelector
       placeholder="watch status"
