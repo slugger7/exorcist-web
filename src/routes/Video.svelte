@@ -100,6 +100,9 @@
           ...updatedMedia.chapters,
         ];
       }
+      if (updatedMedia.chapters.length == 0) {
+        mediaEntity.chapters = [];
+      }
     },
   };
 
