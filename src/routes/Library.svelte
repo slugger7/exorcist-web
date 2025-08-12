@@ -34,6 +34,12 @@
 
 {#snippet headerAddons()}
   <p class="control">
+    <Link class="button" to={routes.edit.libraryFunc(id, name)}
+      ><span>Edit</span>
+      <span class="icon"><i class="fas fa-pen"></i></span></Link
+    >
+  </p>
+  <p class="control">
     <Link
       class="button"
       to={routes.refreshLibraryMetadataFn(
