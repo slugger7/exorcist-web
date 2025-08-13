@@ -84,9 +84,11 @@
     /** @type {WSMessage<MediaDTO>}*/
     const data = JSON.parse(e.data);
 
-    const topic = topicMap[data.topic];
-    if (topic) {
-      topic(data.data);
+    if (data.data.id === id) {
+      const topic = topicMap[data.topic];
+      if (topic) {
+        topic(data.data);
+      }
     }
   };
 
