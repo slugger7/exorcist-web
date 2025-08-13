@@ -94,7 +94,6 @@
   const topicMap = {
     media_update: (updatedMedia) => {
       if (updatedMedia.chapters.length > 0) {
-        // TODO: update chapters to nothing when they get cleared
         mediaEntity.chapters = [
           ...(mediaEntity.chapters || []),
           ...updatedMedia.chapters,
