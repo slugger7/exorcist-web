@@ -84,9 +84,11 @@
     /** @type {WSMessage<MediaDTO>}*/
     const data = JSON.parse(e.data);
 
-    const topic = topicMap[data.topic];
-    if (topic) {
-      topic(data.data);
+    if (data.data.id === id) {
+      const topic = topicMap[data.topic];
+      if (topic) {
+        topic(data.data);
+      }
     }
   };
 
@@ -94,11 +96,13 @@
   const topicMap = {
     media_update: (updatedMedia) => {
       if (updatedMedia.chapters.length > 0) {
-        // TODO: update chapters to nothing when they get cleared
         mediaEntity.chapters = [
           ...(mediaEntity.chapters || []),
           ...updatedMedia.chapters,
         ];
+      }
+      if (updatedMedia.chapters.length == 0) {
+        mediaEntity.chapters = [];
       }
     },
   };
