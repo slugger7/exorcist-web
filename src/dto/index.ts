@@ -4,8 +4,8 @@
   * 
   * DO NOT EDIT
   */
-import * as model from "./model.d.ts"
-export * from "./enum.d.ts"
+import * as model from "./model"
+export * from "./enum"
 
 //////////
 // source: enum.go

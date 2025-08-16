@@ -1,4 +1,3 @@
-import type { Job } from "./job";
 import type { WSTopicAllValues } from "../../dto"
 import type { PageDTO } from "../../dto";
 
