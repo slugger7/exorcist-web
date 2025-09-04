@@ -307,9 +307,10 @@
           </p>
           <p class="control">
             <button
-              class="button"
+              class={`button ${loadingProgress ? "is-loading" : ""}`}
               onclick={handleWatchedClick}
               aria-label="toggle watched"
+              disabled={loadingProgress}
             >
               <span class="icon">
                 <i
