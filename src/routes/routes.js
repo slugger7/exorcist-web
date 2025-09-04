@@ -20,6 +20,7 @@ const routes = {
     video: "/videos/:id",
     /** @type {ItemUrlFn} */
     videoFunc: (id) => (`/videos/${id}`),
+    videoAlt: "/videos-alt/:id",
     login: "/login",
     logout: "/logout",
     jobs: "/jobs",
